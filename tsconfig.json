@@ -16,6 +16,14 @@
     "lib": [
       "es2017",
       "dom"
-    ]
+    ],
+    "paths": {
+      "blink": [
+        "dist/blink"
+      ],
+      "blink/*": [
+        "dist/blink/*"
+      ]
+    }
   }
 }
