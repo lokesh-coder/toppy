@@ -1,5 +1,5 @@
-import { TestBed, async } from '@angular/core/testing';
-import { Component, Injectable, NgModule } from '@angular/core';
+import { TestBed, async, fakeAsync, ComponentFixture, tick } from '@angular/core/testing';
+import { Component, Injectable, NgModule, DebugElement } from '@angular/core';
 import { DomHelper } from '../lib/helper/dom';
 import { BlinkRef } from '../lib/blink-ref';
 import { OverlayInstance } from '../lib/overlay-ins';
@@ -7,8 +7,10 @@ import { ComponentHost } from '../lib/host';
 import { Messenger } from '../lib/helper/messenger';
 import { GlobalPosition } from '../lib/position/global-position';
 import { InsidePlacement } from '../lib/models';
+import { By } from '@angular/platform-browser';
 
 @Component({
+  selector: 'test-component',
   template: `
     <div>DYNAMIC COMP</div>
   `
@@ -35,6 +37,8 @@ export class BlinkRefMock extends BlinkRef<any> {
 
 describe('Blink ref:', () => {
   let blinkRef: BlinkRef<any> = null;
+  let debugEl: DebugElement = null;
+  let fixture: ComponentFixture<TestComponent> = null;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -51,6 +55,8 @@ describe('Blink ref:', () => {
       ]
     }).compileComponents();
     blinkRef = TestBed.get(BlinkRef);
+    fixture = TestBed.createComponent(TestComponent);
+    debugEl = fixture.debugElement;
   }));
 
   it('should initialize', () => {
@@ -66,9 +72,12 @@ describe('Blink ref:', () => {
   });
 
   describe('on calling `open` method', () => {
+    afterEach(() => {
+      blinkRef.close();
+    });
     it('should return same instance', () => {
       blinkRef.id = 'QWERTY';
-      let instance = blinkRef.open();
+      const instance = blinkRef.open();
       expect(instance instanceof BlinkRef).toBeTruthy();
       expect(instance.id).toBe('QWERTY');
     });
@@ -77,12 +86,29 @@ describe('Blink ref:', () => {
       expect(blinkRef.compIns.component instanceof TestComponent).toBeTruthy();
       expect(blinkRef.compIns.component.name).toBe('test-component');
     });
-    it("should attach a component's event", () => {
-      // blinkRef.open();
+    // it('should attach a component\'s event', () => {
+    //   // blinkRef.open();
+    // });
+
+    it('should create overlay element in DOM', () => {
+      const overlayContainerElements = document.getElementsByClassName('overlay-container');
+      expect(overlayContainerElements.length).toEqual(0);
+      blinkRef.open();
+      expect(overlayContainerElements.length).toEqual(1);
     });
-    it('should create overlay element in DOM', () => {});
-    it('should attach component element in DOM', () => {});
-    it('should watch window resize', () => {});
-    it('should watch window resize', () => {});
+    it('should attach component element in DOM', () => {
+      const componentElement = document.getElementsByTagName('test-component');
+      blinkRef.open();
+      expect(componentElement.length).toEqual(1);
+    });
+    it('should watch window resize', fakeAsync(() => {
+      blinkRef.open();
+      blinkRef.onWindowResize().subscribe(res => {
+        expect(res instanceof Event).toBeTruthy();
+      });
+      window.dispatchEvent(new Event('resize'));
+      tick(10000);
+      fixture.detectChanges();
+    }));
   });
 });

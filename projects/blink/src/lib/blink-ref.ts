@@ -2,8 +2,8 @@ import { Injectable } from '@angular/core';
 import { ComponentHost } from './host';
 import { OverlayInstance } from './overlay-ins';
 import { Messenger } from './helper/messenger';
-import { fromEvent } from 'rxjs';
-import { map, filter, observeOn, distinctUntilChanged, debounceTime, takeUntil } from 'rxjs/operators';
+import { fromEvent, Observable } from 'rxjs';
+import { map, filter, observeOn, distinctUntilChanged, debounceTime, takeUntil, tap } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { ComponentInstance } from './component-ins';
 import { animationFrameScheduler } from 'rxjs';
@@ -34,8 +34,10 @@ export class BlinkRef<C> {
     this.compIns = this._host.getCompIns();
     const comp = this.compIns.component as any;
     this.addEvent(comp.constructor.name, comp);
-    this.onDocumentClick();
-    this.onWindowResize();
+    this.onDocumentClick().subscribe(() => {
+      console.log('clicked docuemnt');
+    });
+    this.onWindowResize().subscribe();
     setTimeout(_ => this._overlay.computePos.next(true), 1);
     return this;
   }
@@ -49,32 +51,28 @@ export class BlinkRef<C> {
     console.log(`SparkleRef called: ${BlinkRef.c} times`);
   }
 
-  onDocumentClick() {
-    fromEvent(this._overlay.container, 'click')
-      .pipe(
-        takeUntil(this.alive),
-        map((e: any) => e.target),
-        filter(this._overlay.isHostContainerElement.bind(this._overlay))
-      )
-      .subscribe((elem: any) => {
-        this.close();
-      });
+  onDocumentClick(): Observable<any> {
+    return fromEvent(this._overlay.container, 'click').pipe(
+      takeUntil(this.alive),
+      map((e: any) => e.target),
+      filter(this._overlay.isHostContainerElement.bind(this._overlay)),
+      tap(() => this.close())
+    );
   }
 
-  onWindowResize() {
+  onWindowResize(): Observable<any> {
     const onResize = fromEvent(window, 'resize');
     const onScroll = fromEvent(window, 'scroll', { passive: true });
-    merge(onResize, onScroll)
-      .pipe(
-        takeUntil(this.alive),
-        debounceTime(5),
-        observeOn(animationFrameScheduler),
-        distinctUntilChanged()
-      )
-      .subscribe(() => {
+    return merge(onResize, onScroll).pipe(
+      takeUntil(this.alive),
+      debounceTime(5),
+      observeOn(animationFrameScheduler),
+      distinctUntilChanged(),
+      tap(() => {
         this._overlay.computePos.next(true);
         this._overlay.config.windowResizeCallback();
-      });
+      })
+    );
   }
 
   private addEvent(name, type) {
