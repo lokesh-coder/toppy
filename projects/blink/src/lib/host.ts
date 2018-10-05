@@ -41,6 +41,7 @@ export class ComponentHost<C> {
     return this.compIns;
   }
   detach() {
+    if (!this.compRef) { return; }
     this.appRef.detachView(this.compRef.hostView);
     this.compRef.destroy();
   }

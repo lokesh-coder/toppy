@@ -22,7 +22,6 @@ export const DefaultOverlayInstanceConfig: OverlayInstanceConfig = {
   docClickCallback: () => {},
   parentElement: null
 };
-
 @Injectable()
 export class OverlayInstance {
   private position: Position;
@@ -35,12 +34,15 @@ export class OverlayInstance {
   id: string;
   positionSubscription: Subscription;
   events: BehaviorSubject<string> = new BehaviorSubject('init');
+
   constructor(public dom: DomHelper, public host: ComponentHost<any>, private messenger: Messenger) {}
+
   configure(position: Position = new DefaultPosition(), id?: string, config: Partial<OverlayInstanceConfig> = {}) {
     this.config = { ...DefaultOverlayInstanceConfig, ...config };
     this.position = position;
     this.id = id;
   }
+
   create() {
     this.container = this.dom.createElement('div', {
       className: this.config.containerClass + ' ' + this.position.getClassName(),
@@ -69,12 +71,14 @@ export class OverlayInstance {
     this.calculateCoords();
     return this;
   }
+
   destroy() {
     this.host.detach();
     this.dom.removeElement(this.container);
     this.events.next('detached');
     this.events.complete();
   }
+
   setView(view) {
     this.view = view;
     this.dom.insertChildren(this.hostContainer, view);
