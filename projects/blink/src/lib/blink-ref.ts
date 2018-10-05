@@ -29,6 +29,10 @@ export class BlinkRef<C> {
   }
 
   open() {
+    // close existing overlays
+    if (this.compIns) {
+      this.close();
+    }
     const view = this._host.attach().componentView();
     this._overlay.create().setView(view);
     this.compIns = this._host.getCompIns();

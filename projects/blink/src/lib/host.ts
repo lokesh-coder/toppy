@@ -45,6 +45,9 @@ export class ComponentHost<C> {
     this.compRef.destroy();
   }
   componentView(): HTMLElement {
+    if (!this.compRef || this.appRef.viewCount === 0) {
+      return null;
+    }
     return (this.compRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
   }
 }

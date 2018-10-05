@@ -11,9 +11,7 @@ import { By } from '@angular/platform-browser';
 
 @Component({
   selector: 'test-component',
-  template: `
-    <div>DYNAMIC COMP</div>
-  `
+  template: '<div>DYNAMIC COMP</div>'
 })
 export class TestComponent {
   name = 'test-component';
@@ -35,7 +33,7 @@ export class BlinkRefMock extends BlinkRef<any> {
   }
 }
 
-describe('Blink ref:', () => {
+describe('== Blink ref ==', () => {
   let blinkRef: BlinkRef<any> = null;
   let debugEl: DebugElement = null;
   let fixture: ComponentFixture<TestComponent> = null;
@@ -86,10 +84,6 @@ describe('Blink ref:', () => {
       expect(blinkRef.compIns.component instanceof TestComponent).toBeTruthy();
       expect(blinkRef.compIns.component.name).toBe('test-component');
     });
-    // it('should attach a component\'s event', () => {
-    //   // blinkRef.open();
-    // });
-
     it('should create overlay element in DOM', () => {
       const overlayContainerElements = document.getElementsByClassName('overlay-container');
       expect(overlayContainerElements.length).toEqual(0);
@@ -110,5 +104,25 @@ describe('Blink ref:', () => {
       tick(10000);
       fixture.detectChanges();
     }));
+  });
+
+  describe('on calling `close` method', () => {
+    it('should remove overlay container element form DOM', () => {
+      const overlayContainerElements = document.getElementsByClassName('overlay-container');
+      expect(overlayContainerElements.length).toEqual(0);
+      blinkRef.open();
+      expect(overlayContainerElements.length).toEqual(1);
+      blinkRef.close();
+      expect(overlayContainerElements.length).toEqual(0);
+    });
+    it('should remove all overlay container elements form DOM', () => {
+      const overlayContainerElements = document.getElementsByClassName('overlay-container');
+      blinkRef.open();
+      blinkRef.open();
+      blinkRef.open();
+      expect(overlayContainerElements.length).toEqual(1);
+      blinkRef.close();
+      expect(overlayContainerElements.length).toEqual(0);
+    });
   });
 });

@@ -2,7 +2,7 @@ import { TestBed, async } from '@angular/core/testing';
 import { Blink, OverlayInstance, ComponentHost, Messenger, Utils, BlinkRef } from 'blink';
 import { of } from 'rxjs';
 
-describe('Blink service:', () => {
+describe('== Blink ==', () => {
   let blink: Blink<any> = null;
   let overlayMock;
   let componentHostMock;
