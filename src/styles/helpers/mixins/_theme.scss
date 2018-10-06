@@ -1,0 +1,11 @@
+@mixin classic-theme {
+	@if $blink--current-theme=='CLASSIC' {
+		@content;
+	}
+}
+
+@mixin dexter-theme {
+	@if $blink--current-theme=='DEXTER' {
+		@content;
+	}
+}

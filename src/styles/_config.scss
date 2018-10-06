@@ -1,0 +1,74 @@
+$blink--base-font-size: 14px;
+$blink--base-font-size-xl: 16px;
+$blink--app-name: 'BLINK';
+$blink--debug: false;
+$blink--font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
+  'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Rubik', 'Inter UI', 'Nunito Sans';
+$blink--font-family-monospace: 'Courier New', 'Lucida Console', Monaco, Courier, monospace;
+$blink--current-theme: 'DEFAULT';
+$blink--themes: (
+  'default': 'DEFAULT',
+  'jummy': 'JIMMY'
+);
+$blink--colors-basic: (
+  'bg': #f8f8fa,
+  'bg2': #f3f3f7a6,
+  'bg3': #fefefe,
+  'text': #aaaab1,
+  'heading': #35335a,
+  'border': #ebebf3,
+  'para': #b1b0be,
+  'dark': #000,
+  'shadow': #dddde9
+);
+
+$blink--colors-theme: (
+  'primary': #5a5a8c,
+  'secondary': #d07b87,
+  'success': #3fc782,
+  'warning': #f78f1e,
+  'danger': #e3505a,
+  'dark': #000,
+  'info': #03a9f4
+);
+$blink--colors: (
+  'basic': $blink--colors-basic,
+  'theme': $blink--colors-theme
+);
+
+$blink--client-color: #fec500;
+
+$blink--font-sizes: (
+  'sm': 0.9rem,
+  'md': 1rem,
+  'lg': 1.4rem,
+  'xl': 4rem,
+  'h1': 3.2rem,
+  'h2': 2rem,
+  'h3': 1.75rem,
+  'h4': 1.5rem,
+  'h5': 1.25rem,
+  'h6': 1rem
+);
+$blink-folder-image-size: 15rem;
+$blink-folder-illus: (
+  'bg': #ddd,
+  'front': #fff,
+  'back': #fff,
+  'file': $blink--client-color,
+  'file-shadow': darken($blink--client-color, 10%)
+);
+$blink--border-rad: 3px;
+$blink--icons-font: 'ink';
+$blink--icon-font-path: './assets/fonts/icons';
+$blink--font-path: './assets/fonts/inter-ui';
+
+$blink--grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1600px
+);
+
+$blink--color-picker-width: 250px;

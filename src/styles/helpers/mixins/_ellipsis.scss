@@ -1,0 +1,26 @@
+/// div {
+/// 	@include ellipsis;
+/// }
+///
+///	.box {
+/// 	@include ellipsis(3);
+///	}
+
+/* stylelint-disable */
+
+@mixin ellipsis($lines: 1, $substract: 0) {
+	@if $lines == 1 {
+		overflow: hidden;
+		text-overflow: ellipsis;
+		white-space: nowrap;
+		width: 100% - $substract;
+	} @else {
+		-webkit-box-orient: vertical;
+		box-orient: vertical;
+		display: -webkit-box;
+		display: box;
+		-webkit-line-clamp: $lines;
+		line-clamp: $lines;
+		overflow: hidden;
+	}
+}

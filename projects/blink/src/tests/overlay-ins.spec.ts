@@ -94,7 +94,6 @@ describe('== OverlayInstance ==', () => {
     expect(overlayIns.isHostContainerElement(hostContainerElement)).toBeFalsy();
     expect(overlayIns.isHostContainerElement(barEl)).toBeTruthy();
     expect(overlayIns.isHostContainerElement(document)).toBeTruthy();
-    expect(overlayIns.isHostContainerElement(document)).toBeTruthy();
     expect(overlayIns.isHostContainerElement(containerElement)).toBeTruthy();
   });
 });

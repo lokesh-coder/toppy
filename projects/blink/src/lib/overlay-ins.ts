@@ -66,6 +66,9 @@ export class OverlayInstance {
     if (this.config.backdrop) {
       this.dom.insertChildren(this.container, this.backdrop);
     }
+
+    const coords = this.position.getPositions(this.hostContainer);
+    this.dom.setPositions(this.hostContainer, coords);
     this.dom.insertChildren(this.config.parentElement || this.dom.html.BODY, this.container, this.hostContainer);
     this.events.next('attached');
     this.calculateCoords();
@@ -94,11 +97,18 @@ export class OverlayInstance {
     this.container = this.hostContainer = this.backdrop = this.view = null;
   }
 
+  clientAccess() {
+    return {
+      destroy: this.destroy.bind(this)
+    };
+  }
+
   private calculateCoords() {
     this.positionSubscription = this.computePos.subscribe(res => {
       const coords = this.position.getPositions(this.hostContainer);
       this.dom.setPositions(this.hostContainer, coords);
       this.events.next('positions updated');
+      console.log({ coords });
     });
   }
 

@@ -9,6 +9,7 @@ import {
 } from '@angular/core';
 import { ComponentType } from './models';
 import { ComponentInstance } from './component-ins';
+import { BlinkCurrentOverlay } from './blink-current-overlay';
 
 @Injectable()
 export class ComponentHost<C> {
@@ -30,7 +31,18 @@ export class ComponentHost<C> {
 
   attach(): ComponentHost<C> {
     this.compFac = this.compFacResolver.resolveComponentFactory(this.component);
-    this.compRef = this.compFac.create(this.injector);
+    console.log('this.componentProps', this.componentProps);
+    const dataInjector = Injector.create({
+      providers: [
+        {
+          provide: BlinkCurrentOverlay,
+          useFactory: () => new BlinkCurrentOverlay(this.componentProps.id),
+          deps: []
+        }
+      ],
+      parent: this.injector
+    });
+    this.compRef = this.compFac.create(dataInjector);
     this.compIns = this.compRef.instance = <ComponentInstance<C>>(
       new ComponentInstance(this.compRef.instance, this.componentProps)
     );
@@ -41,7 +53,9 @@ export class ComponentHost<C> {
     return this.compIns;
   }
   detach() {
-    if (!this.compRef) { return; }
+    if (!this.compRef) {
+      return;
+    }
     this.appRef.detachView(this.compRef.hostView);
     this.compRef.destroy();
   }

@@ -1,0 +1,35 @@
+@if $blink--current-theme== 'DARK' {
+  $blink--font-family: 'Barlow';
+  $blink--border-rad: 2px;
+  $blink--colors-basic: (
+    'bg': #ebeeef,
+    'bg-alt': #ddd,
+    'bg-alt-dark': #dee1e3,
+    'text': #808080,
+    'heading': #435257,
+    'subheading': #999,
+    'subtext': #999,
+    'border': #cbcbcb,
+    'para': #808080,
+    'dark': #000
+  );
+  $blink--colors-theme: (
+    'primary': #2196f3,
+    'primary-o': #1976d2,
+    'secondary': #dbdbdb,
+    'success': #3fc782,
+    'warning': #f78f1e,
+    'error': #e3505a,
+    'danger': #e3505a,
+    'info': #03a9f4,
+    'dark': #2196f3,
+    'subheading': #333,
+    'link-alt': #999
+  );
+  $blink--colors: (
+    'basic': $blink--colors-basic,
+    'theme': $blink--colors-theme
+  );
+
+  $blink--sidebar-bg: #3c444d;
+}

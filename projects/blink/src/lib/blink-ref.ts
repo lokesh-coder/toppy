@@ -9,7 +9,7 @@ import { ComponentInstance } from './component-ins';
 import { animationFrameScheduler } from 'rxjs';
 import { merge } from 'rxjs';
 
-@Injectable()
+// @Injectable()
 export class BlinkRef<C> {
   static c = 0;
   compIns: ComponentInstance<C>;
@@ -25,7 +25,7 @@ export class BlinkRef<C> {
   ) {
     this.addEvent('overlay', this._overlay);
     this.count++;
-    console.log('sparkle ref initiated', this.count);
+    console.log('sparkle ref initiated ==>', this.count);
   }
 
   open() {
@@ -48,7 +48,7 @@ export class BlinkRef<C> {
 
   close() {
     this._overlay.destroy();
-    this._messenger.post({ name: 'REMOVE_OVERLAY_INS', data: this.id });
+    // this._messenger.post({ name: 'REMOVE_OVERLAY_INS', data: this.id });
     this.cleanup();
     this._overlay.cleanup();
     BlinkRef.c++;

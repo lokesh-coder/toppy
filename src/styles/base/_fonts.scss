@@ -1,0 +1,69 @@
+@font-face {
+  font-family: 'Inter UI';
+  font-style:  normal;
+  font-weight: 400;
+  src: url("#{$blink--font-path}/Inter-UI-Regular.woff2") format("woff2"),
+       url("#{$blink--font-path}/Inter-UI-Regular.woff") format("woff");
+}
+@font-face {
+  font-family: 'Inter UI';
+  font-style:  italic;
+  font-weight: 400;
+  src: url("#{$blink--font-path}/Inter-UI-Italic.woff2") format("woff2"),
+       url("#{$blink--font-path}/Inter-UI-Italic.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Inter UI';
+  font-style:  normal;
+  font-weight: 500;
+  src: url("#{$blink--font-path}/Inter-UI-Medium.woff2") format("woff2"),
+       url("#{$blink--font-path}/Inter-UI-Medium.woff") format("woff");
+}
+@font-face {
+  font-family: 'Inter UI';
+  font-style:  italic;
+  font-weight: 500;
+  src: url("#{$blink--font-path}/Inter-UI-MediumItalic.woff2") format("woff2"),
+       url("#{$blink--font-path}/Inter-UI-MediumItalic.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Inter UI';
+  font-style:  normal;
+  font-weight: 700;
+  src: url("#{$blink--font-path}/Inter-UI-Bold.woff2") format("woff2"),
+       url("#{$blink--font-path}/Inter-UI-Bold.woff") format("woff");
+}
+@font-face {
+  font-family: 'Inter UI';
+  font-style:  italic;
+  font-weight: 700;
+  src: url("#{$blink--font-path}/Inter-UI-BoldItalic.woff2") format("woff2"),
+       url("#{$blink--font-path}/Inter-UI-BoldItalic.woff") format("woff");
+}
+
+@font-face {
+  font-family: 'Inter UI';
+  font-style:  normal;
+  font-weight: 900;
+  src: url("#{$blink--font-path}/Inter-UI-Black.woff2") format("woff2"),
+       url("#{$blink--font-path}/Inter-UI-Black.woff") format("woff");
+}
+@font-face {
+  font-family: 'Inter UI';
+  font-style:  italic;
+  font-weight: 900;
+  src: url("#{$blink--font-path}/Inter-UI-BlackItalic.woff2") format("woff2"),
+       url("#{$blink--font-path}/Inter-UI-BlackItalic.woff") format("woff");
+}
+
+
+
+@include classic-theme() {
+	@import url('https://fonts.googleapis.com/css?family=Roboto:100,100i,300,300i,400,400i,500,700');
+}
+
+@include dexter-theme() {
+	@import url('https://fonts.googleapis.com/css?family=Barlow:100,100i,300,300i,400,400i,500,600,700');
+}

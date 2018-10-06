@@ -9,10 +9,12 @@ import { Utils } from './helper/utils';
 import { Messenger } from './helper/messenger';
 import { filter } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class Blink<C> {
+  static refs = [];
   private _id: string;
-  private _blinkRefs = [];
   constructor(
     private _overlay: OverlayInstance,
     private _host: ComponentHost<C>,
@@ -23,7 +25,7 @@ export class Blink<C> {
       .watch()
       .pipe(filter(e => e.name === 'REMOVE_OVERLAY_INS'))
       .subscribe(e => {
-        delete this._blinkRefs[e.data];
+        delete Blink.refs[e.data];
       });
   }
   overlay(position: Position, id = this.utils.ID, config: Partial<OverlayInstanceConfig> = {}): Blink<C> {
@@ -32,15 +34,19 @@ export class Blink<C> {
     return this;
   }
   host(component: ComponentType<C>, props: Props<C> = {}): Blink<C> {
-    this._host.configure(component, props);
+    this._host.configure(component, { ...(props as any), id: this._id, ins: this.getBlinkRef.bind(this) });
     return this;
   }
   create(): BlinkRef<C> {
-    if (this._blinkRefs[this._id]) {
-      this._blinkRefs[this._id].close();
-      delete this._blinkRefs[this._id];
+    if (Blink.refs[this._id]) {
+      Blink.refs[this._id].close();
+      // delete Blink.refs[this._id];
     }
-    this._blinkRefs[this._id] = new BlinkRef(this._overlay, this._host, this._messenger, this._id);
-    return this._blinkRefs[this._id];
+    Blink.refs[this._id] = new BlinkRef(this._overlay, this._host, this._messenger, this._id);
+    console.log('here it is', Blink.refs);
+    return Blink.refs[this._id];
+  }
+  getBlinkRef(id) {
+    return Blink.refs[id];
   }
 }

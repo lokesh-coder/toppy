@@ -1,6 +1,33 @@
-<h1 #el>
-  Welcome to Bink
-</h1>
-
-<button (click)="open()">open</button>
-<button (click)="close()">close</button>
+<nav class="navbar navbar-expand-lg navbar-light bg-white">
+  <div class="container">
+    <a class="navbar-brand">Blink</a>
+    <button class="navbar-toggler" data-target="#my-nav" data-toggle="collapse">
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div id="my-nav" class="collapse navbar-collapse">
+      <ul class="navbar-nav ml-auto">
+        <li class="nav-item active">
+          <a class="nav-link" href="#">Text</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+<div class="container">
+  <div class="row">
+    <div class="col-md-3">
+      <div id="sidebar">
+        <ul class="list-group">
+          <li class="list-group-item active">Introduction</li>
+          <li class="list-group-item active">Installation</li>
+          <li class="list-group-item active">Features</li>
+          <li class="list-group-item active">Positions</li>
+          <li class="list-group-item active">Communication</li>
+          <li class="list-group-item active">Issues</li>
+          <li class="list-group-item active">Contribution</li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-9">conent</div>
+  </div>
+</div>

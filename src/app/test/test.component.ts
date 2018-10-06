@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { BlinkCurrentOverlay } from 'blink';
 
 @Component({
   selector: 'app-test',
@@ -6,10 +7,12 @@ import { Component, OnInit } from '@angular/core';
   styleUrls: ['./test.component.scss']
 })
 export class TestComponent implements OnInit {
-
-  constructor() { }
+  constructor(private oc: BlinkCurrentOverlay) {}
 
   ngOnInit() {
+    console.log('ID', this.oc);
   }
-
+  close() {
+    this.oc.close();
+  }
 }
