@@ -1,14 +1,13 @@
-$blink--base-font-size: 14px;
+$blink--base-font-size: 13px;
 $blink--base-font-size-xl: 16px;
 $blink--app-name: 'BLINK';
 $blink--debug: false;
-$blink--font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif,
-  'Apple Color Emoji', 'Segoe UI Emoji', 'Segoe UI Symbol', 'Rubik', 'Inter UI', 'Nunito Sans';
+$blink--font-family: 'Rubik', 'Inter UI', 'Nunito Sans';
 $blink--font-family-monospace: 'Courier New', 'Lucida Console', Monaco, Courier, monospace;
 $blink--current-theme: 'DEFAULT';
 $blink--themes: (
   'default': 'DEFAULT',
-  'jummy': 'JIMMY'
+  'dark': 'DARK'
 );
 $blink--colors-basic: (
   'bg': #f8f8fa,

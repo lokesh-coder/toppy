@@ -56,6 +56,7 @@ export interface OverlayInstanceConfig {
   backdropClass: string;
   watchWindowResize: boolean;
   watchDocClick: boolean;
+  dismissOnDocumentClick: boolean;
   windowResizeCallback: () => void;
   docClickCallback: () => void;
   parentElement: HTMLElement | null;

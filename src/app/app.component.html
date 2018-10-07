@@ -1,33 +1,55 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-white">
-  <div class="container">
-    <a class="navbar-brand">Blink</a>
-    <button class="navbar-toggler" data-target="#my-nav" data-toggle="collapse">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div id="my-nav" class="collapse navbar-collapse">
-      <ul class="navbar-nav ml-auto">
-        <li class="nav-item active">
-          <a class="nav-link" href="#">Text</a>
-        </li>
-      </ul>
-    </div>
-  </div>
-</nav>
 <div class="container">
   <div class="row">
     <div class="col-md-3">
       <div id="sidebar">
         <ul class="list-group">
-          <li class="list-group-item active">Introduction</li>
-          <li class="list-group-item active">Installation</li>
-          <li class="list-group-item active">Features</li>
-          <li class="list-group-item active">Positions</li>
-          <li class="list-group-item active">Communication</li>
-          <li class="list-group-item active">Issues</li>
-          <li class="list-group-item active">Contribution</li>
+          <li class="list-group-item">Introduction</li>
+          <li class="list-group-item">Installation</li>
+          <li class="list-group-item">Features</li>
+          <li class="list-group-item">Positions</li>
+          <li class="list-group-item">Communication</li>
+          <li class="list-group-item">Issues</li>
+          <li class="list-group-item">Contribution</li>
         </ul>
       </div>
     </div>
-    <div class="col-md-9">conent</div>
+    <div class="col-md-9">
+      <app-section title="Introduction">
+
+      </app-section>
+      <app-section title="Installation">
+
+      </app-section>
+      <app-section title="Features">
+
+      </app-section>
+      <app-section title="Positions">
+        <app-sub-section title="Relative position">
+          <app-relative-position-example></app-relative-position-example>
+
+        </app-sub-section>
+        <app-sub-section title="Global position">
+          <app-global-position-example></app-global-position-example>
+
+        </app-sub-section>
+        <app-sub-section title="Slide position">
+          <app-slide-position-example></app-slide-position-example>
+
+        </app-sub-section>
+        <app-sub-section title="Fullscreen position">
+          <app-fullscreen-position-example></app-fullscreen-position-example>
+
+        </app-sub-section>
+      </app-section>
+      <app-section title="Communication">
+
+      </app-section>
+      <app-section title="Contribution">
+
+      </app-section>
+      <app-section title="Issues">
+
+      </app-section>
+    </div>
   </div>
 </div>

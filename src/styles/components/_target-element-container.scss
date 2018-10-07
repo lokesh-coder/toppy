@@ -1,0 +1,15 @@
+.comp.target-element-container {
+  background: #fff;
+  padding: 2rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  .target-element {
+    background: #5a5a8c;
+    padding: 1rem;
+    border-radius: 2px;
+    color: #fff;
+    font-weight: 500;
+    box-shadow: 0px 3px 6px #c6c6d8;
+  }
+}

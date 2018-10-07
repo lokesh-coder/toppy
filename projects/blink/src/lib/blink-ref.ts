@@ -16,6 +16,7 @@ export class BlinkRef<C> {
   events = {};
   config;
   count = 0;
+  private _isOpen = false;
   private alive: Subject<any> = new Subject();
   constructor(
     private _overlay: OverlayInstance,
@@ -43,6 +44,7 @@ export class BlinkRef<C> {
     });
     this.onWindowResize().subscribe();
     setTimeout(_ => this._overlay.computePos.next(true), 1);
+    this._isOpen = true;
     return this;
   }
 
@@ -52,7 +54,12 @@ export class BlinkRef<C> {
     this.cleanup();
     this._overlay.cleanup();
     BlinkRef.c++;
+    this._isOpen = false;
     console.log(`SparkleRef called: ${BlinkRef.c} times`);
+  }
+
+  toggle() {
+    return this._isOpen ? this.close() : this.open();
   }
 
   onDocumentClick(): Observable<any> {

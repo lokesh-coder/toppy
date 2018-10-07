@@ -28,13 +28,13 @@ export class Blink<C> {
         delete Blink.refs[e.data];
       });
   }
-  overlay(position: Position, id = this.utils.ID, config: Partial<OverlayInstanceConfig> = {}): Blink<C> {
+  overlay(position: Position, config: Partial<OverlayInstanceConfig> = {}, id = this.utils.ID): Blink<C> {
     this._id = id;
     this._overlay.configure(position, id, config);
     return this;
   }
   host(component: ComponentType<C>, props: Props<C> = {}): Blink<C> {
-    this._host.configure(component, { ...(props as any), id: this._id, ins: this.getBlinkRef.bind(this) });
+    this._host.configure(component, { ...(props as any), id: this._id });
     return this;
   }
   create(): BlinkRef<C> {

@@ -18,6 +18,7 @@ export const DefaultOverlayInstanceConfig: OverlayInstanceConfig = {
   backdropClass: 'backdrop',
   watchWindowResize: false,
   watchDocClick: false,
+  dismissOnDocumentClick: true,
   windowResizeCallback: () => {},
   docClickCallback: () => {},
   parentElement: null
@@ -60,7 +61,7 @@ export class OverlayInstance {
     this.hostContainer = this.dom.createElement('div', {
       className: this.config.hostContainerClass,
       attr: {
-        style: 'position: absolute;'
+        style: 'position: absolute;transition:all 0.2s ease;'
       }
     });
     if (this.config.backdrop) {
