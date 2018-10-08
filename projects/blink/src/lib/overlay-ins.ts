@@ -10,24 +10,12 @@ import { of } from 'rxjs';
 import { Messenger } from './helper/messenger';
 import { ComponentHost } from './host';
 import { Subscription } from 'rxjs';
+import { OverlayConfig } from './config';
 
-export const DefaultOverlayInstanceConfig: OverlayInstanceConfig = {
-  backdrop: false,
-  containerClass: 'overlay-container',
-  hostContainerClass: 'host-container',
-  backdropClass: 'backdrop',
-  watchWindowResize: false,
-  watchDocClick: false,
-  dismissOnDocumentClick: true,
-  windowResizeCallback: () => {},
-  docClickCallback: () => {},
-  parentElement: null
-};
 @Injectable()
 export class OverlayInstance {
   private position: Position;
   private view: HTMLElement;
-  config: OverlayInstanceConfig;
   computePos: Subject<boolean> = new Subject();
   hostContainer: HTMLElement;
   container: HTMLElement;
@@ -36,10 +24,14 @@ export class OverlayInstance {
   positionSubscription: Subscription;
   events: BehaviorSubject<string> = new BehaviorSubject('init');
 
-  constructor(public dom: DomHelper, public host: ComponentHost<any>, private messenger: Messenger) {}
+  constructor(
+    public dom: DomHelper,
+    public host: ComponentHost<any>,
+    public config: OverlayConfig,
+    private messenger: Messenger
+  ) {}
 
-  configure(position: Position = new DefaultPosition(), id?: string, config: Partial<OverlayInstanceConfig> = {}) {
-    this.config = { ...DefaultOverlayInstanceConfig, ...config };
+  configure(position: Position = new DefaultPosition(), id?: string) {
     this.position = position;
     this.id = id;
   }
@@ -49,7 +41,9 @@ export class OverlayInstance {
       className: this.config.containerClass + ' ' + this.position.getClassName(),
       attr: {
         'data-overlay-id': this.id,
-        style: 'left:0;position: fixed;top: 0;width: 100%;height: 100%;'
+        style: `left:0;position: fixed;top: 0;width: 100%;height: 100%;${
+          !this.config.dismissOnDocumentClick ? 'pointer-events:none' : ''
+        }`
       }
     });
     this.backdrop = this.dom.createElement('div', {

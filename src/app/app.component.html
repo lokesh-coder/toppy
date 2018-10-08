@@ -2,7 +2,11 @@
   <div class="row">
     <div class="col-md-3">
       <div id="sidebar">
-        <ul class="list-group">
+        <div class="brand d-flex flex-column justify-center align-items-center my-5">
+          <h2>Blink</h2>
+          <p>Angular overlay library</p>
+        </div>
+        <ul class="list-group comp menu">
           <li class="list-group-item">Introduction</li>
           <li class="list-group-item">Installation</li>
           <li class="list-group-item">Features</li>
@@ -15,10 +19,38 @@
     </div>
     <div class="col-md-9">
       <app-section title="Introduction">
-
+        <div class="content">
+          <p>Blink is a tiny library to create overlays in Angular framework. Overlays are used in `tooltip`, `modal`,
+            `sidemenu`, `popup`, `context menu`, `toaster`, `alerts`, `dropdowns`, `datepicker`, `popovers` etc </p>
+        </div>
       </app-section>
       <app-section title="Installation">
+        <div class="content">
 
+          <div class="step">
+            <div>Step one:</div>
+            `npm install blink`
+          </div>
+          <div class="step">
+            <div>Step two:</div>
+            <div>
+              `import BlinkModule from 'blink'`
+            </div>
+            <div>
+              `
+              const position = new GlobalPosition();
+              const ref = this.blink.overlay(position).host().create();
+              ref.open(); // use it anywhere
+              `
+            </div>
+          </div>
+          <div class="step">
+            <div>Step three:</div>
+          </div>
+          <div class="step">
+            <div>Step four:</div>
+          </div>
+        </div>
       </app-section>
       <app-section title="Features">
 

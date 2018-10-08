@@ -37,7 +37,12 @@ export class RelativePositionExampleComponent implements OnInit {
     }
     this._blinkRef = this.blink
       .overlay(
-        new RelativePosition({ placement: this.selectedPlacement, src: this.targetEl.nativeElement, hostWidth: 'auto' })
+        new RelativePosition({
+          placement: this.selectedPlacement,
+          src: this.targetEl.nativeElement,
+          hostWidth: 'auto',
+          autoUpdate: true
+        })
       )
       .host(TooltipComponent)
       .create();

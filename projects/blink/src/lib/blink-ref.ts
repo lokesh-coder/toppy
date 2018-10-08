@@ -3,18 +3,18 @@ import { ComponentHost } from './host';
 import { OverlayInstance } from './overlay-ins';
 import { Messenger } from './helper/messenger';
 import { fromEvent, Observable } from 'rxjs';
-import { map, filter, observeOn, distinctUntilChanged, debounceTime, takeUntil, tap } from 'rxjs/operators';
+import { map, filter, observeOn, distinctUntilChanged, debounceTime, takeUntil, tap, skipWhile } from 'rxjs/operators';
 import { Subject } from 'rxjs';
 import { ComponentInstance } from './component-ins';
 import { animationFrameScheduler } from 'rxjs';
 import { merge } from 'rxjs';
+import { OverlayConfig } from './config';
 
 // @Injectable()
 export class BlinkRef<C> {
   static c = 0;
   compIns: ComponentInstance<C>;
   events = {};
-  config;
   count = 0;
   private _isOpen = false;
   private alive: Subject<any> = new Subject();
@@ -22,6 +22,7 @@ export class BlinkRef<C> {
     private _overlay: OverlayInstance,
     private _host: ComponentHost<C>,
     private _messenger: Messenger,
+    private _config: OverlayConfig,
     public id: string
   ) {
     this.addEvent('overlay', this._overlay);
@@ -66,6 +67,7 @@ export class BlinkRef<C> {
     return fromEvent(this._overlay.container, 'click').pipe(
       takeUntil(this.alive),
       map((e: any) => e.target),
+      skipWhile(() => !this._config.dismissOnDocumentClick),
       filter(this._overlay.isHostContainerElement.bind(this._overlay)),
       tap(() => this.close())
     );

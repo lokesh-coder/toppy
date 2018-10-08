@@ -1,13 +1,10 @@
-.blink-page-title {
-  font-size: 1.2rem;
+h2 {
+  font-weight: 300;
+  margin: 1rem 0;
+  display: inline-block;
   color: clr('heading');
-  .blink-icon {
-    opacity: 0.8;
-  }
 }
 
-.blink-pre {
-  font-family: $blink--font-family-monospace;
-  color: clr('dark');
-  font-size: 1rem;
+h4 {
+  font-weight: 300;
 }

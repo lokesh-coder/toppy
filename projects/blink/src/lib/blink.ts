@@ -8,6 +8,7 @@ import { ComponentType, OverlayInstanceConfig, Props } from './models';
 import { Utils } from './helper/utils';
 import { Messenger } from './helper/messenger';
 import { filter } from 'rxjs/operators';
+import { OverlayConfig } from './config';
 
 @Injectable({
   providedIn: 'root'
@@ -18,6 +19,7 @@ export class Blink<C> {
   constructor(
     private _overlay: OverlayInstance,
     private _host: ComponentHost<C>,
+    private _config: OverlayConfig,
     private _messenger: Messenger,
     private utils: Utils
   ) {
@@ -30,7 +32,8 @@ export class Blink<C> {
   }
   overlay(position: Position, config: Partial<OverlayInstanceConfig> = {}, id = this.utils.ID): Blink<C> {
     this._id = id;
-    this._overlay.configure(position, id, config);
+    this._overlay.configure(position, id);
+    this._config.set(config);
     return this;
   }
   host(component: ComponentType<C>, props: Props<C> = {}): Blink<C> {
@@ -42,7 +45,7 @@ export class Blink<C> {
       Blink.refs[this._id].close();
       // delete Blink.refs[this._id];
     }
-    Blink.refs[this._id] = new BlinkRef(this._overlay, this._host, this._messenger, this._id);
+    Blink.refs[this._id] = new BlinkRef(this._overlay, this._host, this._messenger, this._config, this._id);
     console.log('here it is', Blink.refs);
     return Blink.refs[this._id];
   }

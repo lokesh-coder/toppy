@@ -7,17 +7,12 @@ import { BlinkRef } from './blink-ref';
 import { OverlayInstance } from './overlay-ins';
 import { Utils } from './helper/utils';
 import { Blink } from './blink';
+import { OverlayConfig } from './config';
 
-export const CurrentOverlay = new InjectionToken<string>('Current Overlay');
 @NgModule({
   imports: [],
   exports: [],
   declarations: [],
-  providers: [ComponentHost, OverlayInstance, DomHelper, Utils, Messenger, Blink]
+  providers: [ComponentHost, OverlayInstance, DomHelper, Utils, Messenger, Blink, OverlayConfig]
 })
 export class BlinkModule {}
-
-export function CurrentOverlayFactory() {
-  // console.log('injectot', injector);
-  return new Date();
-}

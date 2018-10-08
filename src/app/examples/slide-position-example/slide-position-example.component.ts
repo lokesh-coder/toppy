@@ -8,7 +8,7 @@ import { SimpleListComponent } from '../../host-components/simple-list/simple-li
   styles: []
 })
 export class SlidePositionExampleComponent implements OnInit {
-  placements: { name: string; value: SlidePlacement }[] = [ 
+  placements: { name: string; value: SlidePlacement }[] = [
     { name: 'Left', value: SlidePlacement.LEFT },
     { name: 'Right', value: SlidePlacement.RIGHT }
   ];
@@ -23,7 +23,9 @@ export class SlidePositionExampleComponent implements OnInit {
       this._blinkRef.close();
     }
     this._blinkRef = this.blink
-      .overlay(new SlidePosition({ placement: this.selectedPlacement }))
+      .overlay(new SlidePosition({ placement: this.selectedPlacement }), {
+        dismissOnDocumentClick: false
+      })
       .host(SimpleListComponent)
       .create();
     this._blinkRef.open();
