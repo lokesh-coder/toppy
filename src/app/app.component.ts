@@ -1,6 +1,7 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
 import { Blink, OutsidePlacement, RelativePosition, SlidePlacement } from 'blink';
 import { TestComponent } from './test/test.component';
+import { code } from './codes';
 
 @Component({
   selector: 'app-root',
@@ -12,6 +13,7 @@ export class AppComponent {
   @ViewChild('el', { read: ElementRef })
   el: ElementRef;
   ins;
+  code = code;
   constructor(private _blink: Blink<TestComponent>) {}
   // ngOnInit() {
   //   console.log('what???', SlidePlacement.RIGHT);

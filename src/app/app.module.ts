@@ -1,6 +1,7 @@
 import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { MarkdownModule } from 'ngx-markdown';
 
 import { AppComponent } from './app.component';
 import { BlinkModule } from 'blink';
@@ -15,6 +16,7 @@ import { SimpleListComponent } from './host-components/simple-list/simple-list.c
 import { SlidePositionExampleComponent } from './examples/slide-position-example/slide-position-example.component';
 import { FullscreenPositionExampleComponent } from './examples/fullscreen-position-example/fullscreen-position-example.component';
 import { HeroScreenComponent } from './host-components/hero-screen/hero-screen.component';
+import { HttpClientModule, HttpClient } from '@angular/common/http';
 
 @NgModule({
   declarations: [
@@ -31,7 +33,7 @@ import { HeroScreenComponent } from './host-components/hero-screen/hero-screen.c
     FullscreenPositionExampleComponent,
     HeroScreenComponent
   ],
-  imports: [BrowserModule, FormsModule, BlinkModule],
+  imports: [BrowserModule, FormsModule, HttpClientModule, MarkdownModule.forRoot({ loader: HttpClient }), BlinkModule],
   providers: [],
   entryComponents: [TestComponent, TooltipComponent, SimpleModalComponent, SimpleListComponent, HeroScreenComponent],
   bootstrap: [AppComponent],

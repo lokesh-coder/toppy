@@ -29,7 +29,10 @@
 
           <div class="step">
             <div>Step one:</div>
-            `npm install blink`
+            <markdown ngPreserveWhitespaces [src]="'./assets/md/installation.md'">
+              # Markdown
+            </markdown>
+            <!-- <ngx-prism language="shell" [code]="code.NPM_INSTALL"></ngx-prism> -->
           </div>
           <div class="step">
             <div>Step two:</div>
@@ -37,11 +40,7 @@
               `import BlinkModule from 'blink'`
             </div>
             <div>
-              `
-              const position = new GlobalPosition();
-              const ref = this.blink.overlay(position).host().create();
-              ref.open(); // use it anywhere
-              `
+              <!-- <ngx-prism language="javascript" [code]="code.INSTALL"></ngx-prism> -->
             </div>
           </div>
           <div class="step">
