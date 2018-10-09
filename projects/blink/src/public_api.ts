@@ -1,7 +1,7 @@
 export { Utils } from './lib/helper/utils';
 export { Messenger } from './lib/helper/messenger';
-export { ComponentHost } from './lib/host';
 export { Blink } from './lib/blink';
+export { ComponentHost } from './lib/host';
 export { BlinkCurrentOverlay } from './lib/blink-current-overlay';
 export { BlinkRef } from './lib/blink-ref';
 export { BlinkModule } from './lib/blink.module';
