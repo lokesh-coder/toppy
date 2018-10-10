@@ -31,7 +31,6 @@ export class ComponentHost<C> {
 
   attach(): ComponentHost<C> {
     this.compFac = this.compFacResolver.resolveComponentFactory(this.component);
-    console.log('this.componentProps', this.componentProps);
     const dataInjector = Injector.create({
       providers: [
         {
@@ -49,9 +48,11 @@ export class ComponentHost<C> {
     this.appRef.attachView(this.compRef.hostView);
     return this;
   }
+
   getCompIns(): ComponentInstance<C> {
     return this.compIns;
   }
+
   detach() {
     if (!this.compRef) {
       return;
@@ -59,6 +60,7 @@ export class ComponentHost<C> {
     this.appRef.detachView(this.compRef.hostView);
     this.compRef.destroy();
   }
+
   componentView(): HTMLElement {
     if (!this.compRef || this.appRef.viewCount === 0) {
       return null;

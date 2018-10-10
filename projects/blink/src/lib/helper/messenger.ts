@@ -3,7 +3,9 @@ import { Subject } from 'rxjs';
 import { MessengerEvent } from '../models';
 import { Observable } from 'rxjs';
 
-@Injectable()
+@Injectable({
+  providedIn:'root'
+})
 export class Messenger {
   private messageSub: Subject<any> = new Subject();
   constructor() {}

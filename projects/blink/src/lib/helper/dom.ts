@@ -3,7 +3,9 @@ import { HtmlElementOptions, ContainerSize } from '../models';
 
 export type Elem = Document | HTMLElement;
 
-@Injectable()
+@Injectable({
+  providedIn:'root'
+})
 export class DomHelper {
   html = {
     BODY: document.getElementsByTagName('body')[0]

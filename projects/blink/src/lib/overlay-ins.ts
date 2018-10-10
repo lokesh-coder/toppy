@@ -1,35 +1,25 @@
-import { Injectable, Component, ComponentDecorator } from '@angular/core';
+import { Injectable, Component, ComponentDecorator, OnDestroy } from '@angular/core';
 import { OverlayInstanceConfig, ContainerSize, ComponentType } from './models';
 import { DomHelper } from './helper/dom';
-import { Position } from './position/position';
-import { fromEvent } from 'rxjs';
-import { DefaultPosition } from './position/default-position';
-import { BehaviorSubject } from 'rxjs';
-import { Subject } from 'rxjs';
-import { of } from 'rxjs';
+import { Position, DefaultPosition } from './position';
+import { from, BehaviorSubject, of, Subject, Subscription } from 'rxjs';
 import { Messenger } from './helper/messenger';
 import { ComponentHost } from './host';
-import { Subscription } from 'rxjs';
 import { OverlayConfig } from './config';
 
 @Injectable()
-export class OverlayInstance {
+export class OverlayInstance implements OnDestroy {
   private position: Position;
   private view: HTMLElement;
-  computePos: Subject<boolean> = new Subject();
-  hostContainer: HTMLElement;
-  container: HTMLElement;
-  backdrop: HTMLElement;
+  computePosition: Subject<boolean> = new Subject();
+  hostContainerEl: HTMLElement;
+  containerEl: HTMLElement;
+  backdropEl: HTMLElement;
   id: string;
-  positionSubscription: Subscription;
+  private _positionSubscription: Subscription;
   events: BehaviorSubject<string> = new BehaviorSubject('init');
 
-  constructor(
-    public dom: DomHelper,
-    public host: ComponentHost<any>,
-    public config: OverlayConfig,
-    private messenger: Messenger
-  ) {}
+  constructor(public config: OverlayConfig, private _dom: DomHelper) {}
 
   configure(position: Position = new DefaultPosition(), id?: string) {
     this.position = position;
@@ -37,7 +27,7 @@ export class OverlayInstance {
   }
 
   create() {
-    this.container = this.dom.createElement('div', {
+    this.containerEl = this._dom.createElement('div', {
       className: this.config.containerClass + ' ' + this.position.getClassName(),
       attr: {
         'data-overlay-id': this.id,
@@ -46,68 +36,64 @@ export class OverlayInstance {
         }`
       }
     });
-    this.backdrop = this.dom.createElement('div', {
+
+    this.backdropEl = this._dom.createElement('div', {
       className: this.config.backdropClass,
       attr: {
         style: 'left:0;position: fixed;top: 0;width: 100%;height: 100%;background: rgba(63, 81, 181, 0.39);'
       }
     });
-    this.hostContainer = this.dom.createElement('div', {
+
+    this.hostContainerEl = this._dom.createElement('div', {
       className: this.config.hostContainerClass,
       attr: {
         style: 'position: absolute;transition:all 0.2s ease;'
       }
     });
+
     if (this.config.backdrop) {
-      this.dom.insertChildren(this.container, this.backdrop);
+      this._dom.insertChildren(this.containerEl, this.backdropEl);
     }
 
-    const coords = this.position.getPositions(this.hostContainer);
-    this.dom.setPositions(this.hostContainer, coords);
-    this.dom.insertChildren(this.config.parentElement || this.dom.html.BODY, this.container, this.hostContainer);
+    this._setPosition();
+    this._dom.insertChildren(this.config.parentElement || this._dom.html.BODY, this.containerEl, this.hostContainerEl);
     this.events.next('attached');
-    this.calculateCoords();
+    this._watchPositionChange();
     return this;
-  }
-
-  destroy() {
-    this.host.detach();
-    this.dom.removeElement(this.container);
-    this.events.next('detached');
-    this.events.complete();
   }
 
   setView(view) {
     this.view = view;
-    this.dom.insertChildren(this.hostContainer, view);
-    // this.computePos.next(true);
+    this._dom.insertChildren(this.hostContainerEl, view);
   }
 
   isHostContainerElement(element): boolean {
-    return element !== this.hostContainer && element !== this.view && !this.view.contains(element);
+    return element !== this.hostContainerEl && element !== this.view && !this.view.contains(element);
   }
 
-  cleanup() {
-    this.positionSubscription.unsubscribe();
-    this.container = this.hostContainer = this.backdrop = this.view = null;
+  destroy() {
+    this._dom.removeElement(this.containerEl);
+    this.events.next('detached');
+    this.events.complete();
+    this._cleanup();
   }
 
-  clientAccess() {
-    return {
-      destroy: this.destroy.bind(this)
-    };
+  private _cleanup() {
+    this._positionSubscription.unsubscribe();
+    this.containerEl = this.hostContainerEl = this.backdropEl = this.view = null;
   }
 
-  private calculateCoords() {
-    this.positionSubscription = this.computePos.subscribe(res => {
-      const coords = this.position.getPositions(this.hostContainer);
-      this.dom.setPositions(this.hostContainer, coords);
-      this.events.next('positions updated');
-      console.log({ coords });
-    });
+  private _setPosition() {
+    const coords = this.position.getPositions(this.hostContainerEl);
+    this._dom.setPositions(this.hostContainerEl, coords);
+    this.events.next('positions updated');
   }
 
-  private watchSrcElementPos() {
-    of((this.position as any).src).subscribe(e => {});
+  private _watchPositionChange(): void {
+    this._positionSubscription = this.computePosition.subscribe(_ => this._setPosition());
+  }
+
+  ngOnDestroy() {
+    this._positionSubscription.unsubscribe();
   }
 }

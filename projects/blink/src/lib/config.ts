@@ -11,7 +11,7 @@ export function ConfigFactory() {
 })
 export class OverlayConfig implements OverlayInstanceConfig {
   backdrop = false;
-  backdropClass = 'blinnk-backdrop';
+  backdropClass = 'blink-backdrop';
   containerClass = 'blink-container';
   dismissOnDocumentClick = true;
   hostContainerClass: 'blink-host-container';

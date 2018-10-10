@@ -10,14 +10,12 @@ import { animationFrameScheduler } from 'rxjs';
 import { merge } from 'rxjs';
 import { OverlayConfig } from './config';
 
-// @Injectable()
 export class BlinkRef<C> {
-  static c = 0;
   compIns: ComponentInstance<C>;
   events = {};
-  count = 0;
   private _isOpen = false;
-  private alive: Subject<any> = new Subject();
+  private _alive: Subject<any> = new Subject();
+
   constructor(
     private _overlay: OverlayInstance,
     private _host: ComponentHost<C>,
@@ -25,38 +23,34 @@ export class BlinkRef<C> {
     private _config: OverlayConfig,
     public id: string
   ) {
-    this.addEvent('overlay', this._overlay);
-    this.count++;
-    console.log('sparkle ref initiated ==>', this.count);
+    this._addEvent('overlay', this._overlay);
   }
 
   open() {
-    // close existing overlays
     if (this.compIns) {
       this.close();
     }
     const view = this._host.attach().componentView();
     this._overlay.create().setView(view);
     this.compIns = this._host.getCompIns();
+
     const comp = this.compIns.component as any;
-    this.addEvent(comp.constructor.name, comp);
-    this.onDocumentClick().subscribe(() => {
-      console.log('clicked docuemnt');
-    });
+    this._addEvent(comp.constructor.name, comp);
+
+    this.onDocumentClick().subscribe();
     this.onWindowResize().subscribe();
-    setTimeout(_ => this._overlay.computePos.next(true), 1);
+
+    setTimeout(_ => this._overlay.computePosition.next(true), 1);
     this._isOpen = true;
     return this;
   }
 
   close() {
+    this._host.detach();
     this._overlay.destroy();
     // this._messenger.post({ name: 'REMOVE_OVERLAY_INS', data: this.id });
-    this.cleanup();
-    this._overlay.cleanup();
-    BlinkRef.c++;
+    this._cleanup();
     this._isOpen = false;
-    console.log(`SparkleRef called: ${BlinkRef.c} times`);
   }
 
   toggle() {
@@ -64,8 +58,8 @@ export class BlinkRef<C> {
   }
 
   onDocumentClick(): Observable<any> {
-    return fromEvent(this._overlay.container, 'click').pipe(
-      takeUntil(this.alive),
+    return fromEvent(this._overlay.containerEl, 'click').pipe(
+      takeUntil(this._alive),
       map((e: any) => e.target),
       skipWhile(() => !this._config.dismissOnDocumentClick),
       filter(this._overlay.isHostContainerElement.bind(this._overlay)),
@@ -77,24 +71,24 @@ export class BlinkRef<C> {
     const onResize = fromEvent(window, 'resize');
     const onScroll = fromEvent(window, 'scroll', { passive: true });
     return merge(onResize, onScroll).pipe(
-      takeUntil(this.alive),
+      takeUntil(this._alive),
       debounceTime(5),
       observeOn(animationFrameScheduler),
       distinctUntilChanged(),
       tap(() => {
-        this._overlay.computePos.next(true);
+        this._overlay.computePosition.next(true);
         this._overlay.config.windowResizeCallback();
       })
     );
   }
 
-  private addEvent(name, type) {
+  private _addEvent(name, type) {
     if (type.events) {
-      this.events[name] = type.events.asObservable().pipe(takeUntil(this.alive));
+      this.events[name] = type.events.asObservable().pipe(takeUntil(this._alive));
     }
   }
 
-  private cleanup() {
-    this.alive.next(true);
+  private _cleanup() {
+    this._alive.next(true);
   }
 }
