@@ -45,6 +45,7 @@ export class ComponentHost<C> {
     this.compIns = this.compRef.instance = <ComponentInstance<C>>(
       new ComponentInstance(this.compRef.instance, this.componentProps)
     );
+  //  support templateRef/string
     this.appRef.attachView(this.compRef.hostView);
     return this;
   }
