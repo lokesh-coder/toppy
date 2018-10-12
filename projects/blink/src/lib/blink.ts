@@ -1,4 +1,4 @@
-import { Injectable } from '@angular/core';
+import { Injectable, TemplateRef } from '@angular/core';
 import { Position } from './position/position';
 import { OverlayInstance } from './overlay-ins';
 import { ComponentHost } from './host';
@@ -37,7 +37,11 @@ export class Blink<C> {
     return this;
   }
   host(component: ComponentType<C>, props: Props<C> = {}): Blink<C> {
-    this._host.configure(component, { ...(props as any), id: this._id });
+    this._host.configure({ component, props });
+    return this;
+  }
+  template(template: TemplateRef<any>): Blink<C> {
+    this._host.configure({ template });
     return this;
   }
   create(): BlinkRef<C> {

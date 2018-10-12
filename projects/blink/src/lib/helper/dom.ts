@@ -4,7 +4,7 @@ import { HtmlElementOptions, ContainerSize } from '../models';
 export type Elem = Document | HTMLElement;
 
 @Injectable({
-  providedIn:'root'
+  providedIn: 'root'
 })
 export class DomHelper {
   html = {

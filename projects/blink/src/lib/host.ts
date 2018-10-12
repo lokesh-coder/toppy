@@ -5,11 +5,13 @@ import {
   Injector,
   Component,
   EmbeddedViewRef,
-  ComponentDecorator
+  ComponentDecorator,
+  TemplateRef
 } from '@angular/core';
 import { ComponentType } from './models';
 import { ComponentInstance } from './component-ins';
 import { BlinkCurrentOverlay } from './blink-current-overlay';
+import { ViewRef } from '@angular/core/src/render3/view_ref';
 
 @Injectable()
 export class ComponentHost<C> {
@@ -17,6 +19,7 @@ export class ComponentHost<C> {
   private compRef;
   private component;
   private componentProps;
+  private template: TemplateRef<any>;
   compIns: ComponentInstance<C>;
   constructor(
     private appRef: ApplicationRef,
@@ -24,30 +27,56 @@ export class ComponentHost<C> {
     private injector: Injector
   ) {}
 
-  configure(component: ComponentType<C>, props = {}) {
+  configure({
+    component,
+    props,
+    template
+  }: Partial<{
+    component: ComponentType<C>;
+    props: object;
+    template: TemplateRef<any>;
+  }>) {
     this.component = component;
     this.componentProps = props;
+    this.template = template;
   }
 
-  attach(): ComponentHost<C> {
-    this.compFac = this.compFacResolver.resolveComponentFactory(this.component);
+  createViewFromString(content: string) {
+    return document.createTextNode(content);
+  }
+  createViewFromTemplate(template: TemplateRef<any>, ctx = {}) {
+    return template.createEmbeddedView(ctx);
+  }
+  createViewFromComponent(component, props = {}) {
+    this.compFac = this.compFacResolver.resolveComponentFactory(component);
     const dataInjector = Injector.create({
       providers: [
         {
           provide: BlinkCurrentOverlay,
-          useFactory: () => new BlinkCurrentOverlay(this.componentProps.id),
+          useFactory: () => new BlinkCurrentOverlay(props.id),
           deps: []
         }
       ],
       parent: this.injector
     });
     this.compRef = this.compFac.create(dataInjector);
-    this.compIns = this.compRef.instance = <ComponentInstance<C>>(
-      new ComponentInstance(this.compRef.instance, this.componentProps)
-    );
-  //  support templateRef/string
-    this.appRef.attachView(this.compRef.hostView);
-    return this;
+    this.compIns = this.compRef.instance = <ComponentInstance<C>>new ComponentInstance(this.compRef.instance, props);
+    return this.compRef.hostView;
+  }
+
+  attach(): HTMLElement {
+    let view: EmbeddedViewRef<any> = null;
+    let viewEl = null;
+    if (this.component) {
+      view = this.createViewFromComponent(this.component, this.componentProps);
+      viewEl = this.componentView();
+    } else if (this.template) {
+      view = this.createViewFromTemplate(this.template);
+      viewEl = view.rootNodes[0];
+    }
+    //  support templateRef/string
+    this.appRef.attachView(view);
+    return viewEl;
   }
 
   getCompIns(): ComponentInstance<C> {
@@ -67,5 +96,8 @@ export class ComponentHost<C> {
       return null;
     }
     return (this.compRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
+  }
+  templateView() {
+    return this.template.elementRef;
   }
 }

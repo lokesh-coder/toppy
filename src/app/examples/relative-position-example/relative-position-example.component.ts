@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild, ElementRef } from '@angular/core';
+import { Component, OnInit, ViewChild, ElementRef, TemplateRef } from '@angular/core';
 import { Blink, RelativePosition, OutsidePlacement, BlinkRef } from 'blink';
 import { TooltipComponent } from '../../host-components/tooltip/tooltip.component';
 
@@ -10,6 +10,8 @@ import { TooltipComponent } from '../../host-components/tooltip/tooltip.componen
 export class RelativePositionExampleComponent implements OnInit {
   @ViewChild('targetEl', { read: ElementRef })
   targetEl: ElementRef;
+  @ViewChild('content', { read: TemplateRef })
+  content: TemplateRef<any>;
   placements: { name: string; value: OutsidePlacement }[] = [
     { name: 'Bottom', value: OutsidePlacement.BOTTOM },
     { name: 'Bottom left', value: OutsidePlacement.BOTTOM_LEFT },

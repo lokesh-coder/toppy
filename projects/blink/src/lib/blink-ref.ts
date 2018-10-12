@@ -30,12 +30,12 @@ export class BlinkRef<C> {
     if (this.compIns) {
       this.close();
     }
-    const view = this._host.attach().componentView();
+    const view = this._host.attach();
     this._overlay.create().setView(view);
-    this.compIns = this._host.getCompIns();
+    // this.compIns = this._host.getCompIns();
 
-    const comp = this.compIns.component as any;
-    this._addEvent(comp.constructor.name, comp);
+    // const comp = this.compIns.component as any;
+    // this._addEvent(comp.constructor.name, comp);
 
     this.onDocumentClick().subscribe();
     this.onWindowResize().subscribe();
