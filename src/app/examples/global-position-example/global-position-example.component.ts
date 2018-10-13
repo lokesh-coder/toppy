@@ -16,7 +16,8 @@ export class GlobalPositionExampleComponent implements OnInit {
     { name: 'Right', value: InsidePlacement.RIGHT },
     { name: 'Top', value: InsidePlacement.TOP },
     { name: 'Top left', value: InsidePlacement.TOP_LEFT },
-    { name: 'Top right', value: InsidePlacement.TOP_RIGHT }
+    { name: 'Top right', value: InsidePlacement.TOP_RIGHT },
+    { name: 'Center', value: InsidePlacement.CENTER }
   ];
   selectedPlacement = null;
   private _blinkRef: BlinkRef<SimpleModalComponent>;

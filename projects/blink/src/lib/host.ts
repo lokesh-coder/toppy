@@ -19,6 +19,7 @@ export class ComponentHost<C> {
   private compRef;
   private component;
   private componentProps;
+  private content: string;
   private template: TemplateRef<any>;
   compIns: ComponentInstance<C>;
   constructor(
@@ -30,15 +31,18 @@ export class ComponentHost<C> {
   configure({
     component,
     props,
-    template
+    template,
+    content
   }: Partial<{
     component: ComponentType<C>;
     props: object;
     template: TemplateRef<any>;
+    content: string;
   }>) {
     this.component = component;
     this.componentProps = props;
     this.template = template;
+    this.content = content;
   }
 
   createViewFromString(content: string) {
@@ -47,7 +51,7 @@ export class ComponentHost<C> {
   createViewFromTemplate(template: TemplateRef<any>, ctx = {}) {
     return template.createEmbeddedView(ctx);
   }
-  createViewFromComponent(component, props = {}) {
+  createViewFromComponent(component, props: any = {}) {
     this.compFac = this.compFacResolver.resolveComponentFactory(component);
     const dataInjector = Injector.create({
       providers: [
@@ -73,6 +77,8 @@ export class ComponentHost<C> {
     } else if (this.template) {
       view = this.createViewFromTemplate(this.template);
       viewEl = view.rootNodes[0];
+    } else if (this.content) {
+      return document.createTextNode(this.content) as any;
     }
     //  support templateRef/string
     this.appRef.attachView(view);

@@ -37,11 +37,15 @@ export class Blink<C> {
     return this;
   }
   host(component: ComponentType<C>, props: Props<C> = {}): Blink<C> {
-    this._host.configure({ component, props });
+    this._host.configure({ component, props: { ...(props as any), id: this._id } });
     return this;
   }
   template(template: TemplateRef<any>): Blink<C> {
     this._host.configure({ template });
+    return this;
+  }
+  textContent(str: string): Blink<C> {
+    this._host.configure({ content: str });
     return this;
   }
   create(): BlinkRef<C> {
