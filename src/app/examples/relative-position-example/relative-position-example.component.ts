@@ -47,7 +47,8 @@ export class RelativePositionExampleComponent implements OnInit {
         })
       )
       // .host(TooltipComponent)
-      .textContent('lokesh__')
+      // .textContent('lokesh__')
+      .htmlContent(`Hello <b>Lokesh</b>!`)
       .create();
     this._blinkRef.open();
   }

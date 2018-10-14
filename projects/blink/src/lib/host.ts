@@ -20,6 +20,7 @@ export class ComponentHost<C> {
   private component;
   private componentProps;
   private content: string;
+  private htmlContent: string;
   private template: TemplateRef<any>;
   compIns: ComponentInstance<C>;
   constructor(
@@ -32,17 +33,20 @@ export class ComponentHost<C> {
     component,
     props,
     template,
-    content
+    content,
+    htmlContent
   }: Partial<{
     component: ComponentType<C>;
     props: object;
     template: TemplateRef<any>;
     content: string;
+    htmlContent: string;
   }>) {
     this.component = component;
     this.componentProps = props;
     this.template = template;
     this.content = content;
+    this.htmlContent = htmlContent;
   }
 
   createViewFromString(content: string) {
@@ -79,6 +83,10 @@ export class ComponentHost<C> {
       viewEl = view.rootNodes[0];
     } else if (this.content) {
       return document.createTextNode(this.content) as any;
+    } else if (this.htmlContent) {
+      const el = document.createElement('div');
+      el.innerHTML = this.htmlContent;
+      return el as any;
     }
     //  support templateRef/string
     this.appRef.attachView(view);

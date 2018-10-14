@@ -48,6 +48,10 @@ export class Blink<C> {
     this._host.configure({ content: str });
     return this;
   }
+  htmlContent(html: string): Blink<C> {
+    this._host.configure({ htmlContent: html });
+    return this;
+  }
   create(): BlinkRef<C> {
     if (Blink.refs[this._id]) {
       Blink.refs[this._id].close();
