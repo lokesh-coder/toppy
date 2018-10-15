@@ -14,7 +14,7 @@ import { OverlayConfig } from './config';
   providedIn: 'root'
 })
 export class Blink<C> {
-  static refs = [];
+  refs = [];
   private _id: string;
   constructor(
     private _overlay: OverlayInstance,
@@ -27,13 +27,14 @@ export class Blink<C> {
       .watch()
       .pipe(filter(e => e.name === 'REMOVE_OVERLAY_INS'))
       .subscribe(e => {
-        delete Blink.refs[e.data];
+        delete this.refs[e.data];
       });
   }
   overlay(position: Position, config: Partial<OverlayInstanceConfig> = {}, id = this.utils.ID): Blink<C> {
     this._id = id;
     this._overlay.configure(position, id);
     this._config.set(config);
+    this._host.blinkRef = this.getBlinkRef.bind(this);
     return this;
   }
   host(component: ComponentType<C>, props: Props<C> = {}): Blink<C> {
@@ -53,15 +54,15 @@ export class Blink<C> {
     return this;
   }
   create(): BlinkRef<C> {
-    if (Blink.refs[this._id]) {
-      Blink.refs[this._id].close();
-      // delete Blink.refs[this._id];
+    if (this.refs[this._id]) {
+      this.refs[this._id].close();
+      // delete this.refs[this._id];
     }
-    Blink.refs[this._id] = new BlinkRef(this._overlay, this._host, this._messenger, this._config, this._id);
-    console.log('here it is', Blink.refs);
-    return Blink.refs[this._id];
+    this.refs[this._id] = new BlinkRef(this._overlay, this._host, this._messenger, this._config, this._id);
+    console.log('here it is', this.refs);
+    return this.refs[this._id];
   }
   getBlinkRef(id) {
-    return Blink.refs[id];
+    return this.refs[id];
   }
 }

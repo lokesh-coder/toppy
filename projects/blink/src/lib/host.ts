@@ -3,15 +3,12 @@ import {
   ApplicationRef,
   ComponentFactoryResolver,
   Injector,
-  Component,
   EmbeddedViewRef,
-  ComponentDecorator,
   TemplateRef
 } from '@angular/core';
 import { ComponentType } from './models';
 import { ComponentInstance } from './component-ins';
 import { BlinkCurrentOverlay } from './blink-current-overlay';
-import { ViewRef } from '@angular/core/src/render3/view_ref';
 
 @Injectable()
 export class ComponentHost<C> {
@@ -23,6 +20,7 @@ export class ComponentHost<C> {
   private htmlContent: string;
   private template: TemplateRef<any>;
   compIns: ComponentInstance<C>;
+  blinkRef;
   constructor(
     private appRef: ApplicationRef,
     private compFacResolver: ComponentFactoryResolver,
@@ -61,7 +59,7 @@ export class ComponentHost<C> {
       providers: [
         {
           provide: BlinkCurrentOverlay,
-          useFactory: () => new BlinkCurrentOverlay(props.id),
+          useFactory: () => new BlinkCurrentOverlay(this.blinkRef(props.id), props.id),
           deps: []
         }
       ],

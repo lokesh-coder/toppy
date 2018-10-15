@@ -1,11 +1,8 @@
 import { Blink } from './blink';
 
 export class BlinkCurrentOverlay {
-  constructor(private id) {
-    console.log('me', this);
-  }
+  constructor(private ref, private id) {}
   close() {
-    console.log('=>', Blink.refs);
-    Blink.refs[this.id].close();
+    this.ref.close();
   }
 }
