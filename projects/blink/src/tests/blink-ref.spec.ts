@@ -2,8 +2,8 @@ import { TestBed, async, fakeAsync, ComponentFixture, tick } from '@angular/core
 import { Component, Injectable, NgModule, DebugElement } from '@angular/core';
 import { DomHelper } from '../lib/helper/dom';
 import { BlinkRef } from '../lib/blink-ref';
-import { OverlayInstance } from '../lib/overlay-ins';
-import { ComponentHost } from '../lib/host';
+import { OverlayInstance } from '../lib/overlay-instance';
+import { HostContainer } from '../lib/host-container';
 import { Messenger } from '../lib/helper/messenger';
 import { GlobalPosition } from '../lib/position/global-position';
 import { InsidePlacement } from '../lib/models';
@@ -26,7 +26,7 @@ export class TestModule {}
 
 @Injectable()
 export class BlinkRefMock extends BlinkRef<any> {
-  constructor(_overlay: OverlayInstance, _host: ComponentHost<any>, _messenger: Messenger) {
+  constructor(_overlay: OverlayInstance, _host: HostContainer<any>, _messenger: Messenger) {
     _overlay.configure(new GlobalPosition({ placement: InsidePlacement.CENTER }), '');
     _host.configure(TestComponent);
     super(_overlay, _host, _messenger, 'xyzabc');
@@ -48,7 +48,7 @@ describe('== Blink ref ==', () => {
         },
         DomHelper,
         OverlayInstance,
-        ComponentHost,
+        HostContainer,
         Messenger
       ]
     }).compileComponents();

@@ -1,5 +1,5 @@
 import { TestBed, async } from '@angular/core/testing';
-import { Blink, OverlayInstance, ComponentHost, Messenger, Utils, BlinkRef } from 'blink';
+import { Blink, OverlayInstance, HostContainer, Messenger, Utils, BlinkRef } from 'blink';
 import { of } from 'rxjs';
 
 describe('== Blink ==', () => {
@@ -30,7 +30,7 @@ describe('== Blink ==', () => {
       providers: [
         Blink,
         { provide: OverlayInstance, useValue: overlayMock },
-        { provide: ComponentHost, useValue: componentHostMock },
+        { provide: HostContainer, useValue: componentHostMock },
         { provide: Messenger, useValue: messengerMock },
         { provide: Utils, useValue: utilsMock },
         { provide: BlinkRef, useValue: blinkRefMock }

@@ -46,7 +46,7 @@ export class RelativePositionExampleComponent implements OnInit {
           autoUpdate: true
         })
       )
-      .host(TooltipComponent)
+      .host(this.content)
       // .textContent('lokesh__')
       // .htmlContent(`Hello <b>Lokesh</b>!`)
       .create();

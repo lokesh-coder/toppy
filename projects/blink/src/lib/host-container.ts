@@ -11,7 +11,7 @@ import { ComponentInstance } from './component-ins';
 import { BlinkCurrentOverlay } from './blink-current-overlay';
 
 @Injectable()
-export class ComponentHost<C> {
+export class HostContainer<C> {
   private compFac;
   private compRef;
   private component;

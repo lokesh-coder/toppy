@@ -1,14 +1,13 @@
-export { Utils } from './lib/helper/utils';
 export { Messenger } from './lib/helper/messenger';
 export { Blink } from './lib/blink';
-export { ComponentHost } from './lib/host';
+export { HostContainer } from './lib/host-container';
 export { BlinkCurrentOverlay } from './lib/blink-current-overlay';
 export { BlinkRef } from './lib/blink-ref';
 export { BlinkModule } from './lib/blink.module';
-export { OverlayConfig } from './lib/config';
+export { OverlayConfig } from './lib/overlay-config';
 export { ComponentInstance } from './lib/component-ins';
 export * from './lib/models';
-export { OverlayInstance } from './lib/overlay-ins';
+export { OverlayInstance } from './lib/overlay-instance';
 export { GlobalPosition } from './lib/position/global-position';
 export { RelativePosition } from './lib/position/relative-position';
 export { SlidePosition } from './lib/position/slide-position';

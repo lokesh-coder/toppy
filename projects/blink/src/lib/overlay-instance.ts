@@ -1,11 +1,8 @@
-import { Injectable, Component, ComponentDecorator, OnDestroy } from '@angular/core';
-import { OverlayInstanceConfig, ContainerSize, ComponentType } from './models';
+import { Injectable, OnDestroy } from '@angular/core';
 import { DomHelper } from './helper/dom';
 import { Position, DefaultPosition } from './position';
-import { from, BehaviorSubject, of, Subject, Subscription } from 'rxjs';
-import { Messenger } from './helper/messenger';
-import { ComponentHost } from './host';
-import { OverlayConfig } from './config';
+import { BehaviorSubject, Subject, Subscription } from 'rxjs';
+import { OverlayConfig } from './overlay-config';
 
 @Injectable()
 export class OverlayInstance implements OnDestroy {

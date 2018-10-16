@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
-import { ComponentHost } from './host';
-import { OverlayInstance } from './overlay-ins';
+import { HostContainer } from './host-container';
+import { OverlayInstance } from './overlay-instance';
 import { Messenger } from './helper/messenger';
 import { fromEvent, Observable } from 'rxjs';
 import { map, filter, observeOn, distinctUntilChanged, debounceTime, takeUntil, tap, skipWhile } from 'rxjs/operators';
@@ -8,7 +8,7 @@ import { Subject } from 'rxjs';
 import { ComponentInstance } from './component-ins';
 import { animationFrameScheduler } from 'rxjs';
 import { merge } from 'rxjs';
-import { OverlayConfig } from './config';
+import { OverlayConfig } from './overlay-config';
 
 export class BlinkRef<C> {
   compIns: ComponentInstance<C>;
@@ -18,7 +18,7 @@ export class BlinkRef<C> {
 
   constructor(
     private _overlay: OverlayInstance,
-    private _host: ComponentHost<C>,
+    private _host: HostContainer<C>,
     private _messenger: Messenger,
     private _config: OverlayConfig,
     public id: string

@@ -1,5 +1,5 @@
 import { TestBed, async } from '@angular/core/testing';
-import { ComponentHost } from 'blink';
+import { HostContainer } from 'blink';
 import { Component, NgModule } from '@angular/core';
 
 @Component({
@@ -18,19 +18,19 @@ export class HostComponent {}
   declarations: [HostComponent, MainComponent],
   entryComponents: [HostComponent],
   exports: [HostComponent, MainComponent],
-  providers: [ComponentHost]
+  providers: [HostContainer]
 })
 export class TestModule {}
 
 describe('== ComponentHost ==', () => {
-  let componentHost: ComponentHost<HostComponent> = null;
+  let componentHost: HostContainer<HostComponent> = null;
   let fixture: HostComponent = null;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [TestModule]
     }).compileComponents();
     fixture = TestBed.createComponent(MainComponent).componentInstance;
-    componentHost = TestBed.get(ComponentHost);
+    componentHost = TestBed.get(HostContainer);
   }));
 
   it('should be initialized', () => {

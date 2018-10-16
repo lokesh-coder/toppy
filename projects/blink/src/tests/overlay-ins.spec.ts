@@ -1,7 +1,7 @@
 import { async, TestBed } from '@angular/core/testing';
-import { OverlayInstance } from '../lib/overlay-ins';
+import { OverlayInstance } from '../lib/overlay-instance';
 import { DomHelper } from '../lib/helper/dom';
-import { ComponentHost } from '../lib/host';
+import { HostContainer } from '../lib/host-container';
 import { Messenger } from '../lib/helper/messenger';
 import { GlobalPosition } from '../lib/position/global-position';
 import { InsidePlacement } from '../lib/models';
@@ -11,13 +11,13 @@ describe('== OverlayInstance ==', () => {
   let overlayIns: OverlayInstance = null;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      providers: [OverlayInstance, DomHelper, ComponentHost, Messenger]
+      providers: [OverlayInstance, DomHelper, HostContainer, Messenger]
     });
     overlayIns = TestBed.get(OverlayInstance);
   }));
 
   beforeEach(() => {
-    overlayIns.configure(new GlobalPosition({placement: InsidePlacement.CENTER}), 'abc', {});
+    overlayIns.configure(new GlobalPosition({ placement: InsidePlacement.CENTER }), 'abc', {});
   });
   afterEach(() => {
     overlayIns.destroy();
@@ -46,9 +46,14 @@ describe('== OverlayInstance ==', () => {
     expect(containerElements.length).toEqual(1);
   });
   it('should emit attached event', () => {
-    overlayIns.events.pipe(skip(1), take(1)).subscribe(event => {
-      expect(event).toBe('attached');
-    });
+    overlayIns.events
+      .pipe(
+        skip(1),
+        take(1)
+      )
+      .subscribe(event => {
+        expect(event).toBe('attached');
+      });
     overlayIns.create();
   });
   it('should have backdrop element in DOM', () => {
@@ -68,9 +73,14 @@ describe('== OverlayInstance ==', () => {
   });
   it('should emit detached event', () => {
     overlayIns.create();
-    overlayIns.events.pipe(skip(1), take(1)).subscribe(event => {
-      expect(event).toBe('detached');
-    });
+    overlayIns.events
+      .pipe(
+        skip(1),
+        take(1)
+      )
+      .subscribe(event => {
+        expect(event).toBe('detached');
+      });
     overlayIns.destroy();
   });
   it('should inject view in to DOM', () => {

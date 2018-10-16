@@ -1,3 +1,5 @@
+import { TemplateRef } from '@angular/core';
+
 export interface HtmlElementOptions {
   className?: string;
   id?: string;
@@ -49,7 +51,7 @@ export interface ContainerSize {
   height: string | number;
 }
 
-export interface OverlayInstanceConfig {
+export interface Config {
   backdrop: boolean;
   containerClass: string;
   hostContainerClass: string;
@@ -72,3 +74,5 @@ export interface MessengerEvent {
   name: string;
   data: any;
 }
+
+export type HostContent = string | TemplateRef<any> | ComponentType<any>;

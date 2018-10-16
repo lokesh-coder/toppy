@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { OverlayInstanceConfig } from './models';
+import { Config } from './models';
 
 export function ConfigFactory() {
   return new OverlayConfig();
@@ -9,7 +9,7 @@ export function ConfigFactory() {
   providedIn: 'root',
   useFactory: ConfigFactory
 })
-export class OverlayConfig implements OverlayInstanceConfig {
+export class OverlayConfig implements Config {
   backdrop = false;
   backdropClass = 'blink-backdrop';
   containerClass = 'blink-container';
@@ -20,7 +20,7 @@ export class OverlayConfig implements OverlayInstanceConfig {
   watchWindowResize = true;
   windowResizeCallback() {}
   docClickCallback() {}
-  set(config: Partial<OverlayInstanceConfig>) {
+  set(config: Partial<Config>) {
     // tslint:disable-next-line:forin
     for (const c in config) {
       this[c] = config[c];
