@@ -39,11 +39,15 @@ export class Blink<C> {
     if (typeof content === 'string') {
       this._hostContainer.configure({ content });
     } else if (typeof content === 'string' && props['hasHTML']) {
-      this._hostContainer.configure({ htmlContent: content });
+      this._hostContainer.configure({ content, props });
     } else if (content instanceof TemplateRef) {
-      this._hostContainer.configure({ template: content });
+      this._hostContainer.configure({ content, contentType: 'TEMPLATEREF' });
     } else {
-      this._hostContainer.configure({ component: content, props: { ...(props as any), id: this._overlayID } });
+      this._hostContainer.configure({
+        content,
+        props: { ...(props as any), id: this._overlayID },
+        contentType: 'COMPONENT'
+      });
     }
     return this;
   }

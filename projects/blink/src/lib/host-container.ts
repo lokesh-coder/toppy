@@ -6,7 +6,7 @@ import {
   EmbeddedViewRef,
   TemplateRef
 } from '@angular/core';
-import { ComponentType } from './models';
+import { ComponentType, HostContentType, HostArgs, HostContentValue } from './models';
 import { ComponentInstance } from './component-ins';
 import { BlinkCurrentOverlay } from './blink-current-overlay';
 
@@ -14,10 +14,9 @@ import { BlinkCurrentOverlay } from './blink-current-overlay';
 export class HostContainer<C> {
   private compFac;
   private compRef;
-  private component;
-  private componentProps;
-  private content: string;
-  private htmlContent: string;
+  private contentType: HostContentType;
+  private contentProps;
+  private content;
   private template: TemplateRef<any>;
   compIns: ComponentInstance<C>;
   blinkRef;
@@ -27,24 +26,15 @@ export class HostContainer<C> {
     private injector: Injector
   ) {}
 
-  configure({
-    component,
-    props,
-    template,
-    content,
-    htmlContent
-  }: Partial<{
-    component: ComponentType<C>;
-    props: object;
-    template: TemplateRef<any>;
-    content: string;
-    htmlContent: string;
-  }>) {
-    this.component = component;
-    this.componentProps = props;
-    this.template = template;
+  configure(
+    { contentType, content, props }: HostArgs = {
+      content: 'hello',
+      contentType: 'STRING'
+    }
+  ) {
+    this.contentType = contentType;
+    this.contentProps = props;
     this.content = content;
-    this.htmlContent = htmlContent;
   }
 
   createViewFromString(content: string) {
@@ -73,20 +63,22 @@ export class HostContainer<C> {
   attach(): HTMLElement {
     let view: EmbeddedViewRef<any> = null;
     let viewEl = null;
-    if (this.component) {
-      view = this.createViewFromComponent(this.component, this.componentProps);
-      viewEl = this.componentView();
-    } else if (this.template) {
-      view = this.createViewFromTemplate(this.template);
-      viewEl = view.rootNodes[0];
-    } else if (this.content) {
-      return document.createTextNode(this.content) as any;
-    } else if (this.htmlContent) {
-      const el = document.createElement('div');
-      el.innerHTML = this.htmlContent;
-      return el as any;
+    switch (this.contentType) {
+      case 'COMPONENT':
+        view = this.createViewFromComponent(this.content, this.contentProps);
+        viewEl = this.componentView();
+        break;
+      case 'TEMPLATEREF':
+        view = this.createViewFromTemplate(this.content);
+        viewEl = view.rootNodes[0];
+        break;
+      case 'STRING':
+        const el = document.createElement('div');
+        el.innerHTML = this.content;
+        return el as any;
+      default:
+        return document.createTextNode(this.content) as any;
     }
-    //  support templateRef/string
     this.appRef.attachView(view);
     return viewEl;
   }

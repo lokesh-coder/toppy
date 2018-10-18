@@ -75,4 +75,11 @@ export interface MessengerEvent {
   data: any;
 }
 
-export type HostContent = string | TemplateRef<any> | ComponentType<any>;
+export type HostContentValue = TemplateRef<any> | string | ComponentType<any>;
+
+export type HostContentType = 'STRING' | 'HTMLSTRING' | 'TEMPLATEREF' | 'COMPONENT';
+export interface HostArgs {
+  contentType?: HostContentType;
+  content: HostContentValue;
+  props?: { [key: string]: any };
+}
