@@ -1,6 +1,4 @@
-import { Blink } from './blink';
-
-export class BlinkCurrentOverlay {
+export class ToppyCurrentOverlay {
   constructor(private ref, private id) {}
   close() {
     this.ref.close();

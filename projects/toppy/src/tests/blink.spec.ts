@@ -1,14 +1,14 @@
 import { TestBed, async } from '@angular/core/testing';
-import { Blink, OverlayInstance, HostContainer, Messenger, Utils, BlinkRef } from 'blink';
+import { Toppy, OverlayInstance, HostContainer, Messenger, Utils, ToppyRef } from 'toppy';
 import { of } from 'rxjs';
 
 describe('== Blink ==', () => {
-  let blink: Blink<any> = null;
+  let toppy: Toppy<any> = null;
   let overlayMock;
   let componentHostMock;
   let messengerMock;
   let utilsMock;
-  let blinkRefMock;
+  let toppyRefMock;
 
   beforeEach(() => {
     overlayMock = jasmine.createSpyObj('OverlayInstance', ['configure', 'destroy', 'cleanup']);
@@ -22,77 +22,77 @@ describe('== Blink ==', () => {
     utilsMock = {
       ID: 'xyz'
     };
-    blinkRefMock = jasmine.createSpyObj('BlinkRef', ['close']);
+    toppyRefMock = jasmine.createSpyObj('BlinkRef', ['close']);
   });
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       providers: [
-        Blink,
+        Toppy,
         { provide: OverlayInstance, useValue: overlayMock },
         { provide: HostContainer, useValue: componentHostMock },
         { provide: Messenger, useValue: messengerMock },
         { provide: Utils, useValue: utilsMock },
-        { provide: BlinkRef, useValue: blinkRefMock }
+        { provide: ToppyRef, useValue: toppyRefMock }
       ]
     }).compileComponents();
-    blink = TestBed.get(Blink);
+    toppy = TestBed.get(Toppy);
   }));
   it('should be initialized', () => {
-    expect(blink).toBeTruthy();
+    expect(toppy).toBeTruthy();
   });
-  it('should have empty blink references on load', () => {
-    expect((blink as any)._blinkRefs.length).toEqual(0);
+  it('should have empty toppy references on load', () => {
+    expect((toppy as any)._toppyRefs.length).toEqual(0);
   });
   describe('on calling overlay method', () => {
     it('should return same instance', () => {
-      const instance = blink.overlay(null, 'abc');
-      expect(instance instanceof Blink).toBeTruthy();
+      const instance = toppy.overlay(null, 'abc');
+      expect(instance instanceof Toppy).toBeTruthy();
       expect((instance as any)._id).toEqual('abc');
     });
     it('should set `id`', () => {
-      blink.overlay(null, '123456');
-      expect((blink as any)._id).toBe('123456');
+      toppy.overlay(null, '123456');
+      expect((toppy as any)._id).toBe('123456');
     });
     it('should call `overlayInstance.configure` method once', () => {
-      blink.overlay(null, 'xyz');
+      toppy.overlay(null, 'xyz');
       expect(overlayMock.configure).toHaveBeenCalledTimes(1);
     });
   });
   describe('on calling host method', () => {
     it('should return same instance', () => {
-      const instance = blink.host(null);
-      blink.overlay(null, 'qwerty');
-      expect(instance instanceof Blink).toBeTruthy();
+      const instance = toppy.host(null);
+      toppy.overlay(null, 'qwerty');
+      expect(instance instanceof Toppy).toBeTruthy();
       expect((instance as any)._id).toEqual('qwerty');
     });
     it('should call `ComponentHost.configure` method once', () => {
-      blink.host(null);
+      toppy.host(null);
       expect(componentHostMock.configure).toHaveBeenCalledTimes(1);
     });
   });
   describe('on calling create method', () => {
     it('should return `BlinkRef` instance', () => {
-      const instance = blink.create();
-      expect(instance instanceof BlinkRef).toBeTruthy();
+      const instance = toppy.create();
+      expect(instance instanceof ToppyRef).toBeTruthy();
     });
-    it('should add `BlinkRef` instance to _blinkRef array', () => {
-      (blink as any)._id = 'abc123';
-      const instance = blink.create();
-      expect(Object.keys((blink as any)._blinkRefs).length).toEqual(1);
-      expect((blink as any)._blinkRefs['abc123'].constructor.name).toEqual('BlinkRef');
-      expect(instance instanceof BlinkRef).toBeTruthy();
+    it('should add `BlinkRef` instance to _toppyRef array', () => {
+      (toppy as any)._id = 'abc123';
+      const instance = toppy.create();
+      expect(Object.keys((toppy as any)._toppyRefs).length).toEqual(1);
+      expect((toppy as any)._toppyRefs['abc123'].constructor.name).toEqual('BlinkRef');
+      expect(instance instanceof ToppyRef).toBeTruthy();
     });
     it('should call `BlinkRef.close` method if it already exists', () => {
-      (blink as any)._id = 'mmm';
-      const foo = ((blink as any)._blinkRefs['mmm'] = new BlinkRef(
+      (toppy as any)._id = 'mmm';
+      const foo = ((toppy as any)._toppyRefs['mmm'] = new ToppyRef(
         overlayMock,
         componentHostMock,
         messengerMock,
         'mmm'
       ));
       spyOn(foo, 'close');
-      const instance = blink.create();
+      const instance = toppy.create();
       expect(foo.close).toHaveBeenCalled();
       expect(foo.close).toHaveBeenCalledTimes(1);
     });

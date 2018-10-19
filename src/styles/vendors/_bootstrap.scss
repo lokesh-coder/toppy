@@ -17,8 +17,8 @@ $theme-colors: (
   info: clr('info', 'theme'),
   dark: clr('dark', 'theme')
 );
-$border-radius: $blink--border-rad;
-$font-family-base: $blink--font-family;
+$border-radius: $toppy--border-rad;
+$font-family-base: $toppy--font-family;
 $breadcrumb-margin-bottom: 0;
 
 $h1-font-size: fs('h1');
@@ -30,7 +30,7 @@ $h6-font-size: fs('h6');
 $input-btn-padding-y-lg: .8rem;
 $input-btn-padding-x-lg: 1.5rem;
 
-$grid-breakpoints: $blink--grid-breakpoints;
+$grid-breakpoints: $toppy--grid-breakpoints;
 
 @import '~bootstrap/scss/functions';
 @import '~bootstrap/scss/variables';

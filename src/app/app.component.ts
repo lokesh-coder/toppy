@@ -1,5 +1,5 @@
 import { Component, ViewChild, ElementRef } from '@angular/core';
-import { Blink, OutsidePlacement, RelativePosition, SlidePlacement } from 'blink';
+import { Toppy, OutsidePlacement, RelativePosition, SlidePlacement } from 'toppy';
 import { TestComponent } from './test/test.component';
 import { code } from './codes';
 
@@ -9,15 +9,15 @@ import { code } from './codes';
   styleUrls: ['./app.component.scss']
 })
 export class AppComponent {
-  title = 'blink-app';
+  title = 'toppy-app';
   @ViewChild('el', { read: ElementRef })
   el: ElementRef;
   ins;
   code = code;
-  constructor(private _blink: Blink<TestComponent>) {}
+  constructor(private _toppy: Toppy<TestComponent>) {}
   // ngOnInit() {
   //   console.log('what???', SlidePlacement.RIGHT);
-  //   this.ins = this._blink
+  //   this.ins = this._toppy
   //     .overlay(
   //       new RelativePosition({
   //         placement: OutsidePlacement.BOTTOM_LEFT,

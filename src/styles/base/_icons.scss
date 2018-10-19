@@ -41,14 +41,14 @@ $icons: (
   font-family: 'ink';
   font-style: normal;
   font-weight: normal;
-  src: url('#{$blink--icon-font-path}/ink.ttf?olqd7c') format('truetype'),
-    url('#{$blink--icon-font-path}/ink.woff?olqd7c') format('woff'),
-    url('#{$blink--icon-font-path}/ink.svg?olqd7c#choosy') format('svg');
+  src: url('#{$toppy--icon-font-path}/ink.ttf?olqd7c') format('truetype'),
+    url('#{$toppy--icon-font-path}/ink.woff?olqd7c') format('woff'),
+    url('#{$toppy--icon-font-path}/ink.svg?olqd7c#choosy') format('svg');
 }
 
-.blink-icon {
+.toppy-icon {
   /* use !important to prevent issues with browser extensions that change fonts */
-  font-family: $blink--icons-font !important;
+  font-family: $toppy--icons-font !important;
 
   /* Better Font Rendering =========== */
   -webkit-font-smoothing: antialiased;

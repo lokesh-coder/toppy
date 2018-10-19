@@ -1,3 +1,3 @@
 @function fs($key: 'md') {
-	@return map-get($blink--font-sizes, $key);
+	@return map-get($toppy--font-sizes, $key);
 }

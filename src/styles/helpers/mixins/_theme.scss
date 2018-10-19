@@ -1,11 +1,11 @@
 @mixin default-theme {
-  @if $blink--current-theme== 'DEFAULT' {
+  @if $toppy--current-theme== 'DEFAULT' {
     @content;
   }
 }
 
 @mixin dark-theme {
-  @if $blink--current-theme== 'DARK' {
+  @if $toppy--current-theme== 'DARK' {
     @content;
   }
 }

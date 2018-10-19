@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SlidePlacement, BlinkRef, Blink, SlidePosition } from 'blink';
+import { SlidePlacement, ToppyRef, Toppy, SlidePosition } from 'toppy';
 import { SimpleListComponent } from '../../host-components/simple-list/simple-list.component';
 
 @Component({
@@ -13,22 +13,22 @@ export class SlidePositionExampleComponent implements OnInit {
     { name: 'Right', value: SlidePlacement.RIGHT }
   ];
   selectedPlacement = null;
-  private _blinkRef: BlinkRef<SimpleListComponent>;
-  constructor(private blink: Blink<SimpleListComponent>) {}
+  private _toppyRef: ToppyRef<SimpleListComponent>;
+  constructor(private toppy: Toppy<SimpleListComponent>) {}
 
   ngOnInit() {}
 
   open() {
-    if (this._blinkRef) {
-      this._blinkRef.close();
+    if (this._toppyRef) {
+      this._toppyRef.close();
     }
-    this._blinkRef = this.blink
+    this._toppyRef = this.toppy
       .overlay(new SlidePosition({ placement: this.selectedPlacement }), {
         dismissOnDocumentClick: false
       })
       .host(SimpleListComponent)
       .create();
-    this._blinkRef.open();
+    this._toppyRef.open();
   }
 
   onOptionChange() {

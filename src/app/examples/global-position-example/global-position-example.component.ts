@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { InsidePlacement, BlinkRef, Blink, GlobalPosition } from 'blink';
+import { InsidePlacement, ToppyRef, Toppy, GlobalPosition } from 'toppy';
 import { SimpleModalComponent } from '../../host-components/simple-modal/simple-modal.component';
 
 @Component({
@@ -20,20 +20,20 @@ export class GlobalPositionExampleComponent implements OnInit {
     { name: 'Center', value: InsidePlacement.CENTER }
   ];
   selectedPlacement = null;
-  private _blinkRef: BlinkRef<SimpleModalComponent>;
-  constructor(private blink: Blink<SimpleModalComponent>) {}
+  private _toppyRef: ToppyRef<SimpleModalComponent>;
+  constructor(private toppy: Toppy<SimpleModalComponent>) {}
 
   ngOnInit() {}
 
   open() {
-    if (this._blinkRef) {
-      this._blinkRef.close();
+    if (this._toppyRef) {
+      this._toppyRef.close();
     }
-    this._blinkRef = this.blink
+    this._toppyRef = this.toppy
       .overlay(new GlobalPosition({ placement: this.selectedPlacement, hostHeight: 'auto', hostWidth: 'auto' }))
       .host(SimpleModalComponent)
       .create();
-    this._blinkRef.open();
+    this._toppyRef.open();
   }
 
   onOptionChange() {

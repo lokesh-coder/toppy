@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FullscreenPosition, Blink, BlinkRef } from 'blink';
+import { FullscreenPosition, Toppy, ToppyRef } from 'toppy';
 import { HeroScreenComponent } from '../../host-components/hero-screen/hero-screen.component';
 
 @Component({
@@ -9,20 +9,20 @@ import { HeroScreenComponent } from '../../host-components/hero-screen/hero-scre
 })
 export class FullscreenPositionExampleComponent implements OnInit {
   selectedPlacement = null;
-  private _blinkRef: BlinkRef<HeroScreenComponent>;
-  constructor(private blink: Blink<HeroScreenComponent>) {}
+  private _toppyRef: ToppyRef<HeroScreenComponent>;
+  constructor(private toppy: Toppy<HeroScreenComponent>) {}
 
   ngOnInit() {}
 
   open() {
-    if (this._blinkRef) {
-      this._blinkRef.close();
+    if (this._toppyRef) {
+      this._toppyRef.close();
     }
-    this._blinkRef = this.blink
+    this._toppyRef = this.toppy
       .overlay(new FullscreenPosition())
       .host(HeroScreenComponent)
       .create();
-    this._blinkRef.open();
+    this._toppyRef.open();
   }
 
   onOptionChange() {

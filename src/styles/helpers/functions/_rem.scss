@@ -1,4 +1,4 @@
-@function rem($pixels, $context: $blink--base-font-size) {
+@function rem($pixels, $context: $toppy--base-font-size) {
 	@if (unitless($pixels)) {
 		$pixels: $pixels * 1px;
 	}

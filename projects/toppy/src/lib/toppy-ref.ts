@@ -10,7 +10,7 @@ import { animationFrameScheduler } from 'rxjs';
 import { merge } from 'rxjs';
 import { OverlayConfig } from './overlay-config';
 
-export class BlinkRef<C> {
+export class ToppyRef<C> {
   compIns: ComponentInstance<C>;
   events = {};
   private _isOpen = false;

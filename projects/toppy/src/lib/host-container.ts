@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { ComponentType, HostContentType, HostArgs, HostContentValue } from './models';
 import { ComponentInstance } from './component-ins';
-import { BlinkCurrentOverlay } from './blink-current-overlay';
+import { ToppyCurrentOverlay } from './toppy-current-overlay';
 
 @Injectable()
 export class HostContainer<C> {
@@ -19,7 +19,7 @@ export class HostContainer<C> {
   private content;
   private template: TemplateRef<any>;
   compIns: ComponentInstance<C>;
-  blinkRef;
+  toppyRef;
   constructor(
     private appRef: ApplicationRef,
     private compFacResolver: ComponentFactoryResolver,
@@ -48,8 +48,8 @@ export class HostContainer<C> {
     const dataInjector = Injector.create({
       providers: [
         {
-          provide: BlinkCurrentOverlay,
-          useFactory: () => new BlinkCurrentOverlay(this.blinkRef(props.id), props.id),
+          provide: ToppyCurrentOverlay,
+          useFactory: () => new ToppyCurrentOverlay(this.toppyRef(props.id), props.id),
           deps: []
         }
       ],

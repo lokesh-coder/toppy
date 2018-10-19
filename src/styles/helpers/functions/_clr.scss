@@ -1,4 +1,4 @@
 @function clr($key: 'primary', $set: 'basic') {
-	$map: map-get($blink--colors, $set);
+	$map: map-get($toppy--colors, $set);
 	@return map-get($map, $key);
 }

@@ -11,10 +11,10 @@ export function ConfigFactory() {
 })
 export class OverlayConfig implements Config {
   backdrop = false;
-  backdropClass = 'blink-backdrop';
-  containerClass = 'blink-container';
+  backdropClass = 'toppy-backdrop';
+  containerClass = 'toppy-container';
   dismissOnDocumentClick = true;
-  hostContainerClass: 'blink-host-container';
+  hostContainerClass: 'toppy-host-container';
   parentElement = null;
   watchDocClick = true;
   watchWindowResize = true;

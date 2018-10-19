@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewChild, ElementRef, TemplateRef } from '@angular/core';
-import { Blink, RelativePosition, OutsidePlacement, BlinkRef } from 'blink';
+import { Toppy, RelativePosition, OutsidePlacement, ToppyRef } from 'toppy';
 import { TooltipComponent } from '../../host-components/tooltip/tooltip.component';
 
 @Component({
@@ -27,17 +27,17 @@ export class RelativePositionExampleComponent implements OnInit {
     { name: 'Top right', value: OutsidePlacement.TOP_RIGHT }
   ];
   selectedPlacement = null;
-  private _blinkRef: BlinkRef<TooltipComponent>;
-  constructor(private blink: Blink<TooltipComponent>) {}
+  private _toppyRef: ToppyRef<TooltipComponent>;
+  constructor(private toppy: Toppy<TooltipComponent>) {}
 
   ngOnInit() {}
 
   onOptionChange() {
     console.log('option changed');
-    if (this._blinkRef) {
-      this._blinkRef.close();
+    if (this._toppyRef) {
+      this._toppyRef.close();
     }
-    this._blinkRef = this.blink
+    this._toppyRef = this.toppy
       .overlay(
         new RelativePosition({
           placement: this.selectedPlacement,
@@ -50,6 +50,6 @@ export class RelativePositionExampleComponent implements OnInit {
       // .textContent('lokesh__')
       // .htmlContent(`Hello <b>Lokesh</b>!`)
       .create();
-    this._blinkRef.open();
+    this._toppyRef.open();
   }
 }

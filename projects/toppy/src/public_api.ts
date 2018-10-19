@@ -1,9 +1,9 @@
 export { Messenger } from './lib/helper/messenger';
-export { Blink } from './lib/blink';
+export { Toppy } from './lib/toppy';
 export { HostContainer } from './lib/host-container';
-export { BlinkCurrentOverlay } from './lib/blink-current-overlay';
-export { BlinkRef } from './lib/blink-ref';
-export { BlinkModule } from './lib/blink.module';
+export { ToppyCurrentOverlay } from './lib/toppy-current-overlay';
+export { ToppyRef } from './lib/toppy-ref';
+export { ToppyModule } from './lib/toppy.module';
 export { OverlayConfig } from './lib/overlay-config';
 export { ComponentInstance } from './lib/component-ins';
 export * from './lib/models';

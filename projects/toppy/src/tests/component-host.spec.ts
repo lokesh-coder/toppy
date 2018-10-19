@@ -1,5 +1,5 @@
 import { TestBed, async } from '@angular/core/testing';
-import { HostContainer } from 'blink';
+import { HostContainer } from 'toppy';
 import { Component, NgModule } from '@angular/core';
 
 @Component({

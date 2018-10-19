@@ -1,5 +1,5 @@
 {
-  "name": "blink-app",
+  "name": "toppy-app",
   "version": "0.0.0",
   "scripts": {
     "ng": "ng",
@@ -8,7 +8,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "lib": "nodemon --watch ./projects/blink/**/*.ts --exec \"ng build blink\""
+    "lib": "nodemon --watch ./projects/toppy/**/*.ts --exec \"ng build toppy\""
   },
   "private": true,
   "dependencies": {

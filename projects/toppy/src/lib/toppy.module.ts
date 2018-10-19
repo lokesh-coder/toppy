@@ -2,10 +2,10 @@ import { NgModule } from '@angular/core';
 
 import { HostContainer } from './host-container';
 import { OverlayInstance } from './overlay-instance';
-import { Blink } from './blink';
+import { Toppy } from './toppy';
 import { OverlayConfig } from './overlay-config';
 
 @NgModule({
-  providers: [HostContainer, OverlayInstance, Blink, OverlayConfig]
+  providers: [HostContainer, OverlayInstance, Toppy, OverlayConfig]
 })
-export class BlinkModule {}
+export class ToppyModule {}

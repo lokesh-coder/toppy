@@ -3,7 +3,7 @@
   "version": 1,
   "newProjectRoot": "projects",
   "projects": {
-    "blink-app": {
+    "toppy-app": {
       "root": "",
       "sourceRoot": "src",
       "projectType": "application",
@@ -13,7 +13,7 @@
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
-            "outputPath": "dist/blink-app",
+            "outputPath": "dist/toppy-app",
             "index": "src/index.html",
             "main": "src/main.ts",
             "polyfills": "src/polyfills.ts",
@@ -52,18 +52,18 @@
         "serve": {
           "builder": "@angular-devkit/build-angular:dev-server",
           "options": {
-            "browserTarget": "blink-app:build"
+            "browserTarget": "toppy-app:build"
           },
           "configurations": {
             "production": {
-              "browserTarget": "blink-app:build:production"
+              "browserTarget": "toppy-app:build:production"
             }
           }
         },
         "extract-i18n": {
           "builder": "@angular-devkit/build-angular:extract-i18n",
           "options": {
-            "browserTarget": "blink-app:build"
+            "browserTarget": "toppy-app:build"
           }
         },
         "test": {
@@ -87,7 +87,7 @@
         }
       }
     },
-    "blink-app-e2e": {
+    "toppy-app-e2e": {
       "root": "e2e/",
       "projectType": "application",
       "architect": {
@@ -95,11 +95,11 @@
           "builder": "@angular-devkit/build-angular:protractor",
           "options": {
             "protractorConfig": "e2e/protractor.conf.js",
-            "devServerTarget": "blink-app:serve"
+            "devServerTarget": "toppy-app:serve"
           },
           "configurations": {
             "production": {
-              "devServerTarget": "blink-app:serve:production"
+              "devServerTarget": "toppy-app:serve:production"
             }
           }
         },
@@ -112,17 +112,17 @@
         }
       }
     },
-    "blink": {
-      "root": "projects/blink",
-      "sourceRoot": "projects/blink/src",
+    "toppy": {
+      "root": "projects/toppy",
+      "sourceRoot": "projects/toppy/src",
       "projectType": "library",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/blink/tsconfig.lib.json",
-            "project": "projects/blink/ng-package.json"
+            "tsConfig": "projects/toppy/tsconfig.lib.json",
+            "project": "projects/toppy/ng-package.json"
           },
           "configurations": {
             "production": {
@@ -141,22 +141,22 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/blink/src/test.ts",
-            "tsConfig": "projects/blink/tsconfig.spec.json",
-            "karmaConfig": "projects/blink/karma.conf.js"
+            "main": "projects/toppy/src/test.ts",
+            "tsConfig": "projects/toppy/tsconfig.spec.json",
+            "karmaConfig": "projects/toppy/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["projects/blink/tsconfig.lib.json", "projects/blink/tsconfig.spec.json"],
+            "tsConfig": ["projects/toppy/tsconfig.lib.json", "projects/toppy/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**"]
           }
         }
       }
     }
   },
-  "defaultProject": "blink-app",
+  "defaultProject": "toppy-app",
   "schematics": {
     "@schematics/angular:component": {
       "styleext": "scss"

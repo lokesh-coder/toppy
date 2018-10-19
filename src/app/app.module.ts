@@ -4,7 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { MarkdownModule } from 'ngx-markdown';
 
 import { AppComponent } from './app.component';
-import { BlinkModule } from 'blink';
+import { ToppyModule } from 'toppy';
 import { TestComponent } from './test/test.component';
 import { SectionComponent } from './utils/section/section.component';
 import { SubSectionComponent } from './utils/sub-section/sub-section.component';
@@ -33,7 +33,7 @@ import { HttpClientModule, HttpClient } from '@angular/common/http';
     FullscreenPositionExampleComponent,
     HeroScreenComponent
   ],
-  imports: [BrowserModule, FormsModule, HttpClientModule, MarkdownModule.forRoot({ loader: HttpClient }), BlinkModule],
+  imports: [BrowserModule, FormsModule, HttpClientModule, MarkdownModule.forRoot({ loader: HttpClient }), ToppyModule],
   providers: [],
   entryComponents: [TestComponent, TooltipComponent, SimpleModalComponent, SimpleListComponent, HeroScreenComponent],
   bootstrap: [AppComponent],
