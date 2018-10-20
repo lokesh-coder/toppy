@@ -20,8 +20,8 @@ export class GlobalPositionExampleComponent implements OnInit {
     { name: 'Center', value: InsidePlacement.CENTER }
   ];
   selectedPlacement = null;
-  private _toppyRef: ToppyRef<SimpleModalComponent>;
-  constructor(private toppy: Toppy<SimpleModalComponent>) {}
+  private _toppyRef: ToppyRef;
+  constructor(private toppy: Toppy) {}
 
   ngOnInit() {}
 

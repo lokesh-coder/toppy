@@ -4,7 +4,7 @@ import { DomHelper } from '../lib/helper/dom';
 import { ToppyRef } from '../lib/toppy-ref';
 import { OverlayInstance } from '../lib/overlay-instance';
 import { HostContainer } from '../lib/host-container';
-import { Messenger } from '../lib/helper/messenger';
+import { EventBus } from '../lib/helper/event-bus';
 import { GlobalPosition } from '../lib/position/global-position';
 import { InsidePlacement } from '../lib/models';
 import { By } from '@angular/platform-browser';
@@ -26,7 +26,7 @@ export class TestModule {}
 
 @Injectable()
 export class BlinkRefMock extends ToppyRef<any> {
-  constructor(_overlay: OverlayInstance, _host: HostContainer<any>, _messenger: Messenger) {
+  constructor(_overlay: OverlayInstance, _host: HostContainer<any>, _messenger: EventBus) {
     _overlay.configure(new GlobalPosition({ placement: InsidePlacement.CENTER }), '');
     _host.configure(TestComponent);
     super(_overlay, _host, _messenger, 'xyzabc');
@@ -49,7 +49,7 @@ describe('== Blink ref ==', () => {
         DomHelper,
         OverlayInstance,
         HostContainer,
-        Messenger
+        EventBus
       ]
     }).compileComponents();
     toppyRef = TestBed.get(ToppyRef);

@@ -1,6 +1,5 @@
-import { Component, ViewChild, ElementRef } from '@angular/core';
-import { Toppy, OutsidePlacement, RelativePosition, SlidePlacement } from 'toppy';
-import { TestComponent } from './test/test.component';
+import { Component, ElementRef, ViewChild } from '@angular/core';
+import { Toppy } from 'toppy';
 import { code } from './codes';
 
 @Component({
@@ -14,7 +13,7 @@ export class AppComponent {
   el: ElementRef;
   ins;
   code = code;
-  constructor(private _toppy: Toppy<TestComponent>) {}
+  constructor(private _toppy: Toppy) {}
   // ngOnInit() {
   //   console.log('what???', SlidePlacement.RIGHT);
   //   this.ins = this._toppy

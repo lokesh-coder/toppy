@@ -27,8 +27,8 @@ export class RelativePositionExampleComponent implements OnInit {
     { name: 'Top right', value: OutsidePlacement.TOP_RIGHT }
   ];
   selectedPlacement = null;
-  private _toppyRef: ToppyRef<TooltipComponent>;
-  constructor(private toppy: Toppy<TooltipComponent>) {}
+  private _toppyRef: ToppyRef;
+  constructor(private toppy: Toppy) {}
 
   ngOnInit() {}
 
@@ -51,5 +51,8 @@ export class RelativePositionExampleComponent implements OnInit {
       // .htmlContent(`Hello <b>Lokesh</b>!`)
       .create();
     this._toppyRef.open();
+    this._toppyRef.events['overlay'].subscribe(a => {
+      console.log('events', a);
+    });
   }
 }

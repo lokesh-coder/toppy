@@ -1,15 +1,15 @@
 import { Injectable } from '@angular/core';
-import { Config } from './models';
+import { BaseConfig } from './models';
 
 export function ConfigFactory() {
-  return new OverlayConfig();
+  return new Config();
 }
 
 @Injectable({
   providedIn: 'root',
   useFactory: ConfigFactory
 })
-export class OverlayConfig implements Config {
+export class Config implements BaseConfig {
   backdrop = false;
   backdropClass = 'toppy-backdrop';
   containerClass = 'toppy-container';
@@ -20,10 +20,10 @@ export class OverlayConfig implements Config {
   watchWindowResize = true;
   windowResizeCallback() {}
   docClickCallback() {}
-  set(config: Partial<Config>) {
+  set(config: Partial<BaseConfig>) {
     // tslint:disable-next-line:forin
-    for (const c in config) {
-      this[c] = config[c];
+    for (const configName in config) {
+      this[configName] = config[configName];
     }
   }
 }

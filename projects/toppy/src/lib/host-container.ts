@@ -1,24 +1,24 @@
 import {
-  Injectable,
   ApplicationRef,
   ComponentFactoryResolver,
-  Injector,
   EmbeddedViewRef,
+  Injectable,
+  Injector,
   TemplateRef
 } from '@angular/core';
-import { ComponentType, HostContentType, HostArgs, HostContentValue } from './models';
 import { ComponentInstance } from './component-ins';
-import { ToppyCurrentOverlay } from './toppy-current-overlay';
+import { CurrentOverlay } from './current-overlay';
+import { HostArgs, HostContentType } from './models';
 
 @Injectable()
-export class HostContainer<C> {
+export class HostContainer {
   private compFac;
   private compRef;
   private contentType: HostContentType;
   private contentProps;
   private content;
   private template: TemplateRef<any>;
-  compIns: ComponentInstance<C>;
+  compIns: ComponentInstance;
   toppyRef;
   constructor(
     private appRef: ApplicationRef,
@@ -48,15 +48,15 @@ export class HostContainer<C> {
     const dataInjector = Injector.create({
       providers: [
         {
-          provide: ToppyCurrentOverlay,
-          useFactory: () => new ToppyCurrentOverlay(this.toppyRef(props.id), props.id),
+          provide: CurrentOverlay,
+          useFactory: () => new CurrentOverlay(this.toppyRef(props.id)),
           deps: []
         }
       ],
       parent: this.injector
     });
     this.compRef = this.compFac.create(dataInjector);
-    this.compIns = this.compRef.instance = <ComponentInstance<C>>new ComponentInstance(this.compRef.instance, props);
+    this.compIns = this.compRef.instance = <ComponentInstance>new ComponentInstance(this.compRef.instance, props);
     return this.compRef.hostView;
   }
 
@@ -83,7 +83,7 @@ export class HostContainer<C> {
     return viewEl;
   }
 
-  getCompIns(): ComponentInstance<C> {
+  getCompIns(): ComponentInstance {
     return this.compIns;
   }
 

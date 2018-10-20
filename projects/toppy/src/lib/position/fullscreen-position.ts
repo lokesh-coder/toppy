@@ -1,4 +1,4 @@
-import { PositionCoOrds, SlidePlacement } from '../models';
+import { PositionCoOrds } from '../models';
 import { Position } from './position';
 
 export class FullscreenPosition extends Position {

@@ -9,8 +9,8 @@ import { HeroScreenComponent } from '../../host-components/hero-screen/hero-scre
 })
 export class FullscreenPositionExampleComponent implements OnInit {
   selectedPlacement = null;
-  private _toppyRef: ToppyRef<HeroScreenComponent>;
-  constructor(private toppy: Toppy<HeroScreenComponent>) {}
+  private _toppyRef: ToppyRef;
+  constructor(private toppy: Toppy) {}
 
   ngOnInit() {}
 

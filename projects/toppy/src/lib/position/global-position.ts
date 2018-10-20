@@ -1,5 +1,5 @@
-import { Position } from './position';
 import { InsidePlacement } from '../models';
+import { Position } from './position';
 
 export interface Config {
   placement?: InsidePlacement;

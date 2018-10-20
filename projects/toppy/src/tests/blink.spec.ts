@@ -1,5 +1,5 @@
 import { TestBed, async } from '@angular/core/testing';
-import { Toppy, OverlayInstance, HostContainer, Messenger, Utils, ToppyRef } from 'toppy';
+import { Toppy, OverlayInstance, HostContainer, EventBus, Utils, ToppyRef } from 'toppy';
 import { of } from 'rxjs';
 
 describe('== Blink ==', () => {
@@ -31,7 +31,7 @@ describe('== Blink ==', () => {
         Toppy,
         { provide: OverlayInstance, useValue: overlayMock },
         { provide: HostContainer, useValue: componentHostMock },
-        { provide: Messenger, useValue: messengerMock },
+        { provide: EventBus, useValue: messengerMock },
         { provide: Utils, useValue: utilsMock },
         { provide: ToppyRef, useValue: toppyRefMock }
       ]

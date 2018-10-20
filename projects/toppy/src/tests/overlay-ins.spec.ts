@@ -2,7 +2,7 @@ import { async, TestBed } from '@angular/core/testing';
 import { OverlayInstance } from '../lib/overlay-instance';
 import { DomHelper } from '../lib/helper/dom';
 import { HostContainer } from '../lib/host-container';
-import { Messenger } from '../lib/helper/messenger';
+import { EventBus } from '../lib/helper/event-bus';
 import { GlobalPosition } from '../lib/position/global-position';
 import { InsidePlacement } from '../lib/models';
 import { take, takeLast, skip } from 'rxjs/operators';
@@ -11,7 +11,7 @@ describe('== OverlayInstance ==', () => {
   let overlayIns: OverlayInstance = null;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      providers: [OverlayInstance, DomHelper, HostContainer, Messenger]
+      providers: [OverlayInstance, DomHelper, HostContainer, EventBus]
     });
     overlayIns = TestBed.get(OverlayInstance);
   }));

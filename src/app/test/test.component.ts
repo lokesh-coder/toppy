@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { ToppyCurrentOverlay } from 'toppy';
+import { CurrentOverlay } from 'toppy';
 
 @Component({
   selector: 'app-test',
@@ -7,7 +7,7 @@ import { ToppyCurrentOverlay } from 'toppy';
   styleUrls: ['./test.component.scss']
 })
 export class TestComponent implements OnInit {
-  constructor(private oc: ToppyCurrentOverlay) {}
+  constructor(private oc: CurrentOverlay) {}
 
   ngOnInit() {
     console.log('ID', this.oc);

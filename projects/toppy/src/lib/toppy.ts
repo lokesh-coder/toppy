@@ -1,58 +1,59 @@
-import { Injectable, TemplateRef, Component } from '@angular/core';
+import { Injectable, TemplateRef } from '@angular/core';
 import { filter } from 'rxjs/operators';
-import { ToppyRef } from './toppy-ref';
-import { Messenger } from './helper/messenger';
+import { Config } from './config';
+import { EventBus } from './helper/event-bus';
 import { HostContainer } from './host-container';
-import { ComponentType, Config, Props } from './models';
-import { OverlayConfig } from './overlay-config';
+import { BaseConfig, ComponentType, HostArgs, Props } from './models';
 import { OverlayInstance } from './overlay-instance';
 import { Position } from './position/position';
+import { ToppyRef } from './toppy-ref';
 
 @Injectable({
   providedIn: 'root'
 })
-export class Toppy<C> {
+export class Toppy {
   refs = [];
   private _overlayID: string;
   constructor(
     private _overlayIns: OverlayInstance,
-    private _hostContainer: HostContainer<C>,
-    private _config: OverlayConfig,
-    private _messenger: Messenger
+    private _hostContainer: HostContainer,
+    private _config: Config,
+    private _eventBus: EventBus
   ) {
-    this._messenger
+    this._eventBus
       .watch()
       .pipe(filter(e => e.name === 'REMOVE_OVERLAY_INS'))
-      .subscribe(e => {
-        delete this.refs[e.data];
-      });
+      .subscribe(e => delete this.refs[e.data]);
   }
-  overlay(position: Position, config: Partial<Config> = {}): Toppy<C> {
-    this._overlayID = this._generateOverlayID();
+  overlay(position: Position, config: Partial<BaseConfig> = {}): Toppy {
+    this._overlayID = this._generateID();
     this._overlayIns.configure(position, this._overlayID);
     this._config.set(config);
     this._hostContainer.toppyRef = this.getToppyRef.bind(this);
     return this;
   }
 
-  host(content: string | TemplateRef<any> | ComponentType<C>, props: Props<C> = {}) {
+  host(content: string | TemplateRef<any> | ComponentType<any>, props: Props<any> = {}) {
+    let data: HostArgs;
+
     if (typeof content === 'string') {
-      this._hostContainer.configure({ content });
+      data = { content };
     } else if (typeof content === 'string' && props['hasHTML']) {
-      this._hostContainer.configure({ content, props });
+      data = { content, props };
     } else if (content instanceof TemplateRef) {
-      this._hostContainer.configure({ content, contentType: 'TEMPLATEREF' });
+      data = { content, contentType: 'TEMPLATEREF' };
     } else {
-      this._hostContainer.configure({
+      data = {
         content,
         props: { ...(props as any), id: this._overlayID },
         contentType: 'COMPONENT'
-      });
+      };
     }
+    this._hostContainer.configure(data);
     return this;
   }
 
-  create(): ToppyRef<C> {
+  create(): ToppyRef {
     if (this.refs[this._overlayID]) {
       this.refs[this._overlayID].close();
       delete this.refs[this._overlayID];
@@ -60,7 +61,7 @@ export class Toppy<C> {
     this.refs[this._overlayID] = new ToppyRef(
       this._overlayIns,
       this._hostContainer,
-      this._messenger,
+      this._eventBus,
       this._config,
       this._overlayID
     );
@@ -71,7 +72,7 @@ export class Toppy<C> {
     return this.refs[id];
   }
 
-  private _generateOverlayID(): string {
+  private _generateID(): string {
     return Math.random()
       .toString(36)
       .substr(2, 5);

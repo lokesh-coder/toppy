@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HtmlElementOptions, ContainerSize } from '../models';
+import { ContainerSize, HtmlElementOptions } from '../models';
 
 export type Elem = Document | HTMLElement;
 

@@ -1,4 +1,4 @@
-import { OutsidePlacement, PositionCoOrds, ContainerSize } from '../models';
+import { OutsidePlacement, PositionCoOrds } from '../models';
 import { Position } from './position';
 
 export interface Config {

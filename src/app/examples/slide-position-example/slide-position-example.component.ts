@@ -13,8 +13,8 @@ export class SlidePositionExampleComponent implements OnInit {
     { name: 'Right', value: SlidePlacement.RIGHT }
   ];
   selectedPlacement = null;
-  private _toppyRef: ToppyRef<SimpleListComponent>;
-  constructor(private toppy: Toppy<SimpleListComponent>) {}
+  private _toppyRef: ToppyRef;
+  constructor(private toppy: Toppy) {}
 
   ngOnInit() {}
 

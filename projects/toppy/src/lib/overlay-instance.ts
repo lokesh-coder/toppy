@@ -1,8 +1,8 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { DomHelper } from './helper/dom';
-import { Position, DefaultPosition } from './position';
 import { BehaviorSubject, Subject, Subscription } from 'rxjs';
-import { OverlayConfig } from './overlay-config';
+import { Config } from './config';
+import { DomHelper } from './helper/dom';
+import { DefaultPosition, Position } from './position';
 
 @Injectable()
 export class OverlayInstance implements OnDestroy {
@@ -16,7 +16,7 @@ export class OverlayInstance implements OnDestroy {
   private _positionSubscription: Subscription;
   events: BehaviorSubject<string> = new BehaviorSubject('init');
 
-  constructor(public config: OverlayConfig, private _dom: DomHelper) {}
+  constructor(public config: Config, private _dom: DomHelper) {}
 
   configure(position: Position = new DefaultPosition(), id?: string) {
     this.position = position;
@@ -71,7 +71,6 @@ export class OverlayInstance implements OnDestroy {
   destroy() {
     this._dom.removeElement(this.containerEl);
     this.events.next('detached');
-    this.events.complete();
     this._cleanup();
   }
 
@@ -92,5 +91,6 @@ export class OverlayInstance implements OnDestroy {
 
   ngOnDestroy() {
     this._positionSubscription.unsubscribe();
+    this.events.complete();
   }
 }

@@ -51,7 +51,7 @@ export interface ContainerSize {
   height: string | number;
 }
 
-export interface Config {
+export interface BaseConfig {
   backdrop: boolean;
   containerClass: string;
   hostContainerClass: string;
@@ -70,7 +70,7 @@ export interface ComponentType<T> {
 
 export type Props<T> = { [P in keyof T]?: T[P] };
 
-export interface MessengerEvent {
+export interface ToppyEvent {
   name: string;
   data: any;
 }
