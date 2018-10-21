@@ -15,4 +15,8 @@ export class EventBus {
   watch(): Observable<any> {
     return this._event.asObservable();
   }
+
+  destroy() {
+    this._event.complete();
+  }
 }

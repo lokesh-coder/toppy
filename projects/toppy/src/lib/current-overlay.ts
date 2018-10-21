@@ -1,6 +1,8 @@
+import { ToppyRef } from './toppy-ref';
+
 export class CurrentOverlay {
-  constructor(private ref) {}
+  constructor(private _ref: ToppyRef) {}
   close() {
-    this.ref.close();
+    this._ref.close();
   }
 }

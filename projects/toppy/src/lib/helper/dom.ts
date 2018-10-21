@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { ContainerSize, HtmlElementOptions } from '../models';
+import { ContainerSize } from '../models';
 
 export type Elem = Document | HTMLElement;
 
@@ -11,10 +11,8 @@ export class DomHelper {
     BODY: document.getElementsByTagName('body')[0]
   };
 
-  createElement(elementName: string, { className = '', id = '', attr = {} }: HtmlElementOptions): HTMLElement {
+  createElement(elementName: string, attr = {}): HTMLElement {
     const element = document.createElement(elementName);
-    element.className = className;
-    element.id = id;
     Object.keys(attr).forEach(name => element.setAttribute(name, attr[name]));
     return element;
   }

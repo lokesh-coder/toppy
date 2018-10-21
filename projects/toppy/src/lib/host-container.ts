@@ -1,25 +1,28 @@
 import {
   ApplicationRef,
+  ComponentFactory,
   ComponentFactoryResolver,
+  ComponentRef,
   EmbeddedViewRef,
   Injectable,
   Injector,
-  TemplateRef
+  TemplateRef,
+  ViewRef
 } from '@angular/core';
 import { ComponentInstance } from './component-ins';
 import { CurrentOverlay } from './current-overlay';
 import { HostArgs, HostContentType } from './models';
+import { ToppyRef } from './toppy-ref';
 
 @Injectable()
 export class HostContainer {
-  private compFac;
-  private compRef;
-  private contentType: HostContentType;
-  private contentProps;
-  private content;
-  private template: TemplateRef<any>;
-  compIns: ComponentInstance;
-  toppyRef;
+  private _compFac: ComponentFactory<any>;
+  private _compRef: ComponentRef<any>;
+  private _contentType: HostContentType;
+  private _compIns: ComponentInstance;
+  private _contentProps: { [key: string]: any };
+  private _content: any;
+  toppyRef: (id: string) => ToppyRef;
   constructor(
     private appRef: ApplicationRef,
     private compFacResolver: ComponentFactoryResolver,
@@ -32,19 +35,19 @@ export class HostContainer {
       contentType: 'STRING'
     }
   ) {
-    this.contentType = contentType;
-    this.contentProps = props;
-    this.content = content;
+    this._contentType = contentType;
+    this._contentProps = props;
+    this._content = content;
   }
 
-  createViewFromString(content: string) {
+  createViewFromString(content: string): Text {
     return document.createTextNode(content);
   }
-  createViewFromTemplate(template: TemplateRef<any>, ctx = {}) {
+  createViewFromTemplate(template: TemplateRef<any>, ctx = {}): EmbeddedViewRef<any> {
     return template.createEmbeddedView(ctx);
   }
-  createViewFromComponent(component, props: any = {}) {
-    this.compFac = this.compFacResolver.resolveComponentFactory(component);
+  createViewFromComponent(component, props: any = {}): ViewRef {
+    this._compFac = this.compFacResolver.resolveComponentFactory(component);
     const dataInjector = Injector.create({
       providers: [
         {
@@ -55,53 +58,50 @@ export class HostContainer {
       ],
       parent: this.injector
     });
-    this.compRef = this.compFac.create(dataInjector);
-    this.compIns = this.compRef.instance = <ComponentInstance>new ComponentInstance(this.compRef.instance, props);
-    return this.compRef.hostView;
+    this._compRef = this._compFac.create(dataInjector);
+    this._compIns = <ComponentInstance>new ComponentInstance(this._compRef.instance, props).getInstance();
+    return this._compRef.hostView;
   }
 
   attach(): HTMLElement {
-    let view: EmbeddedViewRef<any> = null;
+    let view: any = null;
     let viewEl = null;
-    switch (this.contentType) {
+    switch (this._contentType) {
       case 'COMPONENT':
-        view = this.createViewFromComponent(this.content, this.contentProps);
-        viewEl = this.componentView();
+        view = this.createViewFromComponent(this._content, this._contentProps);
+        viewEl = this.getComponentViewEl();
         break;
       case 'TEMPLATEREF':
-        view = this.createViewFromTemplate(this.content);
+        view = this.createViewFromTemplate(this._content);
         viewEl = view.rootNodes[0];
         break;
       case 'STRING':
         const el = document.createElement('div');
-        el.innerHTML = this.content;
+        el.innerHTML = this._content;
         return el as any;
       default:
-        return document.createTextNode(this.content) as any;
+        return document.createTextNode(this._content) as any;
     }
     this.appRef.attachView(view);
     return viewEl;
   }
 
-  getCompIns(): ComponentInstance {
-    return this.compIns;
-  }
-
-  detach() {
-    if (!this.compRef) {
+  detach(): void {
+    if (!this._compRef) {
       return;
     }
-    this.appRef.detachView(this.compRef.hostView);
-    this.compRef.destroy();
+    this.appRef.detachView(this._compRef.hostView);
+    this._compRef.destroy();
   }
 
-  componentView(): HTMLElement {
-    if (!this.compRef || this.appRef.viewCount === 0) {
+  getComponentViewEl(): null | HTMLElement {
+    if (!this._compRef || this.appRef.viewCount === 0) {
       return null;
     }
-    return (this.compRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
+    return (this._compRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
   }
-  templateView() {
-    return this.template.elementRef;
+
+  getCompIns() {
+    return this._compIns;
   }
 }

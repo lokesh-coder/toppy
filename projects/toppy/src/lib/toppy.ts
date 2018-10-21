@@ -1,9 +1,9 @@
-import { Injectable, TemplateRef } from '@angular/core';
+import { Injectable, OnDestroy, TemplateRef } from '@angular/core';
 import { filter } from 'rxjs/operators';
 import { Config } from './config';
 import { EventBus } from './helper/event-bus';
 import { HostContainer } from './host-container';
-import { BaseConfig, ComponentType, HostArgs, Props } from './models';
+import { BaseConfig, ComponentType, HostArgs } from './models';
 import { OverlayInstance } from './overlay-instance';
 import { Position } from './position/position';
 import { ToppyRef } from './toppy-ref';
@@ -11,9 +11,10 @@ import { ToppyRef } from './toppy-ref';
 @Injectable({
   providedIn: 'root'
 })
-export class Toppy {
-  refs = [];
+export class Toppy implements OnDestroy {
+  toppyRefs: { [key: string]: ToppyRef } = {};
   private _overlayID: string;
+
   constructor(
     private _overlayIns: OverlayInstance,
     private _hostContainer: HostContainer,
@@ -23,17 +24,18 @@ export class Toppy {
     this._eventBus
       .watch()
       .pipe(filter(e => e.name === 'REMOVE_OVERLAY_INS'))
-      .subscribe(e => delete this.refs[e.data]);
+      .subscribe(e => delete this.toppyRefs[e.data]);
   }
+
   overlay(position: Position, config: Partial<BaseConfig> = {}): Toppy {
+    this._config.set(config);
     this._overlayID = this._generateID();
     this._overlayIns.configure(position, this._overlayID);
-    this._config.set(config);
     this._hostContainer.toppyRef = this.getToppyRef.bind(this);
     return this;
   }
 
-  host(content: string | TemplateRef<any> | ComponentType<any>, props: Props<any> = {}) {
+  host(content: string | TemplateRef<any> | ComponentType<any>, props: { [x: string]: any } = {}) {
     let data: HostArgs;
 
     if (typeof content === 'string') {
@@ -45,7 +47,7 @@ export class Toppy {
     } else {
       data = {
         content,
-        props: { ...(props as any), id: this._overlayID },
+        props: { ...props, id: this._overlayID },
         contentType: 'COMPONENT'
       };
     }
@@ -54,22 +56,26 @@ export class Toppy {
   }
 
   create(): ToppyRef {
-    if (this.refs[this._overlayID]) {
-      this.refs[this._overlayID].close();
-      delete this.refs[this._overlayID];
+    if (this.toppyRefs[this._overlayID]) {
+      this.toppyRefs[this._overlayID].close();
+      delete this.toppyRefs[this._overlayID];
     }
-    this.refs[this._overlayID] = new ToppyRef(
+    this.toppyRefs[this._overlayID] = new ToppyRef(
       this._overlayIns,
       this._hostContainer,
       this._eventBus,
       this._config,
       this._overlayID
     );
-    console.log('here it is', this.refs);
-    return this.refs[this._overlayID];
+    return this.toppyRefs[this._overlayID];
   }
+
   getToppyRef(id) {
-    return this.refs[id];
+    return this.toppyRefs[id];
+  }
+
+  ngOnDestroy() {
+    this._eventBus.destroy();
   }
 
   private _generateID(): string {

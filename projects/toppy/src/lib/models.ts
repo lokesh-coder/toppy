@@ -1,11 +1,5 @@
 import { TemplateRef } from '@angular/core';
 
-export interface HtmlElementOptions {
-  className?: string;
-  id?: string;
-  attr?: { [x: string]: any };
-}
-
 export interface PositionCoOrds {
   top?: number;
   left?: number;
@@ -54,21 +48,19 @@ export interface ContainerSize {
 export interface BaseConfig {
   backdrop: boolean;
   containerClass: string;
-  hostContainerClass: string;
+  wrapperClass: string;
   backdropClass: string;
   watchWindowResize: boolean;
   watchDocClick: boolean;
   dismissOnDocumentClick: boolean;
+  parentElement: HTMLElement | null;
   windowResizeCallback: () => void;
   docClickCallback: () => void;
-  parentElement: HTMLElement | null;
 }
 
 export interface ComponentType<T> {
   new (...args: any[]): T;
 }
-
-export type Props<T> = { [P in keyof T]?: T[P] };
 
 export interface ToppyEvent {
   name: string;

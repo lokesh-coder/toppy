@@ -1,6 +1,7 @@
-import { Component, OnInit, ViewChild, ElementRef, TemplateRef } from '@angular/core';
-import { Toppy, RelativePosition, OutsidePlacement, ToppyRef } from 'toppy';
-import { TooltipComponent } from '../../host-components/tooltip/tooltip.component';
+import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { OutsidePlacement, RelativePosition, Toppy, ToppyRef } from 'toppy';
 
 @Component({
   selector: 'app-relative-position-example',
@@ -28,12 +29,14 @@ export class RelativePositionExampleComponent implements OnInit {
   ];
   selectedPlacement = null;
   private _toppyRef: ToppyRef;
+  destroy$ = new Subject();
   constructor(private toppy: Toppy) {}
 
   ngOnInit() {}
 
   onOptionChange() {
     console.log('option changed');
+    this.destroy$.next('');
     if (this._toppyRef) {
       this._toppyRef.close();
     }
@@ -51,8 +54,11 @@ export class RelativePositionExampleComponent implements OnInit {
       // .htmlContent(`Hello <b>Lokesh</b>!`)
       .create();
     this._toppyRef.open();
-    this._toppyRef.events['overlay'].subscribe(a => {
-      console.log('events', a);
-    });
+    this._toppyRef
+      .events()
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(a => {
+        console.log('events=>', a);
+      });
   }
 }

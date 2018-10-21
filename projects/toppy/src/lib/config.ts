@@ -11,10 +11,10 @@ export function ConfigFactory() {
 })
 export class Config implements BaseConfig {
   backdrop = false;
-  backdropClass = 'toppy-backdrop';
   containerClass = 'toppy-container';
+  wrapperClass = 'toppy-wrapper';
+  backdropClass = 'toppy-backdrop';
   dismissOnDocumentClick = true;
-  hostContainerClass: 'toppy-host-container';
   parentElement = null;
   watchDocClick = true;
   watchWindowResize = true;

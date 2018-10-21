@@ -1,13 +1,13 @@
 export class ComponentInstance {
-  constructor(public component, public props = {}) {
-    this._addProps(this.props);
+  constructor(private _component, private _props = {}) {
+    this._addProps(this._props);
   }
-  destroy() {}
+  getInstance() {
+    return this._component;
+  }
   private _addProps(props: object) {
     Object.keys(props).forEach(key => {
-      this.component[key] = props[key];
+      this._component[key] = props[key];
     });
   }
-  setProps() {}
-  compIns() {}
 }
