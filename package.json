@@ -4,11 +4,15 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build:app": "ng build",
+    "build:app:prod": "ng build --prod",
+    "build:lib": "ng build --project toppy --prod",
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "lib": "nodemon --watch ./projects/toppy/**/*.ts --exec \"ng build toppy\""
+    "lib": "nodemon --watch ./projects/toppy/**/*.ts --exec \"ng build toppy\"",
+    "semantic-release": "semantic-release",
+    "travis-deploy-once": "travis-deploy-once"
   },
   "private": true,
   "dependencies": {
@@ -38,6 +42,14 @@
     "@angular/cli": "~6.2.2",
     "@angular/compiler-cli": "^6.1.0",
     "@angular/language-service": "^6.1.0",
+    "@commitlint/cli": "7.2.1",
+    "@commitlint/config-conventional": "7.1.2",
+    "@commitlint/travis-cli": "7.2.1",
+    "@semantic-release/changelog": "2.1.2",
+    "@semantic-release/exec": "2.3.0",
+    "@semantic-release/git": "6.0.2",
+    "@semantic-release/github": "4.4.2",
+    "conventional-changelog": "2.0.3",
     "@types/jasmine": "~2.8.8",
     "@types/jasminewd2": "~2.0.3",
     "@types/node": "~8.9.4",
@@ -59,6 +71,10 @@
     "tsickle": ">=0.29.0",
     "tslib": "^1.9.0",
     "tslint": "~5.11.0",
-    "typescript": "~2.9.2"
+    "typescript": "~2.9.2",
+    "github-release-notes": "0.17.0",
+    "husky": "0.14.3",
+    "semantic-release": "15.10.5",
+    "travis-deploy-once": "5.0.9"
   }
 }
