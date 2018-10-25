@@ -1,13 +1,13 @@
-import { TestBed, async, fakeAsync, ComponentFixture, tick } from '@angular/core/testing';
-import { Component, Injectable, NgModule, DebugElement } from '@angular/core';
+import { Component, DebugElement, Injectable, NgModule } from '@angular/core';
+import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
+import { Config } from '../lib/config';
 import { DomHelper } from '../lib/helper/dom';
-import { ToppyRef } from '../lib/toppy-ref';
-import { OverlayInstance } from '../lib/overlay-instance';
-import { HostContainer } from '../lib/host-container';
 import { EventBus } from '../lib/helper/event-bus';
-import { GlobalPosition } from '../lib/position/global-position';
+import { HostContainer } from '../lib/host-container';
 import { InsidePlacement } from '../lib/models';
-import { By } from '@angular/platform-browser';
+import { OverlayInstance } from '../lib/overlay-instance';
+import { GlobalPosition } from '../lib/position/global-position';
+import { ToppyRef } from '../lib/toppy-ref';
 
 @Component({
   selector: 'test-component',
@@ -25,16 +25,16 @@ export class TestComponent {
 export class TestModule {}
 
 @Injectable()
-export class BlinkRefMock extends ToppyRef<any> {
-  constructor(_overlay: OverlayInstance, _host: HostContainer<any>, _messenger: EventBus) {
+export class BlinkRefMock extends ToppyRef {
+  constructor(_overlay: OverlayInstance, _host: HostContainer, _messenger: EventBus, _config: Config) {
     _overlay.configure(new GlobalPosition({ placement: InsidePlacement.CENTER }), '');
-    _host.configure(TestComponent);
-    super(_overlay, _host, _messenger, 'xyzabc');
+    _host.configure({ content: TestComponent });
+    super(_overlay, _host, _messenger, _config, 'xyzabc');
   }
 }
 
 describe('== Blink ref ==', () => {
-  let toppyRef: ToppyRef<any> = null;
+  let toppyRef: ToppyRef = null;
   let debugEl: DebugElement = null;
   let fixture: ComponentFixture<TestComponent> = null;
 
@@ -60,32 +60,24 @@ describe('== Blink ref ==', () => {
   it('should initialize', () => {
     expect(toppyRef).toBeTruthy();
   });
-  it('should increase the reference count', () => {
-    expect(toppyRef.count).toEqual(1);
-  });
-  it('should fire a event', () => {
-    toppyRef.events['overlay'].subscribe(e => {
-      expect(e).toBe('init');
-    });
-  });
 
   describe('on calling `open` method', () => {
     afterEach(() => {
       toppyRef.close();
     });
     it('should return same instance', () => {
-      toppyRef.id = 'QWERTY';
+      toppyRef.overlayID = 'QWERTY';
       const instance = toppyRef.open();
       expect(instance instanceof ToppyRef).toBeTruthy();
-      expect(instance.id).toBe('QWERTY');
+      expect(instance.overlayID).toBe('QWERTY');
     });
-    it('should get the component instance', () => {
-      toppyRef.open();
-      expect(toppyRef.compIns.component instanceof TestComponent).toBeTruthy();
-      expect(toppyRef.compIns.component.name).toBe('test-component');
-    });
+    // it('should get the component instance', () => {
+    //   toppyRef.open();
+    //   expect(toppyRef.compIns.component instanceof TestComponent).toBeTruthy();
+    //   expect(toppyRef.compIns.component.name).toBe('test-component');
+    // });
     it('should create overlay element in DOM', () => {
-      const overlayContainerElements = document.getElementsByClassName('overlay-container');
+      const overlayContainerElements = document.getElementsByClassName('toppy-container');
       expect(overlayContainerElements.length).toEqual(0);
       toppyRef.open();
       expect(overlayContainerElements.length).toEqual(1);
@@ -108,7 +100,7 @@ describe('== Blink ref ==', () => {
 
   describe('on calling `close` method', () => {
     it('should remove overlay container element form DOM', () => {
-      const overlayContainerElements = document.getElementsByClassName('overlay-container');
+      const overlayContainerElements = document.getElementsByClassName('toppy-container');
       expect(overlayContainerElements.length).toEqual(0);
       toppyRef.open();
       expect(overlayContainerElements.length).toEqual(1);
@@ -116,7 +108,7 @@ describe('== Blink ref ==', () => {
       expect(overlayContainerElements.length).toEqual(0);
     });
     it('should remove all overlay container elements form DOM', () => {
-      const overlayContainerElements = document.getElementsByClassName('overlay-container');
+      const overlayContainerElements = document.getElementsByClassName('toppy-container');
       toppyRef.open();
       toppyRef.open();
       toppyRef.open();

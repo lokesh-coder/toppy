@@ -79,7 +79,9 @@ export class OverlayInstance implements OnDestroy {
   }
 
   private _cleanup(): void {
-    this._positionSubscription.unsubscribe();
+    if (this._positionSubscription) {
+      this._positionSubscription.unsubscribe();
+    }
     this._containerEl = this._wrapperEl = this._backdropEl = this._viewEl = null;
   }
 

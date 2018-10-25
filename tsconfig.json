@@ -13,7 +13,7 @@
     "typeRoots": ["node_modules/@types"],
     "lib": ["es2017", "dom"],
     "paths": {
-      "toppy": ["./projects/toppy/src/public_api.ts"]
+      "toppy": ["./toppy/src/public_api.ts"]
     }
   }
 }

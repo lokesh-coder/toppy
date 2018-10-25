@@ -1,23 +1,25 @@
 import { async, TestBed } from '@angular/core/testing';
-import { OverlayInstance } from '../lib/overlay-instance';
+import { skip, take } from 'rxjs/operators';
 import { DomHelper } from '../lib/helper/dom';
-import { HostContainer } from '../lib/host-container';
 import { EventBus } from '../lib/helper/event-bus';
-import { GlobalPosition } from '../lib/position/global-position';
+import { HostContainer } from '../lib/host-container';
 import { InsidePlacement } from '../lib/models';
-import { take, takeLast, skip } from 'rxjs/operators';
+import { OverlayInstance } from '../lib/overlay-instance';
+import { GlobalPosition } from '../lib/position/global-position';
 
 describe('== OverlayInstance ==', () => {
   let overlayIns: OverlayInstance = null;
+  let eventBus: EventBus = null;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       providers: [OverlayInstance, DomHelper, HostContainer, EventBus]
     });
     overlayIns = TestBed.get(OverlayInstance);
+    eventBus = TestBed.get(EventBus);
   }));
 
   beforeEach(() => {
-    overlayIns.configure(new GlobalPosition({ placement: InsidePlacement.CENTER }), 'abc', {});
+    overlayIns.configure(new GlobalPosition({ placement: InsidePlacement.CENTER }), 'abc');
   });
   afterEach(() => {
     overlayIns.destroy();
@@ -27,12 +29,6 @@ describe('== OverlayInstance ==', () => {
     expect(overlayIns).toBeTruthy();
   });
 
-  it('should emit init event', () => {
-    overlayIns.events.pipe(take(1)).subscribe(event => {
-      expect(event).toBe('init');
-    });
-  });
-
   it('should create Overlay element in DOM', () => {
     const containerElements = document.getElementsByClassName(overlayIns.config.containerClass);
     expect(containerElements.length).toEqual(0);
@@ -40,19 +36,20 @@ describe('== OverlayInstance ==', () => {
     expect(containerElements.length).toEqual(1);
   });
   it('should create host container element in DOM', () => {
-    const containerElements = document.getElementsByClassName(overlayIns.config.hostContainerClass);
+    const containerElements = document.getElementsByClassName(overlayIns.config.wrapperClass);
     expect(containerElements.length).toEqual(0);
     overlayIns.create();
     expect(containerElements.length).toEqual(1);
   });
   it('should emit attached event', () => {
-    overlayIns.events
+    eventBus
+      .watch()
       .pipe(
         skip(1),
         take(1)
       )
       .subscribe(event => {
-        expect(event).toBe('attached');
+        expect(event['name']).toBe('ATTACHED');
       });
     overlayIns.create();
   });
@@ -73,13 +70,14 @@ describe('== OverlayInstance ==', () => {
   });
   it('should emit detached event', () => {
     overlayIns.create();
-    overlayIns.events
+    eventBus
+      .watch()
       .pipe(
         skip(1),
         take(1)
       )
       .subscribe(event => {
-        expect(event).toBe('detached');
+        expect(event['name']).toBe('DETACHED');
       });
     overlayIns.destroy();
   });
@@ -98,12 +96,12 @@ describe('== OverlayInstance ==', () => {
     const fooEl = document.createElement('foo');
     const barEl = document.createElement('bar');
     const containerElement = document.getElementsByClassName(overlayIns.config.containerClass)[0];
-    const hostContainerElement = document.getElementsByClassName(overlayIns.config.hostContainerClass)[0];
+    const hostContainerElement = document.getElementsByClassName(overlayIns.config.wrapperClass)[0];
     overlayIns.setView(fooEl);
-    expect(overlayIns.isHostContainerElement(fooEl)).toBeFalsy();
-    expect(overlayIns.isHostContainerElement(hostContainerElement)).toBeFalsy();
-    expect(overlayIns.isHostContainerElement(barEl)).toBeTruthy();
-    expect(overlayIns.isHostContainerElement(document)).toBeTruthy();
-    expect(overlayIns.isHostContainerElement(containerElement)).toBeTruthy();
+    expect(overlayIns.isHostElement(fooEl)).toBeFalsy();
+    expect(overlayIns.isHostElement(hostContainerElement)).toBeFalsy();
+    expect(overlayIns.isHostElement(barEl)).toBeTruthy();
+    expect(overlayIns.isHostElement(document)).toBeTruthy();
+    expect(overlayIns.isHostElement(containerElement)).toBeTruthy();
   });
 });

@@ -1,6 +1,6 @@
-import { TestBed, async } from '@angular/core/testing';
-import { HostContainer } from 'toppy';
 import { Component, NgModule } from '@angular/core';
+import { async, TestBed } from '@angular/core/testing';
+import { HostContainer } from '../lib/host-container';
 
 @Component({
   selector: 'main-component',
@@ -23,7 +23,7 @@ export class HostComponent {}
 export class TestModule {}
 
 describe('== ComponentHost ==', () => {
-  let componentHost: HostContainer<HostComponent> = null;
+  let componentHost: HostContainer = null;
   let fixture: HostComponent = null;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -37,25 +37,25 @@ describe('== ComponentHost ==', () => {
     expect(componentHost).toBeTruthy();
   });
   it('should attach component to the angular zone', () => {
-    expect(componentHost.componentView()).toBeNull();
-    componentHost.configure(HostComponent, {});
+    expect(componentHost.getComponentViewEl()).toBeNull();
+    componentHost.configure({ content: HostComponent, contentType: 'COMPONENT' });
     componentHost.attach();
-    const hostComponentText = componentHost.componentView().querySelector('h1').textContent;
+    const hostComponentText = componentHost.getComponentViewEl().querySelector('h1').textContent;
     expect(hostComponentText).toBe('Hello');
   });
   it('should detach component', () => {
-    componentHost.configure(HostComponent, {});
+    componentHost.configure({ content: HostComponent, contentType: 'COMPONENT' });
 
     componentHost.attach();
-    const hostComponentText = componentHost.componentView().querySelector('h1').textContent;
+    const hostComponentText = componentHost.getComponentViewEl().querySelector('h1').textContent;
     expect(hostComponentText).toBe('Hello');
 
     componentHost.detach();
-    expect(componentHost.componentView()).toBeNull();
+    expect(componentHost.getComponentViewEl()).toBeNull();
   });
   it('should return component instance', () => {
-    componentHost.configure(HostComponent, {});
+    componentHost.configure({ content: HostComponent, contentType: 'COMPONENT' });
     componentHost.attach();
-    expect(componentHost.getCompIns().component instanceof HostComponent).toBeTruthy();
+    expect(componentHost.getCompIns() instanceof HostComponent).toBeTruthy();
   });
 });

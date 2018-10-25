@@ -10,7 +10,7 @@
     "test": "ng test",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "lib": "nodemon --watch ./projects/toppy/**/*.ts --exec \"ng build toppy\"",
+    "lib": "nodemon --watch ./toppy/**/*.ts --exec \"ng build toppy\"",
     "semantic-release": "semantic-release",
     "travis-deploy-once": "travis-deploy-once"
   },

@@ -1,11 +1,11 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
-  "newProjectRoot": "projects",
+  "newProjectRoot": "./",
   "projects": {
     "toppy-app": {
       "root": "",
-      "sourceRoot": "src",
+      "sourceRoot": "demo",
       "projectType": "application",
       "prefix": "app",
       "schematics": {},
@@ -14,12 +14,12 @@
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/toppy-app",
-            "index": "src/index.html",
-            "main": "src/main.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.app.json",
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles/root.scss", "node_modules/prismjs/themes/prism.css"],
+            "index": "demo/index.html",
+            "main": "demo/main.ts",
+            "polyfills": "demo/polyfills.ts",
+            "tsConfig": "demo/tsconfig.app.json",
+            "assets": ["demo/favicon.ico", "demo/assets"],
+            "styles": ["demo/styles/root.scss", "node_modules/prismjs/themes/prism.css"],
             "scripts": [
               "node_modules/marked/lib/marked.js",
               "node_modules/prismjs/prism.js",
@@ -33,8 +33,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "src/environments/environment.ts",
-                  "with": "src/environments/environment.prod.ts"
+                  "replace": "demo/environments/environment.ts",
+                  "with": "demo/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -69,19 +69,19 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "src/test.ts",
-            "polyfills": "src/polyfills.ts",
-            "tsConfig": "src/tsconfig.spec.json",
-            "karmaConfig": "src/karma.conf.js",
-            "styles": ["src/styles/root.scss"],
+            "main": "demo/test.ts",
+            "polyfills": "demo/polyfills.ts",
+            "tsConfig": "demo/tsconfig.spec.json",
+            "karmaConfig": "demo/karma.conf.js",
+            "styles": ["demo/styles/root.scss"],
             "scripts": [],
-            "assets": ["src/favicon.ico", "src/assets"]
+            "assets": ["demo/favicon.ico", "demo/assets"]
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["src/tsconfig.app.json", "src/tsconfig.spec.json"],
+            "tsConfig": ["demo/tsconfig.app.json", "demo/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**"]
           }
         }
@@ -113,16 +113,16 @@
       }
     },
     "toppy": {
-      "root": "projects/toppy",
-      "sourceRoot": "projects/toppy/src",
+      "root": "toppy",
+      "sourceRoot": "toppy/src",
       "projectType": "library",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "projects/toppy/tsconfig.lib.json",
-            "project": "projects/toppy/ng-package.json"
+            "tsConfig": "toppy/tsconfig.lib.json",
+            "project": "toppy/ng-package.json"
           },
           "configurations": {
             "production": {
@@ -141,15 +141,15 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "projects/toppy/src/test.ts",
-            "tsConfig": "projects/toppy/tsconfig.spec.json",
-            "karmaConfig": "projects/toppy/karma.conf.js"
+            "main": "toppy/src/test.ts",
+            "tsConfig": "toppy/tsconfig.spec.json",
+            "karmaConfig": "toppy/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["projects/toppy/tsconfig.lib.json", "projects/toppy/tsconfig.spec.json"],
+            "tsConfig": ["toppy/tsconfig.lib.json", "toppy/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**"]
           }
         }
