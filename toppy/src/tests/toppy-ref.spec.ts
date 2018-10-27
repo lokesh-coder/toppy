@@ -28,12 +28,12 @@ export class TestModule {}
 export class BlinkRefMock extends ToppyRef {
   constructor(_overlay: OverlayInstance, _host: HostContainer, _messenger: EventBus, _config: Config) {
     _overlay.configure(new GlobalPosition({ placement: InsidePlacement.CENTER }), '');
-    _host.configure({ content: TestComponent });
+    _host.configure({ content: TestComponent, contentType: 'COMPONENT', props: {} });
     super(_overlay, _host, _messenger, _config, 'xyzabc');
   }
 }
 
-describe('== Blink ref ==', () => {
+describe('== Toppy ref ==', () => {
   let toppyRef: ToppyRef = null;
   let debugEl: DebugElement = null;
   let fixture: ComponentFixture<TestComponent> = null;

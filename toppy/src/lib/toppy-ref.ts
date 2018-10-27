@@ -18,6 +18,9 @@ export class ToppyRef {
   ) {}
 
   open() {
+    if (this._isOpen) {
+      return;
+    }
     const view = this._host.attach();
     this._overlay.create().setView(view);
 

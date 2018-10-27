@@ -38,7 +38,7 @@ describe('== Toppy ==', () => {
         { provide: OverlayInstance, useValue: overlayMock },
         { provide: HostContainer, useValue: componentHostMock },
         { provide: EventBus, useValue: eventBusMock },
-        { provide: Config },
+        Config,
         { provide: ToppyRef, useValue: toppyRefMock }
       ]
     }).compileComponents();
@@ -49,13 +49,13 @@ describe('== Toppy ==', () => {
     expect(toppy).toBeTruthy();
   });
   it('should have empty toppy references on load', () => {
-    expect((toppy as any)._toppyRefs.length).toEqual(0);
+    expect(Object.keys((toppy as any).toppyRefs).length).toEqual(0);
   });
   describe('on calling overlay method', () => {
     it('should return same instance', () => {
       const instance = toppy.overlay(null);
       expect(instance instanceof Toppy).toBeTruthy();
-      expect((instance as any)._id).toBeDefined('abc');
+      expect((instance as any)._overlayID).toBeDefined();
     });
     it('should call `overlayInstance.configure` method once', () => {
       toppy.overlay(null);
@@ -67,7 +67,7 @@ describe('== Toppy ==', () => {
       const instance = toppy.host(null);
       toppy.overlay(null);
       expect(instance instanceof Toppy).toBeTruthy();
-      expect((instance as any)._id).toBeDefined();
+      expect((instance as any)._overlayID).toBeDefined();
     });
     it('should call `ComponentHost.configure` method once', () => {
       toppy.host(null);
@@ -82,13 +82,13 @@ describe('== Toppy ==', () => {
     it('should add `ToppyRef` instance to _toppyRef array', () => {
       (toppy as any)._overlayID = 'abc123';
       const instance = toppy.create();
-      expect(Object.keys((toppy as any)._toppyRefs).length).toEqual(1);
-      expect((toppy as any)._toppyRefs['abc123'].constructor.name).toEqual('BlinkRef');
+      expect(Object.keys((toppy as any).toppyRefs).length).toEqual(1);
+      expect((toppy as any).toppyRefs['abc123'].constructor.name).toEqual('ToppyRef');
       expect(instance instanceof ToppyRef).toBeTruthy();
     });
     it('should call `BlinkRef.close` method if it already exists', () => {
       (toppy as any)._overlayID = 'mmm';
-      const foo = ((toppy as any)._toppyRefs['mmm'] = new ToppyRef(
+      const foo = ((toppy as any).toppyRefs['mmm'] = new ToppyRef(
         overlayMock,
         componentHostMock,
         eventBusMock,

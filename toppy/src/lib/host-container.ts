@@ -69,10 +69,12 @@ export class HostContainer {
     switch (this._contentType) {
       case 'COMPONENT':
         view = this.createViewFromComponent(this._content, this._contentProps);
+        this.appRef.attachView(view);
         viewEl = this.getComponentViewEl();
         break;
       case 'TEMPLATEREF':
         view = this.createViewFromTemplate(this._content);
+        this.appRef.attachView(view);
         viewEl = view.rootNodes[0];
         break;
       case 'STRING':
@@ -82,7 +84,6 @@ export class HostContainer {
       default:
         return document.createTextNode(this._content) as any;
     }
-    this.appRef.attachView(view);
     return viewEl;
   }
 
@@ -95,7 +96,7 @@ export class HostContainer {
   }
 
   getComponentViewEl(): null | HTMLElement {
-    if (!this._compRef || this.appRef.viewCount === 0) {
+    if (this.appRef.viewCount === 0) {
       return null;
     }
     return (this._compRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
