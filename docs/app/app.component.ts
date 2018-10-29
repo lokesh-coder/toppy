@@ -1,10 +1,10 @@
 import { Component, ElementRef, ViewChild } from '@angular/core';
-import { Toppy } from 'toppy';
+// import { Toppy } from 'toppy';
 import { code } from './codes';
 
 @Component({
   selector: 'app-root',
-  templateUrl: './app.component.html',
+  templateUrl: './app.component.html'
 })
 export class AppComponent {
   title = 'toppy-app';
@@ -12,7 +12,7 @@ export class AppComponent {
   el: ElementRef;
   ins;
   code = code;
-  constructor(private _toppy: Toppy) {}
+  // constructor(private _toppy: Toppy) {}
   // ngOnInit() {
   //   console.log('what???', SlidePlacement.RIGHT);
   //   this.ins = this._toppy

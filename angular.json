@@ -1,25 +1,48 @@
 {
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
-  "newProjectRoot": "./",
+  "newProjectRoot": "projects",
   "projects": {
     "toppy-app": {
       "root": "",
-      "sourceRoot": "demo",
+      "sourceRoot": "docs",
       "projectType": "application",
       "prefix": "app",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "styleext": "scss",
+          "spec": false
+        },
+        "@schematics/angular:class": {
+          "spec": false
+        },
+        "@schematics/angular:directive": {
+          "spec": false
+        },
+        "@schematics/angular:guard": {
+          "spec": false
+        },
+        "@schematics/angular:module": {
+          "spec": false
+        },
+        "@schematics/angular:pipe": {
+          "spec": false
+        },
+        "@schematics/angular:service": {
+          "spec": false
+        }
+      },
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-angular:browser",
           "options": {
             "outputPath": "dist/toppy-app",
-            "index": "demo/index.html",
-            "main": "demo/main.ts",
-            "polyfills": "demo/polyfills.ts",
-            "tsConfig": "demo/tsconfig.app.json",
-            "assets": ["demo/favicon.ico", "demo/assets"],
-            "styles": ["demo/styles/root.scss", "node_modules/prismjs/themes/prism.css"],
+            "index": "docs/index.html",
+            "main": "docs/main.ts",
+            "polyfills": "docs/polyfills.ts",
+            "tsConfig": "docs/tsconfig.app.json",
+            "assets": ["docs/favicon.ico", "docs/assets"],
+            "styles": ["docs/styles/root.scss", "node_modules/prismjs/themes/prism.css"],
             "scripts": [
               "node_modules/marked/lib/marked.js",
               "node_modules/prismjs/prism.js",
@@ -33,8 +56,8 @@
             "production": {
               "fileReplacements": [
                 {
-                  "replace": "demo/environments/environment.ts",
-                  "with": "demo/environments/environment.prod.ts"
+                  "replace": "docs/environments/environment.ts",
+                  "with": "docs/environments/environment.prod.ts"
                 }
               ],
               "optimization": true,
@@ -45,7 +68,14 @@
               "aot": true,
               "extractLicenses": true,
               "vendorChunk": false,
-              "buildOptimizer": true
+              "buildOptimizer": true,
+              "budgets": [
+                {
+                  "type": "initial",
+                  "maximumWarning": "2mb",
+                  "maximumError": "5mb"
+                }
+              ]
             }
           }
         },
@@ -69,19 +99,19 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "demo/test.ts",
-            "polyfills": "demo/polyfills.ts",
-            "tsConfig": "demo/tsconfig.spec.json",
-            "karmaConfig": "demo/karma.conf.js",
-            "styles": ["demo/styles/root.scss"],
+            "main": "docs/test.ts",
+            "polyfills": "docs/polyfills.ts",
+            "tsConfig": "docs/tsconfig.spec.json",
+            "karmaConfig": "docs/karma.conf.js",
+            "styles": ["docs/styles/root.scss"],
             "scripts": [],
-            "assets": ["demo/favicon.ico", "demo/assets"]
+            "assets": ["docs/favicon.ico", "docs/assets"]
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["demo/tsconfig.app.json", "demo/tsconfig.spec.json"],
+            "tsConfig": ["docs/tsconfig.app.json", "docs/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**"]
           }
         }
@@ -90,6 +120,7 @@
     "toppy-app-e2e": {
       "root": "e2e/",
       "projectType": "application",
+      "prefix": "",
       "architect": {
         "e2e": {
           "builder": "@angular-devkit/build-angular:protractor",
@@ -113,53 +144,35 @@
       }
     },
     "toppy": {
-      "root": "toppy",
-      "sourceRoot": "toppy/src",
+      "root": "projects/toppy",
+      "sourceRoot": "projects/toppy/src",
       "projectType": "library",
       "prefix": "lib",
       "architect": {
         "build": {
           "builder": "@angular-devkit/build-ng-packagr:build",
           "options": {
-            "tsConfig": "toppy/tsconfig.lib.json",
-            "project": "toppy/ng-package.json"
-          },
-          "configurations": {
-            "production": {
-              "optimization": true,
-              "outputHashing": "all",
-              "sourceMap": false,
-              "extractCss": true,
-              "namedChunks": false,
-              "aot": true,
-              "extractLicenses": true,
-              "vendorChunk": false,
-              "buildOptimizer": true
-            }
+            "tsConfig": "projects/toppy/tsconfig.lib.json",
+            "project": "projects/toppy/ng-package.json"
           }
         },
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "main": "toppy/src/test.ts",
-            "tsConfig": "toppy/tsconfig.spec.json",
-            "karmaConfig": "toppy/karma.conf.js"
+            "main": "projects/toppy/src/test.ts",
+            "tsConfig": "projects/toppy/tsconfig.spec.json",
+            "karmaConfig": "projects/toppy/karma.conf.js"
           }
         },
         "lint": {
           "builder": "@angular-devkit/build-angular:tslint",
           "options": {
-            "tsConfig": ["toppy/tsconfig.lib.json", "toppy/tsconfig.spec.json"],
+            "tsConfig": ["projects/toppy/tsconfig.lib.json", "projects/toppy/tsconfig.spec.json"],
             "exclude": ["**/node_modules/**"]
           }
         }
       }
     }
   },
-  "defaultProject": "toppy-app",
-  "schematics": {
-    "@schematics/angular:component": {
-      "styleext": "scss"
-    }
-  }
+  "defaultProject": "toppy-app"
 }
