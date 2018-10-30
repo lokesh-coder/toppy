@@ -1,0 +1,73 @@
+$toppy--base-font-size: 13px;
+$toppy--base-font-size-xl: 16px;
+$toppy--app-name: 'BLINK';
+$toppy--debug: false;
+$toppy--font-family: 'Rubik', 'Inter UI', 'Nunito Sans';
+$toppy--font-family-monospace: 'Courier New', 'Lucida Console', Monaco, Courier, monospace;
+$toppy--current-theme: 'DEFAULT';
+$toppy--themes: (
+  'default': 'DEFAULT',
+  'dark': 'DARK'
+);
+$toppy--colors-basic: (
+  'bg': #fff,
+  'bg2': #f3f3f7a6,
+  'bg3': #fefefe,
+  'text': #aaaab1,
+  'heading': #35335a,
+  'border': #ebebf3,
+  'para': #b1b0be,
+  'dark': #000,
+  'shadow': #dddde9
+);
+
+$toppy--colors-theme: (
+  'primary': #5a5a8c,
+  'secondary': #ef8fb7,
+  'success': #3fc782,
+  'warning': #f78f1e,
+  'danger': #e3505a,
+  'dark': #000,
+  'info': #03a9f4
+);
+$toppy--colors: (
+  'basic': $toppy--colors-basic,
+  'theme': $toppy--colors-theme
+);
+
+$toppy--client-color: #fec500;
+
+$toppy--font-sizes: (
+  'sm': 0.9rem,
+  'md': 1rem,
+  'lg': 1.4rem,
+  'xl': 4rem,
+  'h1': 3.2rem,
+  'h2': 2rem,
+  'h3': 1.75rem,
+  'h4': 1.5rem,
+  'h5': 1.25rem,
+  'h6': 1rem
+);
+$toppy-folder-image-size: 15rem;
+$toppy-folder-illus: (
+  'bg': #ddd,
+  'front': #fff,
+  'back': #fff,
+  'file': $toppy--client-color,
+  'file-shadow': darken($toppy--client-color, 10%)
+);
+$toppy--border-rad: 3px;
+$toppy--icons-font: 'ink';
+$toppy--icon-font-path: './assets/fonts/icons';
+$toppy--font-path: './assets/fonts/inter-ui';
+
+$toppy--grid-breakpoints: (
+  xs: 0,
+  sm: 576px,
+  md: 768px,
+  lg: 992px,
+  xl: 1600px
+);
+
+$toppy--color-picker-width: 250px;

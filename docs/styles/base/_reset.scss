@@ -1,0 +1,36 @@
+html {
+  @include smooth-font();
+  font-size: $toppy--base-font-size;
+}
+
+.custom-select {
+  -moz-appearance: none;
+  -webkit-appearance: none;
+}
+
+.btn.btn-link {
+  color: clr('link-alt', 'theme');
+  font-weight: 500;
+  &:hover {
+    text-decoration: none;
+  }
+}
+
+.btn.btn-lg {
+  font-size: 1rem;
+}
+
+button.btn,
+a.btn {
+  line-height: 1;
+  padding: 0.5rem 1rem;
+}
+
+.btn.btn-success,
+.btn.btn-danger,
+.btn.btn-primary {
+  color: #fff;
+}
+a:not([href]):not([tabindex]) {
+  color: none !important;
+}

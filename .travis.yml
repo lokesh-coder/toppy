@@ -1,0 +1,28 @@
+language: node_js
+cache:
+  directories:
+    - ~/.npm
+    - 'node_modules'
+notifications:
+  email: false
+node_js:
+  - '9.3.0'
+install:
+  - 'npm install'
+script:
+  - 'npm run test'
+after_success:
+  - npm run travis-deploy-once "npm run semantic-release"
+before_deploy:
+  - 'npm run build:lib'
+  - 'npm run build:prod:app'
+deploy:
+  provider: pages
+  skip_cleanup: true
+  local_dir: dist/app/
+  github_token: $GITHUB_TOKEN
+  on:
+    branch: master
+branches:
+  except:
+    - /^v\d+\.\d+\.\d+$/

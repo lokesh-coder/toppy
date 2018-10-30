@@ -1,0 +1,69 @@
+$icons: (
+  arrow-down: '\e900',
+  arrow-down-left: '\e901',
+  arrow-down-right: '\e902',
+  arrow-left: '\e903',
+  arrow-right: '\e904',
+  arrow-up: '\e905',
+  arrow-up-left: '\e906',
+  arrow-up-right: '\e907',
+  chevron-down: '\e908',
+  chevron-left: '\e909',
+  chevron-right: '\e90a',
+  chevron-up: '\e90b',
+  chevrons-down: '\e90c',
+  chevrons-left: '\e90d',
+  chevrons-right: '\e90e',
+  chevrons-up: '\e90f',
+  corner-down-left: '\e910',
+  corner-down-right: '\e911',
+  corner-left-down: '\e912',
+  corner-left-up: '\e913',
+  corner-right-down: '\e914',
+  corner-right-up: '\e915',
+  corner-up-left: '\e916',
+  corner-up-right: '\e917',
+  external-link: '\e918',
+  home: '\e919',
+  more-horizontal: '\e91a',
+  more-vertical: '\e91b',
+  plus: '\e91c',
+  plus-square: '\e91d',
+  search: '\e91e',
+  settings: '\e91f',
+  sliders: '\e920',
+  trash: '\e921',
+  x: '\e922',
+  x-square: '\e923'
+);
+
+@font-face {
+  font-family: 'ink';
+  font-style: normal;
+  font-weight: normal;
+  src: url('#{$toppy--icon-font-path}/ink.ttf?olqd7c') format('truetype'),
+    url('#{$toppy--icon-font-path}/ink.woff?olqd7c') format('woff'),
+    url('#{$toppy--icon-font-path}/ink.svg?olqd7c#choosy') format('svg');
+}
+
+.toppy-icon {
+  /* use !important to prevent issues with browser extensions that change fonts */
+  font-family: $toppy--icons-font !important;
+
+  /* Better Font Rendering =========== */
+  -webkit-font-smoothing: antialiased;
+  font-style: normal;
+  font-variant: normal;
+  font-weight: normal;
+  line-height: 1;
+  -moz-osx-font-smoothing: grayscale;
+  speak: none;
+  text-transform: none;
+}
+@each $icon in $icons {
+  .icon-#{nth($icon, 1)} {
+    &:before {
+      content: nth($icon, 2);
+    }
+  }
+}

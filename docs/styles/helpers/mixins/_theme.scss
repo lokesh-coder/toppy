@@ -1,0 +1,11 @@
+@mixin default-theme {
+  @if $toppy--current-theme== 'DEFAULT' {
+    @content;
+  }
+}
+
+@mixin dark-theme {
+  @if $toppy--current-theme== 'DARK' {
+    @content;
+  }
+}

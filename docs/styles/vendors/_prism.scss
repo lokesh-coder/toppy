@@ -1,0 +1,13 @@
+@import url('https://fonts.googleapis.com/css?family=Anonymous+Pro');
+markdown pre[class*='language-'] {
+  background: #f9f9f9;
+  code {
+    font-size: 1.1rem;
+    font-family: 'Overpass Mono', monospace;
+    letter-spacing: -0.5px;
+  }
+}
+markdown code[class*='language-'],
+markdown pre[class*='language-'] {
+  color: #51585d;
+}

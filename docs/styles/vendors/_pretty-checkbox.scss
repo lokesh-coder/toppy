@@ -1,0 +1,15 @@
+$pretty--color-success:clr('success','theme');
+@import '~pretty-checkbox/src/pretty-checkbox';
+
+.pretty.pretty-check{
+  .state label:before, .pretty.p-round .state label:after{
+    border-width: 0.15rem;
+  }
+  .icon{
+    transform: scale(0.8);
+  }
+}
+
+.pretty.p-switch .state label:before, .pretty.p-switch .state label:after{
+  top: calc((0% - (100% - 1em)) - 12%);
+}

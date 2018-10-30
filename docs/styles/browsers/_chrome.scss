@@ -1,0 +1,18 @@
+/* stylelint-disable media-feature-name-no-vendor-prefix */
+@media all and (-webkit-min-device-pixel-ratio: 1) {
+}
+
+
+/* Change the white to any color ;) */
+
+@-webkit-keyframes autofill {
+    to {
+        color: #666;
+        background: transparent;
+    }
+}
+
+input:-webkit-autofill {
+    -webkit-animation-name: autofill;
+    -webkit-animation-fill-mode: both;
+}
