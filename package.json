@@ -12,7 +12,8 @@
     "lint": "ng lint",
     "e2e": "ng e2e",
     "release": "semantic-release --dry-run",
-    "travis-deploy-once": "travis-deploy-once"
+    "travis-deploy-once": "travis-deploy-once",
+    "postpublish": "gh-pages -d dist/toppy"
   },
   "dependencies": {
     "@angular/animations": "~7.0.0",
@@ -54,7 +55,7 @@
     "@types/node": "~8.9.4",
     "codelyzer": "~4.5.0",
     "conventional-changelog": "2.0.3",
-    "gh-pages": "2.0.1",
+    "gh-pages": "^2.0.1",
     "github-release-notes": "0.17.0",
     "husky": "^1.1.2",
     "jasmine-core": "~2.99.1",
