@@ -11,9 +11,9 @@
     "test:lib": "ng test --project toppy",
     "lint": "ng lint",
     "e2e": "ng e2e",
-    "release": "semantic-release --dry-run",
+    "release": "semantic-release",
     "travis-deploy-once": "travis-deploy-once",
-    "postpublish": "gh-pages -d dist/toppy"
+    "postpublish": "gh-pages -d dist/toppy-app"
   },
   "dependencies": {
     "@angular/animations": "~7.0.0",
