@@ -18,7 +18,7 @@ before_script:
   - wget https://dl.google.com/linux/direct/google-chrome-stable_current_amd64.deb
   - sudo dpkg -i google-chrome*.deb
 script:
-  - npm run test:lib -- --watch=false -cc
+  - npm run test:lib -- --watch=false
 after_success:
   - npm run build:lib
   - npm run build:app
