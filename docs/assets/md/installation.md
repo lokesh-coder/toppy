@@ -3,11 +3,11 @@
 **`Step 1:`** You can install through `npm` or `yarn`
 
 ```powershell
-npm install @overlay/core --save
+npm install toppy --save
 ```
 
 ```powershell
-yarn add @overlay/core
+yarn add toppy
 ```
 
 **`Step 2:`** Add module in your angular app
@@ -35,7 +35,7 @@ export class AppComponent {
   @ViewChild('el', { read: ElementRef })
   el: ElementRef;
 
-  constructor(private _overlay: Overlay) {}
+  constructor(private _toppy_: Toppy) {}
 
   ngOnInit() {
     const position = new RelativePosition({
@@ -43,7 +43,10 @@ export class AppComponent {
       src: this.el.nativeElement
     });
 
-    this.overlayIns = this._overlay.overlay(position).create('hello');
+    this.overlayIns = this._toppy_
+      .overlay(position)
+      .host('hello')
+      .create();
   }
   open() {
     this.overlayIns.open();
