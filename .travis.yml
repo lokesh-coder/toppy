@@ -22,7 +22,7 @@ script:
 after_success:
   - npm run build:lib
   - npm run build:app
-  - npm run travis-deploy-once "npm run semantic-release"
+  - npm run travis-deploy-once "npm run release"
 branches:
   except:
     - /^v\d+\.\d+\.\d+$/
