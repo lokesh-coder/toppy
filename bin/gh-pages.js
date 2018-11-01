@@ -12,21 +12,22 @@ async function copyFiles() {
     archivedData[version] = Date.now();
     await fs.writeJson(archiveMetaFile, archivedData);
     console.log('successfully archived!');
+    ghpages.publish(
+      './dist/toppy-app',
+      {
+        repo: 'https://' + process.env.GH_TOKEN + '@github.com/lokesh-coder/toppy.git'
+      },
+      function(err) {
+        if (err) {
+          console.log('Error occured during gh pages push', err);
+        } else {
+          console.log('Pushed to ghpages!');
+        }
+      }
+    );
   } catch (err) {
     console.error(err);
   }
 }
 
 copyFiles();
-
-ghpages.publish(
-  './dist/toppy-app',
-  {
-    repo: 'https://' + process.env.GH_TOKEN + '@github.com/lokesh-coder/toppy.git',
-    silent: true,
-    add: true
-  },
-  function(err) {
-    console.error('Error occured during gh pages push', err);
-  }
-);
