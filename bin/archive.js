@@ -10,7 +10,7 @@ async function archiveFiles() {
     archivedData = archivedData || {};
     archivedData[version] = Date.now();
     await fs.writeJson(archiveMetaFile, archivedData);
-    console.log('successfully archived!');
+    console.log(`successfully archived version ${version}!`);
   } catch (err) {
     console.error(err);
   }
