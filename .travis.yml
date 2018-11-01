@@ -1,12 +1,14 @@
 language: node_js
 cache:
   directories:
-    - ~/.npm
-    - 'node_modules'
+    - '~/.npm'
+    - node_modules
 notifications:
   email: false
+  slack:
+    secure: E3zMq5rOujXNqci/8aKxtDDFYNb3QqEi8O9n2enTpLzuK5qVPnaVDzXre7MxLN13LYsRMzT3hpzngOu09Zj1Gt49MCXBDjseF6tVddEE2hURVCVSF87Of4pMUbxxC8zmIwMk33UBGGkS2F5fvkKiX1KL2LdqoJ+2GwD6xq0swPXC+LvbbT0bMif0jFzyJKYyqvT13UzMg+6m4obrfKbaXUdrG7woFs1UMhwkSY4i167w/l3+hYGY4TsOENhoqdUahP3CGu1v6zesLacwGk8A8H00A8dS5oXu0XuWZ+AdFOBpNBHj0JOWkFmMdDTtwOzKIYrGnPHbE1U0/ROdqguT6EBVqnOIHnGsjvBkqUN9mVrR+9iLcdODnsv9MkDEKnxrcpUcCITfTdsaCktIC17Xoe14WsIAB+doxq9fYGvBqqTj7GzMA+8a36ae2AaQDNrAJ+YojbqkisWc/BkkFFHd2EISges/nYmDqDcdk0UpfNuAeheynEiIFKISoxGjd5w/VI9oopY250u2qAwEPdvV8tn31WOxLlx00oe928bY4yPzMv/CkRInXzhmddCZidBGKh7nKTDut4VST/nwawkey5G1xYzHOzxSX1z7X8RQkMocWZ5etGv9bCxiOV/RSkhjzu8eLHKqUd5xs/+PYDxmG3iFzmVXEf4mELm7Bw2JuxE=
 node_js:
-  - '9.3.0'
+  - 9.3.0
 install:
   - npm install
 before_script:
@@ -25,4 +27,4 @@ after_success:
   - npm run travis-deploy-once "npm run release"
 branches:
   except:
-    - /^v\d+\.\d+\.\d+$/
+    - "/^v\\d+\\.\\d+\\.\\d+$/"

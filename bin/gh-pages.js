@@ -20,9 +20,10 @@ async function copyFiles() {
 copyFiles();
 
 ghpages.publish(
-  'dist/toppy-app',
+  './dist/toppy-app',
   {
     repo: 'https://' + process.env.GH_TOKEN + '@github.com/lokesh-coder/toppy.git',
+    silent: true,
     add: true
   },
   function(err) {
