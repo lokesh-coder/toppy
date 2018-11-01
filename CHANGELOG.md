@@ -1,3 +1,10 @@
+## [1.0.6](https://github.com/lokesh-coder/toppy/compare/v1.0.5...v1.0.6) (2018-11-01)
+
+
+### Bug Fixes
+
+* archive doc build versions ([06226c4](https://github.com/lokesh-coder/toppy/commit/06226c4))
+
 ## [1.0.5](https://github.com/lokesh-coder/toppy/compare/v1.0.4...v1.0.5) (2018-11-01)
 
 
