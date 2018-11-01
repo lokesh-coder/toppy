@@ -4,7 +4,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build:prod": "ng build --prod",
+    "build:app": "ng build --prod",
     "build:lib": "ng build toppy",
     "test": "npm run test:lib",
     "test:app": "ng test --project toppy-app",
