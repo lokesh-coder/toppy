@@ -5,7 +5,7 @@
       "@semantic-release/exec",
       {
         "prepareCmd": "chmod a+x ./bin/version.sh && ./bin/version.sh ${nextRelease.version} && cp -r ./README.md ./dist/toppy && npx json -I -f package.json -e 'this.version=\"${nextRelease.version}\"'",
-        "successCmd": "npm run postpublish"
+        "successCmd": "npm run postpublish -- ${nextRelease.version}"
       }
     ],
     [
