@@ -1,3 +1,10 @@
+## [1.0.5](https://github.com/lokesh-coder/toppy/compare/v1.0.4...v1.0.5) (2018-11-01)
+
+
+### Bug Fixes
+
+* change gh pages publish package ([a5ef149](https://github.com/lokesh-coder/toppy/commit/a5ef149))
+
 ## [1.0.4](https://github.com/lokesh-coder/toppy/compare/v1.0.3...v1.0.4) (2018-11-01)
 
 
