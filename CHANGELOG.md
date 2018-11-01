@@ -1,3 +1,5 @@
+## [1.0.1](https://github.com/lokesh-coder/toppy.git/compare/v1.0.0...v1.0.1) (2018-11-01)
+
 # 1.0.0 (2018-11-01)
 
 
