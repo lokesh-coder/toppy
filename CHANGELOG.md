@@ -1,3 +1,10 @@
+## [1.0.4](https://github.com/lokesh-coder/toppy/compare/v1.0.3...v1.0.4) (2018-11-01)
+
+
+### Bug Fixes
+
+* update build command in package json ([0ed8a10](https://github.com/lokesh-coder/toppy/commit/0ed8a10))
+
 ## [1.0.3](https://github.com/lokesh-coder/toppy/compare/v1.0.2...v1.0.3) (2018-11-01)
 
 
