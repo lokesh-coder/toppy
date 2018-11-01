@@ -1,3 +1,10 @@
+## [1.0.2](https://github.com/lokesh-coder/toppy/compare/v1.0.1...v1.0.2) (2018-11-01)
+
+
+### Bug Fixes
+
+* release doc assets to github pages ([87b460b](https://github.com/lokesh-coder/toppy/commit/87b460b))
+
 ## [1.0.1](https://github.com/lokesh-coder/toppy.git/compare/v1.0.0...v1.0.1) (2018-11-01)
 
 # 1.0.0 (2018-11-01)
