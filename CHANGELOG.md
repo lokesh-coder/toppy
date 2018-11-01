@@ -1,3 +1,10 @@
+## [1.0.8](https://github.com/lokesh-coder/toppy/compare/v1.0.7...v1.0.8) (2018-11-01)
+
+
+### Bug Fixes
+
+* ghpages publish path ([f5d2f47](https://github.com/lokesh-coder/toppy/commit/f5d2f47))
+
 ## [1.0.7](https://github.com/lokesh-coder/toppy/compare/v1.0.6...v1.0.7) (2018-11-01)
 
 
