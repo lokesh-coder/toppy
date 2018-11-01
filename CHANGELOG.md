@@ -1,3 +1,10 @@
+## [1.0.3](https://github.com/lokesh-coder/toppy/compare/v1.0.2...v1.0.3) (2018-11-01)
+
+
+### Bug Fixes
+
+* remove assets release in github ([8fb1ec8](https://github.com/lokesh-coder/toppy/commit/8fb1ec8))
+
 ## [1.0.2](https://github.com/lokesh-coder/toppy/compare/v1.0.1...v1.0.2) (2018-11-01)
 
 
