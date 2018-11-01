@@ -4,8 +4,8 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "chmod a+x ./bin/version.sh && ./bin/version.sh ${nextRelease.version} && cp -r ./README.md ./dist/toppy",
-        "successCmd": "npm run postpublish && npx json -I -f package.json -e 'this.version=\"${nextRelease.version}\"'"
+        "prepareCmd": "chmod a+x ./bin/version.sh && ./bin/version.sh ${nextRelease.version} && cp -r ./README.md ./dist/toppy && npx json -I -f package.json -e 'this.version=\"${nextRelease.version}\"'",
+        "successCmd": "npm run postpublish"
       }
     ],
     [
@@ -36,12 +36,7 @@
         "pkgRoot": "dist/toppy"
       }
     ],
-    [
-      "@semantic-release/github",
-      {
-        "assets": [["dist/toppy"]]
-      }
-    ],
+    "@semantic-release/github",
     [
       "@semantic-release/git",
       {
