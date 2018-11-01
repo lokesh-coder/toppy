@@ -1,3 +1,10 @@
+## [1.0.9](https://github.com/lokesh-coder/toppy/compare/v1.0.8...v1.0.9) (2018-11-01)
+
+
+### Bug Fixes
+
+* publish gh-pages with achived versions ([19a34c2](https://github.com/lokesh-coder/toppy/commit/19a34c2))
+
 ## [1.0.8](https://github.com/lokesh-coder/toppy/compare/v1.0.7...v1.0.8) (2018-11-01)
 
 
