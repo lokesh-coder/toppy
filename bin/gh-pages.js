@@ -2,7 +2,8 @@ const ghpages = require('gh-pages');
 ghpages.publish(
   './dist/toppy-app',
   {
-    repo: 'https://' + process.env.GH_TOKEN + '@github.com/lokesh-coder/toppy.git'
+    repo: 'https://' + process.env.GH_TOKEN + '@github.com/lokesh-coder/toppy.git',
+    add: true
   },
   function(err) {
     if (err) {
