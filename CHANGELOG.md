@@ -1,3 +1,10 @@
+## [1.0.13](https://github.com/lokesh-coder/toppy/compare/v1.0.12...v1.0.13) (2018-11-02)
+
+
+### Bug Fixes
+
+* override files on ghpages instead of replace ([d282266](https://github.com/lokesh-coder/toppy/commit/d282266))
+
 ## [1.0.12](https://github.com/lokesh-coder/toppy/compare/v1.0.11...v1.0.12) (2018-11-02)
 
 
