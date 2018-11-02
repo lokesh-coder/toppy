@@ -1,3 +1,11 @@
+## [1.0.12](https://github.com/lokesh-coder/toppy/compare/v1.0.11...v1.0.12) (2018-11-02)
+
+
+### Bug Fixes
+
+* add and sort details in package file ([6db7797](https://github.com/lokesh-coder/toppy/commit/6db7797))
+* merge conflict resolve ([a412259](https://github.com/lokesh-coder/toppy/commit/a412259))
+
 ## [1.0.11](https://github.com/lokesh-coder/toppy/compare/v1.0.10...v1.0.11) (2018-11-01)
 
 
