@@ -1,3 +1,10 @@
+## [1.0.11](https://github.com/lokesh-coder/toppy/compare/v1.0.10...v1.0.11) (2018-11-01)
+
+
+### Bug Fixes
+
+* move archive logic to verfiyRelease stage ([cdce3c1](https://github.com/lokesh-coder/toppy/commit/cdce3c1))
+
 ## [1.0.10](https://github.com/lokesh-coder/toppy/compare/v1.0.9...v1.0.10) (2018-11-01)
 
 
