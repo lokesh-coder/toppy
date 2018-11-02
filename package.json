@@ -1,20 +1,45 @@
 {
   "name": "toppy-app",
   "version": "1.0.10",
+  "description": "Overlay library for Angular 7+",
+  "keywords": [
+    "angular",
+    "dropdown",
+    "modal",
+    "overlay",
+    "popover",
+    "popup",
+    "sidebar",
+    "tooltip"
+  ],
+  "homepage": "https://github.com/lokesh-coder/toppy",
+  "bugs": {
+    "url": "https://github.com/lokesh-coder/toppy/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lokesh-coder/toppy"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Lokesh Rajendran",
+    "email": "mexican.dirtyfellow@gmail.com",
+    "url": "https://github.com/lokesh-coder"
+  },
   "scripts": {
-    "ng": "ng",
-    "start": "ng serve",
+    "archive:app": "node ./bin/archive.js",
     "build:app": "ng build --prod",
     "build:lib": "ng build toppy",
+    "e2e": "ng e2e",
+    "lint": "ng lint",
+    "ng": "ng",
+    "postpublish": "node ./bin/gh-pages.js",
+    "release": "semantic-release",
+    "start": "ng serve",
     "test": "npm run test:lib",
     "test:app": "ng test --project toppy-app",
     "test:lib": "ng test --project toppy",
-    "lint": "ng lint",
-    "e2e": "ng e2e",
-    "release": "semantic-release",
-    "travis-deploy-once": "travis-deploy-once",
-    "archive:app": "node ./bin/archive.js",
-    "postpublish": "node ./bin/gh-pages.js"
+    "travis-deploy-once": "travis-deploy-once"
   },
   "dependencies": {
     "@angular/animations": "~7.0.0",
