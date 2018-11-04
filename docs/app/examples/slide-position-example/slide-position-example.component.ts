@@ -24,7 +24,7 @@ export class SlidePositionExampleComponent implements OnInit {
     }
     this._toppyRef = this.toppy
       .overlay(new SlidePosition({ placement: this.selectedPlacement }), {
-        dismissOnDocumentClick: false
+        dismissOnDocumentClick: true
       })
       .host(SimpleListComponent)
       .create();
