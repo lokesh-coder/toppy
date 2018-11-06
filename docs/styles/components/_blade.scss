@@ -1,5 +1,15 @@
 .comp.blade {
-  background: #dce6ef;
+  background: #3a3d40;
   height: 100%;
   color: #fff;
+  h3 {
+    font-weight: 300;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 1;
+    height: 100%;
+    opacity: 0.9;
+  }
 }
