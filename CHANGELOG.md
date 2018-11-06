@@ -1,3 +1,5 @@
+## [1.0.15](https://github.com/lokesh-coder/toppy/compare/v1.0.14...v1.0.15) (2018-11-06)
+
 ## [1.0.14](https://github.com/lokesh-coder/toppy/compare/v1.0.13...v1.0.14) (2018-11-03)
 
 ## [1.0.13](https://github.com/lokesh-coder/toppy/compare/v1.0.12...v1.0.13) (2018-11-02)
