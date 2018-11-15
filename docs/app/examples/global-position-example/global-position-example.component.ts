@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { InsidePlacement, ToppyRef, Toppy, GlobalPosition } from 'toppy';
+import { GlobalPosition, InsidePlacement, Toppy, ToppyRef } from 'toppy';
 import { SimpleModalComponent } from '../../host-components/simple-modal/simple-modal.component';
 
 @Component({
@@ -30,9 +30,17 @@ export class GlobalPositionExampleComponent implements OnInit {
       this._toppyRef.close();
     }
     this._toppyRef = this.toppy
-      .overlay(new GlobalPosition({ placement: this.selectedPlacement, hostHeight: 'auto', hostWidth: 'auto' }))
+      .overlay(new GlobalPosition({ placement: this.selectedPlacement, hostHeight: 'auto', hostWidth: 'auto' }), {
+        docClickCallback: () => {
+          console.log('abbbb');
+        },
+        backdrop: true
+      })
       .host(SimpleModalComponent)
       .create();
+    // this._toppyRef.onDocumentClick().subscribe(_ => {
+    //   console.log('doc click');
+    // });
     this._toppyRef.open();
   }
 

@@ -20,10 +20,12 @@
     <div class="col-md-9">
       <markdown ngPreserveWhitespaces [src]="'./assets/md/introduction.md'"></markdown>
       <markdown ngPreserveWhitespaces [src]="'./assets/md/installation.md'"></markdown>
+      <markdown ngPreserveWhitespaces [src]="'./assets/md/host-types.md'"></markdown>
       <!-- <app-section title="Features"> </app-section> -->
       <app-section title="Positions">
         <app-sub-section title="1. Relative position">
           <app-relative-position-example></app-relative-position-example>
+          <markdown ngPreserveWhitespaces [src]="'./assets/md/relative-position-example.md'"></markdown>
         </app-sub-section>
         <app-sub-section title="2. Global position">
           <app-global-position-example></app-global-position-example>
@@ -35,7 +37,12 @@
           <app-fullscreen-position-example></app-fullscreen-position-example>
         </app-sub-section>
       </app-section>
-      <!-- <app-section title="Communication"> </app-section> -->
+      <app-section title="Component communication">
+        <markdown ngPreserveWhitespaces [src]="'./assets/md/component-comm.md'"></markdown>
+      </app-section>
+      <app-section title="Configuration" class="table">
+        <markdown ngPreserveWhitespaces [src]="'./assets/md/configuration.md'"></markdown>
+      </app-section>
       <app-section title="Contribution">
         <markdown ngPreserveWhitespaces [src]="'./assets/md/contribution.md'"></markdown>
       </app-section>
