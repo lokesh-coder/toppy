@@ -25,8 +25,6 @@ export class AppModule {}
 
 **`Step 3:`** Use Toppy in any component
 
-###### Simple text
-
 ```typescript
 @Component({
   selector: 'app-root',
@@ -46,7 +44,7 @@ export class AppComponent {
 
     this.overlayIns = this._toppy
       .overlay(position)
-      .host('hello') // simple text
+      .host('hello') // content
       .create();
   }
   open() {
@@ -56,44 +54,4 @@ export class AppComponent {
     this.overlayIns.close();
   }
 }
-```
-
-###### Using html
-
-```typescript
-this.overlayIns = this._toppy
-  .overlay(position)
-  .host(`<div>any HTML content</div>`, { hasHTML: true }) // html
-  .create();
-```
-
-###### Using component
-
-```typescript
-@Component({
-  template: '<div>Hello</div>'
-})
-export class HelloComponent {}
-```
-
-```typescript
-this.overlayIns = this._toppy
-  .overlay(position)
-  .host(HelloComponent) // host a component
-  .create();
-```
-
-###### Using TemplateRef
-
-```html
-<div #tpl>Hello world!</div>
-```
-
-```typescript
-@ViewChild('tpl') tpl:TemplateRef<any>;
-
-this.overlayIns = this._toppy
-  .overlay(position)
-  .host(this.tpl) // template ref
-  .create();
 ```
