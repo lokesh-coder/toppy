@@ -10,9 +10,20 @@
 }
 
 .table thead th {
-  font-weight: 500;
+  font-weight: 700;
+  text-transform: uppercase;
 }
 
-h5 {
-  font-weight: 300;
+app-section {
+  display: block;
+  margin-bottom: 3rem;
+}
+app-sub-section {
+  display: block;
+  margin-bottom: 4rem;
+}
+
+h4 {
+  font-weight: 700;
+  margin-bottom: 1rem;
 }

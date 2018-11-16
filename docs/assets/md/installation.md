@@ -1,5 +1,3 @@
-## Installation
-
 **`Step 1:`** You can install through [npm](https://www.npmjs.com/package/toppy) or [yarn](https://yarnpkg.com/en/package/toppy)
 
 ```powershell

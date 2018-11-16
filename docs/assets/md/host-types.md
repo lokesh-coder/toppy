@@ -1,6 +1,4 @@
-## Content types
-
-##### Plain text
+- ##### Plain text
 
 ```typescript
 this.overlayIns = this._toppy
@@ -9,7 +7,9 @@ this.overlayIns = this._toppy
   .create();
 ```
 
-##### Using html
+<br/>
+
+- ##### Using html
 
 ```typescript
 this.overlayIns = this._toppy
@@ -18,7 +18,9 @@ this.overlayIns = this._toppy
   .create();
 ```
 
-##### Using component
+<br/>
+
+- ##### Using component
 
 ```typescript
 @Component({
@@ -34,7 +36,9 @@ this.overlayIns = this._toppy
   .create();
 ```
 
-##### Using TemplateRef
+<br/>
+
+- ##### Using TemplateRef
 
 ```html
 <div #tpl>Hello world!</div>
