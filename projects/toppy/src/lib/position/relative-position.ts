@@ -10,38 +10,33 @@ export interface Config {
 }
 
 export class RelativePosition extends Position {
-  src: HTMLElement;
-  private placement: OutsidePlacement;
-  private autoUpdate: boolean;
-  private hostWidth: string | number;
-  private hostHeight: string | number;
-  constructor({
-    src,
-    placement = OutsidePlacement.TOP,
-    autoUpdate = false,
-    hostWidth = '100%',
-    hostHeight = '100%'
-  }: Config) {
+  private _config: Config = {
+    src: null,
+    placement: OutsidePlacement.TOP,
+    autoUpdate: false,
+    hostWidth: '100%',
+    hostHeight: '100%'
+  };
+  constructor(config: Config) {
     super();
-    this.src = src;
-    this.placement = placement;
-    this.hostWidth = hostWidth;
-    this.hostHeight = hostHeight;
-    this.autoUpdate = autoUpdate;
+    this._config = { ...this._config, ...config };
+  }
+  updateConfig(config) {
+    this._config = { ...this._config, ...config };
   }
   getPositions(hostElement: HTMLElement): PositionCoOrds {
-    const s = this.getCoords(this.src);
+    const s = this.getCoords(this._config.src);
     const h = this.getCoords(hostElement);
 
-    if (this.hostWidth === '100%') {
-      this.hostWidth = s.width;
+    if (this._config.hostWidth === '100%') {
+      this._config.hostWidth = s.width;
     }
 
-    if (this.hostHeight === '100%') {
-      this.hostHeight = 'auto';
+    if (this._config.hostHeight === '100%') {
+      this._config.hostHeight = 'auto';
     }
-    const props = this.calculatePos(this.placement, s, h);
-    return { ...this.round(props), width: this.hostWidth, height: this.hostHeight };
+    const props = this.calculatePos(this._config.placement, s, h);
+    return { ...this.round(props), width: this._config.hostWidth, height: this._config.hostHeight };
   }
 
   private getSize(el): { x: number; y: number } {
@@ -197,7 +192,7 @@ export class RelativePosition extends Position {
     if (!c) {
       return props;
     }
-    if (this.autoUpdate && this.isOverflowed({ ...props, width: h.width, height: h.height })) {
+    if (this._config.autoUpdate && this.isOverflowed({ ...props, width: h.width, height: h.height })) {
       return this.calculatePos(this.nextPosition(pos), s, h, false);
     }
 
