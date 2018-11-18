@@ -25,16 +25,26 @@ export class OverlayInstance implements OnDestroy {
     this._overlayID = overlayID;
   }
 
+  changePosition(newPosition) {
+    this._position = newPosition;
+  }
+
+  updatePositionConfig(positionConfig) {
+    this._position.updateConfig(positionConfig);
+  }
+
   create() {
     this._containerEl = this._dom.createElement('div', {
       'data-overlay-id': this._overlayID,
       class: this.config.containerClass + ' ' + this._position.getClassName(),
-      style: `left:0;position: fixed;top: 0;width: 100%;height: 100%;${!this.config.dismissOnDocumentClick ? 'pointer-events:none' : ''}`
+      style: `left:0;position: fixed;top: 0;width: 100%;height: 100%;${
+        !this.config.dismissOnDocumentClick ? 'pointer-events:none' : ''
+      }`
     });
 
     this._wrapperEl = this._dom.createElement('div', {
       class: this.config.wrapperClass,
-      style: 'position: absolute;transition:all 0.2s ease;'
+      style: 'position: absolute;visibility:hidden;opacity:0;transition:opacity 0.5s ease;'
     });
 
     if (this.config.backdrop) {
@@ -84,13 +94,20 @@ export class OverlayInstance implements OnDestroy {
     this._containerEl = this._wrapperEl = this._backdropEl = this._viewEl = null;
   }
 
-  private _setPosition(): void {
+  private _setPosition(show = false): void {
     const coords = this._position.getPositions(this._wrapperEl);
     this._dom.setPositions(this._wrapperEl, coords);
+
+    if (show) {
+      this._wrapperEl.style.visibility = 'visible';
+      this._wrapperEl.style.opacity = '1';
+    }
     this._eventBus.post({ name: 'POSITION_UPDATED', data: null });
   }
 
   private _watchPositionChange(): void {
-    this._positionSubscription = this.computePosition.subscribe(_ => this._setPosition());
+    this._positionSubscription = this.computePosition.subscribe(_ => {
+      this._setPosition(true);
+    });
   }
 }

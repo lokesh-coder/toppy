@@ -1,8 +1,18 @@
-import { ApplicationRef, ComponentFactory, ComponentFactoryResolver, ComponentRef, EmbeddedViewRef, Injectable, Injector, TemplateRef, ViewRef } from "@angular/core";
-import { ComponentInstance } from "./component-ins";
-import { CurrentOverlay } from "./current-overlay";
-import { HostArgs, HostContentType } from "./models";
-import { ToppyRef } from "./toppy-ref";
+import {
+  ApplicationRef,
+  ComponentFactory,
+  ComponentFactoryResolver,
+  ComponentRef,
+  EmbeddedViewRef,
+  Injectable,
+  Injector,
+  TemplateRef,
+  ViewRef
+} from '@angular/core';
+import { ComponentInstance } from './component-ins';
+import { CurrentOverlay } from './current-overlay';
+import { HostArgs, HostContentType } from './models';
+import { ToppyRef } from './toppy-ref';
 
 @Injectable()
 export class HostContainer {
@@ -13,12 +23,16 @@ export class HostContainer {
   private _contentProps: { [key: string]: any };
   private _content: any;
   toppyRef: (id: string) => ToppyRef;
-  constructor(private appRef: ApplicationRef, private compFacResolver: ComponentFactoryResolver, private injector: Injector) {}
+  constructor(
+    private appRef: ApplicationRef,
+    private compFacResolver: ComponentFactoryResolver,
+    private injector: Injector
+  ) {}
 
   configure(
     { contentType, content, props }: HostArgs = {
-      content: "hello",
-      contentType: "STRING"
+      content: 'hello',
+      contentType: 'STRING'
     }
   ) {
     this._contentType = contentType;
@@ -53,18 +67,18 @@ export class HostContainer {
     let view: any = null;
     let viewEl = null;
     switch (this._contentType) {
-      case "COMPONENT":
+      case 'COMPONENT':
         view = this.createViewFromComponent(this._content, this._contentProps);
         this.appRef.attachView(view);
         viewEl = this.getComponentViewEl();
         break;
-      case "TEMPLATEREF":
+      case 'TEMPLATEREF':
         view = this.createViewFromTemplate(this._content);
         this.appRef.attachView(view);
         viewEl = view.rootNodes[0];
         break;
-      case "STRING":
-        const el = document.createElement("div");
+      case 'STRING':
+        const el = document.createElement('div');
         el.innerHTML = this._content;
         return el as any;
       default:

@@ -54,6 +54,7 @@ export class ToppyRef {
       map((e: any) => e.target),
       skipWhile(() => !this._config.dismissOnDocumentClick),
       filter(this._overlay.isHostElement.bind(this._overlay)),
+      tap(_ => this._config.docClickCallback.call(null)),
       tap(() => this.close())
     );
   }
@@ -71,6 +72,10 @@ export class ToppyRef {
         this._overlay.config.windowResizeCallback();
       })
     );
+  }
+
+  updatePosition(positionConfig) {
+    this._overlay.updatePositionConfig(positionConfig);
   }
 
   private _cleanup() {
