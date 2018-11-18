@@ -1,3 +1,11 @@
+# [1.1.0](https://github.com/lokesh-coder/toppy/compare/v1.0.18...v1.1.0) (2018-11-18)
+
+
+### Features
+
+* fade in content once position is updated ([3520ef6](https://github.com/lokesh-coder/toppy/commit/3520ef6))
+* fade in content only after final position is updated ([abbfc8f](https://github.com/lokesh-coder/toppy/commit/abbfc8f))
+
 ## [1.0.18](https://github.com/lokesh-coder/toppy/compare/v1.0.17...v1.0.18) (2018-11-16)
 
 ## [1.0.17](https://github.com/lokesh-coder/toppy/compare/v1.0.16...v1.0.17) (2018-11-13)
