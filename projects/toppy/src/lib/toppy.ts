@@ -79,6 +79,7 @@ export class Toppy implements OnDestroy {
   }
 
   ngOnDestroy() {
+    Toppy.toppyRefs = {};
     this._eventBus.destroy();
   }
 
