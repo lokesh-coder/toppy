@@ -1,8 +1,8 @@
 import { animationFrameScheduler, fromEvent, merge, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, observeOn, skipWhile, takeUntil, tap } from 'rxjs/operators';
-import { Config } from './config';
 import { EventBus } from './helper/event-bus';
 import { HostContainer } from './host-container';
+import { ToppyConfig } from './models';
 import { OverlayInstance } from './overlay-instance';
 
 export class ToppyRef {
@@ -13,7 +13,7 @@ export class ToppyRef {
     private _overlay: OverlayInstance,
     private _host: HostContainer,
     private _eventBus: EventBus,
-    private _config: Config,
+    private _config: ToppyConfig,
     public overlayID: string
   ) {}
 
@@ -72,6 +72,10 @@ export class ToppyRef {
         this._overlay.config.windowResizeCallback();
       })
     );
+  }
+
+  getConfig() {
+    return this._config;
   }
 
   updatePosition(positionConfig) {

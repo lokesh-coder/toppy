@@ -14,7 +14,9 @@ import { CurrentOverlay } from './current-overlay';
 import { HostArgs, HostContentType } from './models';
 import { ToppyRef } from './toppy-ref';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class HostContainer {
   private _compFac: ComponentFactory<any>;
   private _compRef: ComponentRef<any>;
@@ -24,9 +26,9 @@ export class HostContainer {
   private _content: any;
   toppyRef: (id: string) => ToppyRef;
   constructor(
-    private appRef: ApplicationRef,
-    private compFacResolver: ComponentFactoryResolver,
-    private injector: Injector
+    private _appRef: ApplicationRef,
+    private _compFacResolver: ComponentFactoryResolver,
+    private _injector: Injector
   ) {}
 
   configure(
@@ -47,7 +49,7 @@ export class HostContainer {
     return template.createEmbeddedView(ctx);
   }
   createViewFromComponent(component, props: any = {}): ViewRef {
-    this._compFac = this.compFacResolver.resolveComponentFactory(component);
+    this._compFac = this._compFacResolver.resolveComponentFactory(component);
     const dataInjector = Injector.create({
       providers: [
         {
@@ -56,7 +58,7 @@ export class HostContainer {
           deps: []
         }
       ],
-      parent: this.injector
+      parent: this._injector
     });
     this._compRef = this._compFac.create(dataInjector);
     this._compIns = <ComponentInstance>new ComponentInstance(this._compRef.instance, props).getInstance();
@@ -69,12 +71,12 @@ export class HostContainer {
     switch (this._contentType) {
       case 'COMPONENT':
         view = this.createViewFromComponent(this._content, this._contentProps);
-        this.appRef.attachView(view);
+        this._appRef.attachView(view);
         viewEl = this.getComponentViewEl();
         break;
       case 'TEMPLATEREF':
         view = this.createViewFromTemplate(this._content);
-        this.appRef.attachView(view);
+        this._appRef.attachView(view);
         viewEl = view.rootNodes[0];
         break;
       case 'STRING':
@@ -91,12 +93,12 @@ export class HostContainer {
     if (!this._compRef) {
       return;
     }
-    this.appRef.detachView(this._compRef.hostView);
+    this._appRef.detachView(this._compRef.hostView);
     this._compRef.destroy();
   }
 
   getComponentViewEl(): null | HTMLElement {
-    if (this.appRef.viewCount === 0) {
+    if (this._appRef.viewCount === 0) {
       return null;
     }
     return (this._compRef.hostView as EmbeddedViewRef<any>).rootNodes[0] as HTMLElement;
@@ -104,5 +106,15 @@ export class HostContainer {
 
   getCompIns() {
     return this._compIns;
+  }
+
+  reset() {
+    this._contentType = null;
+    this._contentProps = null;
+    this._content = null;
+  }
+
+  getNewInstance() {
+    return new HostContainer(this._appRef, this._compFacResolver, this._injector);
   }
 }

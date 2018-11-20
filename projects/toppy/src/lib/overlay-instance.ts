@@ -1,15 +1,17 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
-import { Config } from './config';
 import { DomHelper } from './helper/dom';
 import { EventBus } from './helper/event-bus';
+import { ToppyConfig } from './models';
 import { DefaultPosition } from './position';
 import { Position } from './position/position';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class OverlayInstance implements OnDestroy {
   computePosition: Subject<boolean> = new Subject();
-
+  config: ToppyConfig;
   private _overlayID: string;
   private _position: Position;
   private _viewEl: HTMLElement;
@@ -18,7 +20,12 @@ export class OverlayInstance implements OnDestroy {
   private _backdropEl: HTMLElement;
   private _positionSubscription: Subscription;
 
-  constructor(public config: Config, private _eventBus: EventBus, private _dom: DomHelper) {}
+  constructor(private _eventBus: EventBus, private _dom: DomHelper) {}
+
+  setConfig(config: ToppyConfig) {
+    this.config = config;
+    return this;
+  }
 
   configure(position: Position = new DefaultPosition(), overlayID?: string) {
     this._position = position;
@@ -44,7 +51,7 @@ export class OverlayInstance implements OnDestroy {
 
     this._wrapperEl = this._dom.createElement('div', {
       class: this.config.wrapperClass,
-      style: 'position: absolute;visibility:hidden;opacity:0;transition:opacity 0.5s ease;'
+      style: 'position: absolute;visibility:hidden;opacity:0;transition:opacity 0.2s ease;'
     });
 
     if (this.config.backdrop) {
@@ -73,6 +80,10 @@ export class OverlayInstance implements OnDestroy {
 
   getContainerEl(): HTMLElement {
     return this._containerEl;
+  }
+
+  getNewInstance() {
+    return new OverlayInstance(this._eventBus, this._dom);
   }
 
   destroy(): void {

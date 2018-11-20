@@ -45,7 +45,7 @@ export interface ContainerSize {
   height: string | number;
 }
 
-export interface BaseConfig {
+export interface ToppyConfig {
   backdrop: boolean;
   containerClass: string;
   wrapperClass: string;
