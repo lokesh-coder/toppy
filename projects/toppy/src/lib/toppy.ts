@@ -42,10 +42,10 @@ export class Toppy implements OnDestroy {
   host(content: string | TemplateRef<any> | ComponentType<any>, props: { [x: string]: any } = {}) {
     let data: HostArgs;
 
-    if (typeof content === 'string') {
-      data = { content };
-    } else if (typeof content === 'string' && props['hasHTML']) {
+    if (typeof content === 'string' && props['hasHTML']) {
       data = { content, props };
+    } else if (typeof content === 'string') {
+      data = { content };
     } else if (content instanceof TemplateRef) {
       data = { content, contentType: 'TEMPLATEREF' };
     } else {
