@@ -1,8 +1,4 @@
-import { NgModule } from "@angular/core";
-import { HostContainer } from "./host-container";
-import { OverlayInstance } from "./overlay-instance";
+import { NgModule } from '@angular/core';
 
-@NgModule({
-  providers: [HostContainer, OverlayInstance]
-})
+@NgModule()
 export class ToppyModule {}

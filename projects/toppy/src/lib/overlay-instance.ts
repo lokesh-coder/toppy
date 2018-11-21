@@ -1,15 +1,18 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Subject, Subscription } from 'rxjs';
-import { Config } from './config';
 import { DomHelper } from './helper/dom';
 import { EventBus } from './helper/event-bus';
+import { ToppyConfig } from './models';
 import { DefaultPosition } from './position';
 import { Position } from './position/position';
+import { filter, map } from 'rxjs/operators';
 
-@Injectable()
+@Injectable({
+  providedIn: 'root'
+})
 export class OverlayInstance implements OnDestroy {
   computePosition: Subject<boolean> = new Subject();
-
+  config: ToppyConfig;
   private _overlayID: string;
   private _position: Position;
   private _viewEl: HTMLElement;
@@ -18,7 +21,12 @@ export class OverlayInstance implements OnDestroy {
   private _backdropEl: HTMLElement;
   private _positionSubscription: Subscription;
 
-  constructor(public config: Config, private _eventBus: EventBus, private _dom: DomHelper) {}
+  constructor(private _eventBus: EventBus, private _dom: DomHelper) {}
+
+  setConfig(config: ToppyConfig) {
+    this.config = config;
+    return this;
+  }
 
   configure(position: Position = new DefaultPosition(), overlayID?: string) {
     this._position = position;
@@ -44,7 +52,7 @@ export class OverlayInstance implements OnDestroy {
 
     this._wrapperEl = this._dom.createElement('div', {
       class: this.config.wrapperClass,
-      style: 'position: absolute;visibility:hidden;opacity:0;transition:opacity 0.5s ease;'
+      style: 'position: absolute;visibility:hidden;opacity:0;transition:opacity 0.2s ease;'
     });
 
     if (this.config.backdrop) {
@@ -56,8 +64,10 @@ export class OverlayInstance implements OnDestroy {
     }
 
     this._setPosition();
+    this._position.setEventBus(this._eventBus);
     this._dom.insertChildren(this.config.parentElement || this._dom.html.BODY, this._containerEl, this._wrapperEl);
     this._eventBus.post({ name: 'ATTACHED', data: null });
+    this._onNewComputedPosition();
     this._watchPositionChange();
     return this;
   }
@@ -73,6 +83,10 @@ export class OverlayInstance implements OnDestroy {
 
   getContainerEl(): HTMLElement {
     return this._containerEl;
+  }
+
+  getNewInstance() {
+    return new OverlayInstance(this._eventBus, this._dom);
   }
 
   destroy(): void {
@@ -105,7 +119,13 @@ export class OverlayInstance implements OnDestroy {
     this._eventBus.post({ name: 'POSITION_UPDATED', data: null });
   }
 
-  private _watchPositionChange(): void {
+  private _watchPositionChange() {
+    this._eventBus.watch().pipe(filter(data => data.name === 'NEW_DYN_POS'), map(d => d.data)).subscribe(e => {
+      this._dom.setPositions(this._wrapperEl, {left: e.x, top: e.y});
+    });
+  }
+
+  private _onNewComputedPosition(): void {
     this._positionSubscription = this.computePosition.subscribe(_ => {
       this._setPosition(true);
     });

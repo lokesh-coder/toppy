@@ -3,13 +3,13 @@ import { async, TestBed } from '@angular/core/testing';
 import { HostContainer } from '../lib/host-container';
 
 @Component({
-  selector: 'main-component',
+  selector: 'lib-main-component',
   template: '<div>Main component</div>'
 })
 export class MainComponent {}
 
 @Component({
-  selector: 'host-component',
+  selector: 'lib-host-component',
   template: '<h1 id="greet">Hello</h1>'
 })
 export class HostComponent {}

@@ -161,7 +161,8 @@
           "options": {
             "main": "projects/toppy/src/test.ts",
             "tsConfig": "projects/toppy/tsconfig.spec.json",
-            "karmaConfig": "projects/toppy/karma.conf.js"
+            "karmaConfig": "projects/toppy/karma.conf.js",
+            "codeCoverage": true
           }
         },
         "lint": {
