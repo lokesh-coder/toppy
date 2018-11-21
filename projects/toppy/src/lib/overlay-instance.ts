@@ -5,6 +5,7 @@ import { EventBus } from './helper/event-bus';
 import { ToppyConfig } from './models';
 import { DefaultPosition } from './position';
 import { Position } from './position/position';
+import { filter, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -63,8 +64,10 @@ export class OverlayInstance implements OnDestroy {
     }
 
     this._setPosition();
+    this._position.setEventBus(this._eventBus);
     this._dom.insertChildren(this.config.parentElement || this._dom.html.BODY, this._containerEl, this._wrapperEl);
     this._eventBus.post({ name: 'ATTACHED', data: null });
+    this._onNewComputedPosition();
     this._watchPositionChange();
     return this;
   }
@@ -116,7 +119,13 @@ export class OverlayInstance implements OnDestroy {
     this._eventBus.post({ name: 'POSITION_UPDATED', data: null });
   }
 
-  private _watchPositionChange(): void {
+  private _watchPositionChange() {
+    this._eventBus.watch().pipe(filter(data => data.name === 'NEW_DYN_POS'), map(d => d.data)).subscribe(e => {
+      this._dom.setPositions(this._wrapperEl, {left: e.x, top: e.y});
+    });
+  }
+
+  private _onNewComputedPosition(): void {
     this._positionSubscription = this.computePosition.subscribe(_ => {
       this._setPosition(true);
     });
