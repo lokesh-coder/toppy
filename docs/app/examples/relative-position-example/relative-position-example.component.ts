@@ -1,12 +1,12 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 import { OutsidePlacement, RelativePosition, Toppy, ToppyRef } from 'toppy';
 
 @Component({
   selector: 'app-relative-position-example',
   templateUrl: './relative-position-example.component.html',
-  styles: []
+  styles: [],
+  providers: [Toppy]
 })
 export class RelativePositionExampleComponent implements OnInit {
   @ViewChild('targetEl', { read: ElementRef })
@@ -27,19 +27,12 @@ export class RelativePositionExampleComponent implements OnInit {
     { name: 'Top left', value: OutsidePlacement.TOP_LEFT },
     { name: 'Top right', value: OutsidePlacement.TOP_RIGHT }
   ];
-  selectedPlacement = null;
+  selectedPlacement = this.placements[0].value;
   private _toppyRef: ToppyRef;
   destroy$ = new Subject();
   constructor(private toppy: Toppy) {}
 
-  ngOnInit() {}
-
-  onOptionChange() {
-    console.log('option changed');
-    this.destroy$.next('');
-    if (this._toppyRef) {
-      this._toppyRef.close();
-    }
+  ngOnInit() {
     this._toppyRef = this.toppy
       .overlay(
         new RelativePosition({
@@ -47,18 +40,42 @@ export class RelativePositionExampleComponent implements OnInit {
           src: this.targetEl.nativeElement,
           hostWidth: 'auto',
           autoUpdate: true
-        })
+        }),
+        {
+          backdrop: false,
+          dismissOnDocumentClick: false
+        }
       )
       .host(this.content)
       // .textContent('lokesh__')
       // .htmlContent(`Hello <b>Lokesh</b>!`)
       .create();
+    // this._toppyRef
+    //   .events()
+    //   .pipe(takeUntil(this.destroy$))
+    //   .subscribe(a => {
+    //     console.log('events=>', a);
+    //   });
+  }
+
+  ngAfterViewInit() {}
+
+  onOptionChange() {
+    // this.destroy$.next('');
+    this._toppyRef.updatePosition({
+      placement: this.selectedPlacement
+    });
+  }
+  onMouseOver() {
+    // console.log('aaaa');
+    // console.log('relative config', this._toppyRef.getConfig());
     this._toppyRef.open();
-    this._toppyRef
-      .events()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(a => {
-        console.log('events=>', a);
-      });
+  }
+  onMouseLeave() {
+    // console.log('leave');
+    // this.destroy$.next('');
+    // if (this._toppyRef) {
+    this._toppyRef.close();
+    // }
   }
 }

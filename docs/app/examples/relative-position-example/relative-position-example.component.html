@@ -1,4 +1,9 @@
-<div class="comp target-element-container"><div class="target-element-basic" #targetEl>I am a target element</div></div>
+<div class="comp target-element-container">
+  <div class="target-element-basic text-center" #targetEl (mouseenter)="onMouseOver()" (mouseleave)="onMouseLeave()">
+    I am a target element <br />
+    Hover me
+  </div>
+</div>
 <div class="mt-3">
   <ul class="list-inline comp controls">
     <li *ngFor="let placement of placements">

@@ -19,25 +19,28 @@ export class GlobalPositionExampleComponent implements OnInit {
     { name: 'Top right', value: InsidePlacement.TOP_RIGHT },
     { name: 'Center', value: InsidePlacement.CENTER }
   ];
-  selectedPlacement = null;
+  selectedPlacement = this.placements[0].value;
   private _toppyRef: ToppyRef;
   constructor(private toppy: Toppy) {}
 
-  ngOnInit() {}
+  ngOnInit() {
+    this._toppyRef = this.toppy
+      .overlay(new GlobalPosition({ placement: this.selectedPlacement, hostHeight: 'auto', hostWidth: 'auto' }), {
+        docClickCallback: () => {
+          console.log('doc click callback');
+        },
+        dismissOnDocumentClick: true,
+        backdrop: true
+      })
+      .host(SimpleModalComponent)
+      .create();
+  }
 
   open() {
     if (this._toppyRef) {
       this._toppyRef.close();
     }
-    this._toppyRef = this.toppy
-      .overlay(new GlobalPosition({ placement: this.selectedPlacement, hostHeight: 'auto', hostWidth: 'auto' }), {
-        docClickCallback: () => {
-          console.log('abbbb');
-        },
-        backdrop: true
-      })
-      .host(SimpleModalComponent)
-      .create();
+
     // this._toppyRef.onDocumentClick().subscribe(_ => {
     //   console.log('doc click');
     // });
@@ -46,5 +49,8 @@ export class GlobalPositionExampleComponent implements OnInit {
 
   onOptionChange() {
     console.log('option changed');
+    this._toppyRef.updatePosition({
+      placement: this.selectedPlacement
+    });
   }
 }

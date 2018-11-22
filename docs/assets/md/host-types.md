@@ -41,7 +41,7 @@ this.overlayIns = this._toppy
 - ##### Using TemplateRef
 
 ```html
-<div #tpl>Hello world!</div>
+<ng-template #tpl>Hello world!</ng-template>
 ```
 
 ```typescript
