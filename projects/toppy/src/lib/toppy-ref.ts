@@ -4,6 +4,7 @@ import { EventBus } from './helper/event-bus';
 import { HostContainer } from './host-container';
 import { ToppyConfig } from './models';
 import { OverlayInstance } from './overlay-instance';
+import { getContentMeta } from './utils';
 
 export class ToppyRef {
   private _isOpen = false;
@@ -77,6 +78,12 @@ export class ToppyRef {
 
   getConfig() {
     return this._config;
+  }
+
+  updateHost(content, props = {}) {
+    const data = getContentMeta(content, props, this.overlayID);
+    this._host.configure(data);
+    return this;
   }
 
   updatePosition(positionConfig) {
