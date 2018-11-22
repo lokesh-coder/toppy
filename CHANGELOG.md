@@ -1,3 +1,10 @@
+## [1.1.1](https://github.com/lokesh-coder/toppy/compare/v1.1.0...v1.1.1) (2018-11-22)
+
+
+### Bug Fixes
+
+* multiple toppy config override ([#8](https://github.com/lokesh-coder/toppy/issues/8)) ([ca0ce7e](https://github.com/lokesh-coder/toppy/commit/ca0ce7e))
+
 # [1.1.0](https://github.com/lokesh-coder/toppy/compare/v1.0.18...v1.1.0) (2018-11-18)
 
 
