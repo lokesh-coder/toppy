@@ -1,36 +1,65 @@
-import { Component, NgModule } from '@angular/core';
+import { Component, NgModule, Optional, ViewChild } from '@angular/core';
 import { async, TestBed } from '@angular/core/testing';
+import { CurrentOverlay } from 'toppy/lib/current-overlay';
+import { ToppyRef } from 'toppy/lib/toppy-ref';
 import { HostContainer } from '../lib/host-container';
+
+export class CurrentOverlayMock {
+  toppyRef: ToppyRef;
+  constructor(ref) {
+    this.toppyRef = ref;
+  }
+  close() {
+    this.toppyRef.close();
+  }
+}
+
+export class ToppyRefMock {
+  constructor(@Optional() public id: string) {}
+  close() {}
+}
 
 @Component({
   selector: 'lib-main-component',
-  template: '<div>Main component</div>'
+  template: `
+    <div>Main component</div>
+    <ng-template #tpl><span>Template content</span></ng-template>
+  `
 })
-export class MainComponent {}
+export class MainComponent {
+  @ViewChild('tpl') tpl;
+}
 
 @Component({
   selector: 'lib-host-component',
-  template: '<h1 id="greet">Hello</h1>'
+  template: `
+    <h1 id="greet">Hello</h1>
+  `
 })
-export class HostComponent {}
+export class HostComponent {
+  constructor(@Optional() public currentOverlay: CurrentOverlay) {}
+}
 
 @NgModule({
   declarations: [HostComponent, MainComponent],
   entryComponents: [HostComponent],
   exports: [HostComponent, MainComponent],
-  providers: [HostContainer]
+  providers: [HostContainer, ToppyRefMock]
 })
 export class TestModule {}
 
 describe('== ComponentHost ==', () => {
   let componentHost: HostContainer = null;
-  let fixture: HostComponent = null;
+  let mainComp: MainComponent;
+  let hostComp: HostComponent;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [TestModule]
     }).compileComponents();
-    fixture = TestBed.createComponent(MainComponent).componentInstance;
+    mainComp = TestBed.createComponent(MainComponent).componentInstance;
+    hostComp = TestBed.createComponent(HostComponent).componentInstance;
     componentHost = TestBed.get(HostContainer);
+    componentHost.toppyRef = (id): any => new ToppyRefMock(id);
   }));
 
   it('should be initialized', () => {
@@ -57,5 +86,41 @@ describe('== ComponentHost ==', () => {
     componentHost.configure({ content: HostComponent, contentType: 'COMPONENT' });
     componentHost.attach();
     expect(componentHost.getCompIns() instanceof HostComponent).toBeTruthy();
+  });
+  it('should return html node on calling "createViewFromString" method', () => {
+    const view = componentHost.createViewFromString('<div>Hello</div>');
+    expect(view.textContent).toBe('<div>Hello</div>');
+  });
+  it('should return html node on calling "attach" method without specifying contentType', () => {
+    componentHost.configure({
+      content: 'FOOBAR'
+    });
+    const view = componentHost.attach();
+    expect(view.textContent).toBe('FOOBAR');
+  });
+  it('should return template view on calling "attach" method', () => {
+    componentHost.configure({
+      content: 'QWERTY',
+      contentType: 'STRING'
+    });
+    const view = componentHost.attach();
+    expect(view.textContent).toBe('QWERTY');
+  });
+  it('should return template view on calling "createViewFromTemplate" method', () => {
+    const view = componentHost.createViewFromTemplate(mainComp.tpl);
+    expect(view.rootNodes[0].textContent).toBe('Template content');
+  });
+  it('should return template view on calling "attach" method', () => {
+    componentHost.configure({
+      content: mainComp.tpl,
+      contentType: 'TEMPLATEREF'
+    });
+    const view = componentHost.attach();
+    expect(view.textContent).toBe('Template content');
+  });
+  it('should inject "CurrentOverlay" service on comp init', () => {
+    componentHost.createViewFromComponent(HostComponent, { id: 123 });
+    expect(componentHost.getCompIns() instanceof HostComponent).toBeTruthy();
+    expect((componentHost as any)._compIns.currentOverlay._ref instanceof ToppyRefMock).toBeTruthy();
   });
 });
