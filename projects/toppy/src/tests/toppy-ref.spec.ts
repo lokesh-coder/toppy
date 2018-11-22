@@ -1,6 +1,7 @@
 import { Component, DebugElement, Injectable, NgModule } from '@angular/core';
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
-import { Config } from '../lib/config';
+import { take } from 'rxjs/operators';
+import { DefaultConfig } from 'toppy/lib/config';
 import { DomHelper } from '../lib/helper/dom';
 import { EventBus } from '../lib/helper/event-bus';
 import { HostContainer } from '../lib/host-container';
@@ -10,11 +11,11 @@ import { GlobalPosition } from '../lib/position/global-position';
 import { ToppyRef } from '../lib/toppy-ref';
 
 @Component({
-  selector: 'test-component',
+  selector: 'lib-test-component',
   template: '<div>DYNAMIC COMP</div>'
 })
 export class TestComponent {
-  name = 'test-component';
+  name = 'lib-test-component';
 }
 
 @NgModule({
@@ -25,11 +26,12 @@ export class TestComponent {
 export class TestModule {}
 
 @Injectable()
-export class BlinkRefMock extends ToppyRef {
-  constructor(_overlay: OverlayInstance, _host: HostContainer, _messenger: EventBus, _config: Config) {
+export class ToppyRefMock extends ToppyRef {
+  constructor(_overlay: OverlayInstance, _host: HostContainer, _messenger: EventBus) {
+    _overlay.setConfig(DefaultConfig);
     _overlay.configure(new GlobalPosition({ placement: InsidePlacement.CENTER }), '');
     _host.configure({ content: TestComponent, contentType: 'COMPONENT', props: {} });
-    super(_overlay, _host, _messenger, _config, 'xyzabc');
+    super(_overlay, _host, _messenger, DefaultConfig, 'xyzabc');
   }
 }
 
@@ -44,7 +46,7 @@ describe('== Toppy ref ==', () => {
       providers: [
         {
           provide: ToppyRef,
-          useClass: BlinkRefMock
+          useClass: ToppyRefMock
         },
         DomHelper,
         OverlayInstance,
@@ -60,8 +62,29 @@ describe('== Toppy ref ==', () => {
   it('should initialize', () => {
     expect(toppyRef).toBeTruthy();
   });
+  it('should return event bus on calling "events" method', done => {
+    toppyRef
+      .events()
+      .pipe(take(1))
+      .subscribe(res => {
+        expect(res).toEqual({ name: 'TEST', data: 'HELLO' });
+        done();
+      });
+    (toppyRef as any)._eventBus.post({ name: 'TEST', data: 'HELLO' });
+  });
+  it('should return config on calling "getConfig" method', () => {
+    expect(toppyRef.getConfig()).toBe(DefaultConfig);
+  });
+  it('should toggle on calling "toggle" method', () => {
+    expect((toppyRef as any)._isOpen).toBeFalsy();
+    toppyRef.toggle();
+    expect((toppyRef as any)._isOpen).toBeTruthy();
+    toppyRef.toggle();
+    expect((toppyRef as any)._isOpen).toBeFalsy();
+    toppyRef.close();
+  });
 
-  describe('on calling `open` method', () => {
+  describe('on calling "open" method', () => {
     afterEach(() => {
       toppyRef.close();
     });
@@ -74,7 +97,7 @@ describe('== Toppy ref ==', () => {
     // it('should get the component instance', () => {
     //   toppyRef.open();
     //   expect(toppyRef.compIns.component instanceof TestComponent).toBeTruthy();
-    //   expect(toppyRef.compIns.component.name).toBe('test-component');
+    //   expect(toppyRef.compIns.component.name).toBe('lib-test-component');
     // });
     it('should create overlay element in DOM', () => {
       const overlayContainerElements = document.getElementsByClassName('toppy-container');
@@ -83,7 +106,7 @@ describe('== Toppy ref ==', () => {
       expect(overlayContainerElements.length).toEqual(1);
     });
     it('should attach component element in DOM', () => {
-      const componentElement = document.getElementsByTagName('test-component');
+      const componentElement = document.getElementsByTagName('lib-test-component');
       toppyRef.open();
       expect(componentElement.length).toEqual(1);
     });
@@ -98,7 +121,7 @@ describe('== Toppy ref ==', () => {
     }));
   });
 
-  describe('on calling `close` method', () => {
+  describe('on calling "close" method', () => {
     it('should remove overlay container element form DOM', () => {
       const overlayContainerElements = document.getElementsByClassName('toppy-container');
       expect(overlayContainerElements.length).toEqual(0);
@@ -115,6 +138,22 @@ describe('== Toppy ref ==', () => {
       expect(overlayContainerElements.length).toEqual(1);
       toppyRef.close();
       expect(overlayContainerElements.length).toEqual(0);
+    });
+  });
+
+  describe('on documentClick event', () => {
+    it('should return target element', done => {
+      const spy = spyOn(toppyRef as any, '_cleanup').and.callFake(() => {
+        return false;
+      });
+      (toppyRef as any)._listenDocumentEvents = false;
+      toppyRef.open();
+      toppyRef.onDocumentClick().subscribe(res => {
+        expect(res.className).toBe('toppy-container global-position');
+        done();
+      });
+      const el: any = document.querySelector('.toppy-container');
+      el.click();
     });
   });
 });

@@ -1,19 +1,20 @@
 import { animationFrameScheduler, fromEvent, merge, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, observeOn, skipWhile, takeUntil, tap } from 'rxjs/operators';
-import { Config } from './config';
 import { EventBus } from './helper/event-bus';
 import { HostContainer } from './host-container';
+import { ToppyConfig } from './models';
 import { OverlayInstance } from './overlay-instance';
 
 export class ToppyRef {
   private _isOpen = false;
   private _alive: Subject<Boolean> = new Subject();
+  private _listenDocumentEvents = true;
 
   constructor(
     private _overlay: OverlayInstance,
     private _host: HostContainer,
     private _eventBus: EventBus,
-    private _config: Config,
+    private _config: ToppyConfig,
     public overlayID: string
   ) {}
 
@@ -23,10 +24,10 @@ export class ToppyRef {
     }
     const view = this._host.attach();
     this._overlay.create().setView(view);
-
-    this.onDocumentClick().subscribe();
-    this.onWindowResize().subscribe();
-
+    if (this._listenDocumentEvents) {
+      this.onDocumentClick().subscribe();
+      this.onWindowResize().subscribe();
+    }
     setTimeout(_ => this._overlay.computePosition.next(true), 1);
     this._isOpen = true;
     return this;
@@ -72,6 +73,10 @@ export class ToppyRef {
         this._overlay.config.windowResizeCallback();
       })
     );
+  }
+
+  getConfig() {
+    return this._config;
   }
 
   updatePosition(positionConfig) {
