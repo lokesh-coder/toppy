@@ -1,6 +1,31 @@
 {
   "name": "toppy",
   "version": "0.0.0-development",
+  "description": "Overlay library for Angular 7+",
+  "keywords": [
+    "angular",
+    "dropdown",
+    "modal",
+    "overlay",
+    "popover",
+    "popup",
+    "sidebar",
+    "tooltip"
+  ],
+  "homepage": "https://github.com/lokesh-coder/toppy",
+  "bugs": {
+    "url": "https://github.com/lokesh-coder/toppy/issues"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/lokesh-coder/toppy"
+  },
+  "license": "MIT",
+  "author": {
+    "name": "Lokesh Rajendran",
+    "email": "mexican.dirtyfellow@gmail.com",
+    "url": "https://github.com/lokesh-coder"
+  },
   "peerDependencies": {
     "@angular/common": "^7.0.0",
     "@angular/core": "^7.0.0"
