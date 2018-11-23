@@ -1,9 +1,9 @@
-$toppy--base-font-size: 13px;
+$toppy--base-font-size: 14px;
 $toppy--base-font-size-xl: 16px;
-$toppy--app-name: 'BLINK';
+$toppy--app-name: 'TOPPY';
 $toppy--debug: false;
-$toppy--font-family: 'Nanum Gothic Coding', 'Rubik', 'Inter UI', 'Nunito Sans';
-$toppy--font-family-monospace: 'Nanum Gothic Coding', 'Courier New', 'Lucida Console', Monaco, Courier, monospace;
+$toppy--font-family: 'Inconsolata', 'Rubik', 'Inter UI', 'Nunito Sans';
+$toppy--font-family-monospace: 'Inconsolata', 'Courier New', 'Lucida Console', Monaco, Courier, monospace;
 $toppy--current-theme: 'DEFAULT';
 $toppy--themes: (
   'default': 'DEFAULT',
@@ -58,9 +58,8 @@ $toppy-folder-illus: (
   'file-shadow': darken($toppy--client-color, 10%)
 );
 $toppy--border-rad: 3px;
-$toppy--icons-font: 'ink';
-$toppy--icon-font-path: './assets/fonts/icons';
-$toppy--font-path: './assets/fonts/inter-ui';
+$toppy--icons-font: 'toppy';
+$toppy--icon-font-path: '/assets/icons';
 
 $toppy--grid-breakpoints: (
   xs: 0,
@@ -69,5 +68,3 @@ $toppy--grid-breakpoints: (
   lg: 992px,
   xl: 1600px
 );
-
-$toppy--color-picker-width: 250px;

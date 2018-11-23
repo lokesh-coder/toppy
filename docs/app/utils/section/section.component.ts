@@ -6,7 +6,9 @@ import { Component, Input, OnInit } from '@angular/core';
 })
 export class SectionComponent implements OnInit {
   @Input()
-  heading;
+  heading = '';
+  @Input()
+  icon = '';
   constructor() {}
 
   ngOnInit() {}

@@ -7,8 +7,6 @@ this.overlayIns = this._toppy
   .create();
 ```
 
-<br/>
-
 **Using html**
 
 ```typescript
@@ -17,8 +15,6 @@ this.overlayIns = this._toppy
   .host(`<div>any HTML content</div>`, { hasHTML: true }) // html
   .create();
 ```
-
-<br/>
 
 **Using component**
 
@@ -35,8 +31,6 @@ this.overlayIns = this._toppy
   .host(HelloComponent) // host a component
   .create();
 ```
-
-<br/>
 
 **Using TemplateRef**
 
