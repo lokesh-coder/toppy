@@ -1,0 +1,13 @@
+markdown .inline-code {
+  padding: 1rem;
+  pre[class*='language-'] {
+    display: inline-block;
+    line-height: 1;
+    padding: 0;
+    margin: 0;
+    background: transparent;
+    code {
+      font-size: 1rem;
+    }
+  }
+}

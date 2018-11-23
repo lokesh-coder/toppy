@@ -59,6 +59,7 @@ $icons: (
   -moz-osx-font-smoothing: grayscale;
   speak: none;
   text-transform: none;
+  font-size: 80%;
 }
 @each $icon in $icons {
   .icon-#{nth($icon, 1)} {

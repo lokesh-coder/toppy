@@ -56,20 +56,118 @@ ToppyRef.updatePosition(config:object):ToppyRef
 enum OutsidePlacement {}
 ```
 
-**OutsidePlacement.BOTTOM** | **OutsidePlacement.BOTTOM_LEFT** | **OutsidePlacement.BOTTOM_RIGHT**|, **OutsidePlacement.LEFT** | **OutsidePlacement.LEFT_BOTTOM** | **OutsidePlacement.LEFT_TOP**|, **OutsidePlacement.RIGHT** | **OutsidePlacement.RIGHT_BOTTOM** | **OutsidePlacement.RIGHT_TOP**|, **OutsidePlacement.TOP** | **OutsidePlacement.TOP_LEFT** | **OutsidePlacement.TOP_RIGHT**
+<div class="inline-code">
+
+```typescript
+OutsidePlacement.BOTTOM;
+```
+
+```typescript
+OutsidePlacement.BOTTOM_LEFT;
+```
+
+```typescript
+OutsidePlacement.BOTTOM_RIGHT;
+```
+
+```typescript
+OutsidePlacement.LEFT;
+```
+
+```typescript
+OutsidePlacement.LEFT_BOTTOM;
+```
+
+```typescript
+OutsidePlacement.LEFT_TOP;
+```
+
+```typescript
+OutsidePlacement.RIGHT;
+```
+
+```typescript
+OutsidePlacement.RIGHT_BOTTOM;
+```
+
+```typescript
+OutsidePlacement.RIGHT_TOP;
+```
+
+```typescript
+OutsidePlacement.TOP;
+```
+
+```typescript
+OutsidePlacement.TOP_LEFT;
+```
+
+```typescript
+OutsidePlacement.TOP_RIGHT;
+```
+
+</div>
 
 ```typescript
 enum InsidePlacement {}
 ```
 
-**InsidePlacement** | **InsidePlacement.BOTTOM** | **InsidePlacement.BOTTOM_LEFT**|, **InsidePlacement.BOTTOM_RIGHT** | **InsidePlacement.LEFT** | **InsidePlacement.RIGHT**|, **InsidePlacement.TOP** | **InsidePlacement.TOP_LEFT** | **InsidePlacement.TOP_RIGHT**|, **InsidePlacement.CENTER**
+<div class="inline-code">
+
+```typescript
+InsidePlacement;
+```
+
+```typescript
+InsidePlacement.BOTTOM;
+```
+
+```typescript
+InsidePlacement.BOTTOM_LEFT;
+```
+
+```typescript
+InsidePlacement.BOTTOM_RIGHT;
+```
+
+```typescript
+InsidePlacement.LEFT;
+```
+
+```typescript
+InsidePlacement.RIGHT;
+```
+
+```typescript
+InsidePlacement.TOP;
+```
+
+```typescript
+InsidePlacement.TOP_LEFT;
+```
+
+```typescript
+InsidePlacement.TOP_RIGHT;
+```
+
+```typescript
+InsidePlacement.CENTER**
+```
+
+</div>
 
 ```typescript
 enum SlidePlacement {}
 ```
 
-**SlidePlacement.LEFT** | **SlidePlacement.RIGHT**
+<div class="inline-code">
 
+```typescript
+SlidePlacement.LEFT;
 ```
 
+```typescript
+SlidePlacement.RIGHT;
 ```
+
+</div>

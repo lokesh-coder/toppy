@@ -35,7 +35,7 @@ export class AppComponent {
     if (parts.length === 2) {
       this.selectedVersion = parts[1];
     } else {
-      this.selectedVersion = '1.0.15';
+      this.selectedVersion = this.latestVersion;
     }
   }
 

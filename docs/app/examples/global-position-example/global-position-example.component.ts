@@ -14,6 +14,8 @@ import { SimpleModalComponent } from '../../host-components/simple-modal/simple-
         border: 2px solid #c4532f;
         border-radius: 3px;
         color: #fff;
+        text-transform: uppercase;
+        font-weight: 700;
       }
     `
   ]

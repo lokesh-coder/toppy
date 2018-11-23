@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { SlidePlacement, ToppyRef, Toppy, SlidePosition } from 'toppy';
+import { SlidePlacement, SlidePosition, Toppy, ToppyRef } from 'toppy';
 import { SimpleListComponent } from '../../host-components/simple-list/simple-list.component';
 
 @Component({
@@ -12,7 +12,7 @@ export class SlidePositionExampleComponent implements OnInit {
     { name: 'Left', value: SlidePlacement.LEFT },
     { name: 'Right', value: SlidePlacement.RIGHT }
   ];
-  selectedPlacement = null;
+  selectedPlacement = this.placements[0].value;
   private _toppyRef: ToppyRef;
   constructor(private toppy: Toppy) {}
 
