@@ -30,16 +30,17 @@ export class ToppyRef {
       this.onWindowResize().subscribe();
     }
     setTimeout(_ => this._overlay.computePosition.next(true), 1);
+    this._eventBus.post({ name: 'OPENED_OVERLAY_INS', data: this.overlayID });
     this._isOpen = true;
     return this;
   }
 
   close() {
     this._host.detach();
+    this._eventBus.post({ name: 'REMOVED_OVERLAY_INS', data: this.overlayID });
     this._overlay.destroy();
     this._cleanup();
     this._isOpen = false;
-    this._eventBus.post({ name: 'REMOVE_OVERLAY_INS', data: this.overlayID });
   }
 
   toggle() {
