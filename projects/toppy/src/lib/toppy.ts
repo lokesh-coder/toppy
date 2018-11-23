@@ -1,5 +1,4 @@
 import { Injectable, OnDestroy, TemplateRef } from '@angular/core';
-import { filter } from 'rxjs/operators';
 import { DefaultConfig } from './config';
 import { EventBus } from './helper/event-bus';
 import { HostContainer } from './host-container';
@@ -57,10 +56,7 @@ export class Toppy implements OnDestroy {
   }
 
   delete(overlyID) {
-    this._eventBus
-      .watch()
-      .pipe(filter(e => e.name === 'REMOVED_OVERLAY_INS'))
-      .subscribe(e => delete Toppy.toppyRefs[overlyID]);
+    delete Toppy.toppyRefs[overlyID];
   }
 
   getToppyRef(id) {

@@ -77,11 +77,11 @@ describe('== Toppy ==', () => {
   it('should have empty toppy references on load', () => {
     expect(Object.keys(Toppy.toppyRefs).length).toEqual(0);
   });
-  it('should delete toppyRef on "REMOVED_OVERLAY_INS" event', () => {
+  it('should delete toppyRef on calling "delete" method', () => {
     (toppy as any)._overlayID = 'abc123';
     toppy.create();
     expect(toppy.getToppyRef('abc123').overlayID).toBe('abc123');
-    eventBus.post({ name: 'REMOVED_OVERLAY_INS', data: 'abc123' });
+    toppy.delete('abc123');
     expect(toppy.getToppyRef('abc123')).toBeUndefined();
   });
   describe('on calling "generateID" method', () => {
