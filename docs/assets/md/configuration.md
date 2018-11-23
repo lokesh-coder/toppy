@@ -11,6 +11,7 @@ this.toppy
 | containerClass         | _'toppy-container'_ | string           |
 | wrapperClass           | _'toppy-wrapper'_   | string           |
 | backdropClass          | _'toppy-backdrop'_  | string           |
+| bodyClassNameOnOpen    | _''_                | string           |
 | dismissOnDocumentClick | _true_              | boolean          |
 | parentElement          | _null_              | HTMLElement      |
 | watchDocClick          | _true_              | boolean          |

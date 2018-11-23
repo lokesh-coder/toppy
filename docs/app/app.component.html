@@ -5,43 +5,48 @@
         <h2>Toppy</h2>
         <p>Angular overlay library</p>
       </div>
-      <app-section title="" class="d-block text-center mb-5">
+      <app-section heading="" class="d-block text-center mb-5">
         <markdown ngPreserveWhitespaces [src]="'./assets/md/introduction.md'"></markdown>
       </app-section>
-      <app-section title="Installation">
+      <app-section heading="Installation">
         <markdown ngPreserveWhitespaces [src]="'./assets/md/installation.md'"></markdown>
       </app-section>
-      <app-section title="Content types">
+      <app-section heading="Content types">
         <markdown ngPreserveWhitespaces [src]="'./assets/md/host-types.md'"></markdown>
       </app-section>
 
-      <!-- <app-section title="Features"> </app-section> -->
-      <app-section title="Positions">
-        <app-sub-section title="1. Relative position">
+      <!-- <app-section heading="Features"> </app-section> -->
+      <app-section heading="Positions">
+        <app-sub-section heading="1. Relative position">
           <app-relative-position-example></app-relative-position-example>
-          <markdown ngPreserveWhitespaces [src]="'./assets/md/relative-position-example.md'"></markdown>
+          <markdown ngPreserveWhitespaces [src]="'./assets/md/relative-position-api.md'"></markdown>
         </app-sub-section>
-        <app-sub-section title="2. Global position">
+        <app-sub-section heading="2. Global position">
           <app-global-position-example></app-global-position-example>
+          <markdown ngPreserveWhitespaces [src]="'./assets/md/global-position-api.md'"></markdown>
         </app-sub-section>
-        <app-sub-section title="3. Slide position">
+        <app-sub-section heading="3. Slide position">
           <app-slide-position-example></app-slide-position-example>
+          <markdown ngPreserveWhitespaces [src]="'./assets/md/slide-position-api.md'"></markdown>
         </app-sub-section>
-        <app-sub-section title="4. Fullscreen position">
+        <app-sub-section heading="4. Fullscreen position">
           <app-fullscreen-position-example></app-fullscreen-position-example>
+          <markdown ngPreserveWhitespaces [src]="'./assets/md/fullscreen-position-api.md'"></markdown>
         </app-sub-section>
       </app-section>
-      <app-section title="Component communication">
+      <app-section heading="Component communication">
         <markdown ngPreserveWhitespaces [src]="'./assets/md/component-comm.md'"></markdown>
       </app-section>
-      <app-section title="Configuration" class="table">
+      <app-section heading="Configuration" class="table">
         <markdown ngPreserveWhitespaces [src]="'./assets/md/configuration.md'"></markdown>
       </app-section>
-      <app-section title="API"> <markdown ngPreserveWhitespaces [src]="'./assets/md/api.md'"></markdown> </app-section>
-      <app-section title="Contribution">
+      <app-section heading="API">
+        <markdown ngPreserveWhitespaces [src]="'./assets/md/api.md'"></markdown>
+      </app-section>
+      <app-section heading="Contribution">
         <markdown ngPreserveWhitespaces [src]="'./assets/md/contribution.md'"></markdown>
       </app-section>
-      <app-section title="Issues">
+      <app-section heading="Issues">
         <markdown ngPreserveWhitespaces [src]="'./assets/md/issues.md'"></markdown>
       </app-section>
     </div>
