@@ -23,12 +23,7 @@ export class Toppy implements OnDestroy {
     private _eventBus: EventBus,
     private _overlayIns: OverlayInstance,
     private _hostContainer: HostContainer
-  ) {
-    this._eventBus
-      .watch()
-      .pipe(filter(e => e.name === 'REMOVE_OVERLAY_INS'))
-      .subscribe(e => delete Toppy.toppyRefs[e.data]);
-  }
+  ) {}
 
   overlay(position: Position, config: Partial<ToppyConfig> = {}): Toppy {
     this._hostContainerFreshInstance = this._hostContainer.getNewInstance();
@@ -59,6 +54,13 @@ export class Toppy implements OnDestroy {
       this._overlayID
     );
     return Toppy.toppyRefs[this._overlayID];
+  }
+
+  delete(overlyID) {
+    this._eventBus
+      .watch()
+      .pipe(filter(e => e.name === 'REMOVED_OVERLAY_INS'))
+      .subscribe(e => delete Toppy.toppyRefs[overlyID]);
   }
 
   getToppyRef(id) {

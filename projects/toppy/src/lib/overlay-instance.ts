@@ -1,5 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
-import { Subject, Subscription } from 'rxjs';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 import { DomHelper } from './helper/dom';
 import { EventBus } from './helper/event-bus';
 import { ToppyConfig } from './models';
@@ -18,7 +19,7 @@ export class OverlayInstance implements OnDestroy {
   private _wrapperEl: HTMLElement;
   private _containerEl: HTMLElement;
   private _backdropEl: HTMLElement;
-  private _positionSubscription: Subscription;
+  private _alive: Subject<Boolean> = new Subject();
 
   constructor(private _eventBus: EventBus, private _dom: DomHelper) {}
 
@@ -30,6 +31,7 @@ export class OverlayInstance implements OnDestroy {
   configure(position: Position = new DefaultPosition(), overlayID?: string) {
     this._position = position;
     this._overlayID = overlayID;
+    this.updateOverlayClassInBody();
   }
 
   changePosition(newPosition) {
@@ -92,16 +94,25 @@ export class OverlayInstance implements OnDestroy {
     this._cleanup();
   }
 
+  updateOverlayClassInBody() {
+    this._eventBus.watch().subscribe(event => {
+      if (!this.config || this.config.bodyClassNameOnOpen === '' || event.data !== this._overlayID) {
+        return;
+      }
+      if (event.name === 'OPENED_OVERLAY_INS') {
+        this._dom.addClassNameToBody(this.config.bodyClassNameOnOpen);
+      } else if (event.name === 'REMOVED_OVERLAY_INS') {
+        this._dom.removeClassNameFromBody(this.config.bodyClassNameOnOpen);
+      }
+    });
+  }
+
   ngOnDestroy(): void {
-    if (this._positionSubscription) {
-      this._positionSubscription.unsubscribe();
-    }
+    this._alive.next(false);
   }
 
   private _cleanup(): void {
-    if (this._positionSubscription) {
-      this._positionSubscription.unsubscribe();
-    }
+    this._alive.next(false);
     this._containerEl = this._wrapperEl = this._backdropEl = this._viewEl = null;
   }
 
@@ -117,7 +128,7 @@ export class OverlayInstance implements OnDestroy {
   }
 
   private _watchPositionChange(): void {
-    this._positionSubscription = this.computePosition.subscribe(_ => {
+    this.computePosition.pipe(takeUntil(this._alive)).subscribe(_ => {
       this._setPosition(true);
     });
   }

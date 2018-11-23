@@ -43,4 +43,11 @@ export class DomHelper {
       element.parentNode.removeChild(element);
     }
   }
+
+  addClassNameToBody(className: string) {
+    document.querySelector('body').classList.add(className);
+  }
+  removeClassNameFromBody(className: string) {
+    document.querySelector('body').classList.remove(className);
+  }
 }

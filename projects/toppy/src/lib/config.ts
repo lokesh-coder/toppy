@@ -9,6 +9,7 @@ export const DefaultConfig: ToppyConfig = {
   parentElement: null,
   watchDocClick: true,
   watchWindowResize: true,
+  bodyClassNameOnOpen: '',
   windowResizeCallback: () => {},
   docClickCallback: () => {}
 };
