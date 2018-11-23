@@ -59,7 +59,7 @@ export class OverlayInstance implements OnDestroy {
     if (this.config.backdrop) {
       this._backdropEl = this._dom.createElement('div', {
         class: this.config.backdropClass,
-        style: 'left:0;position: fixed;top: 0;width: 100%;height: 100%;background: rgba(63, 81, 181, 0.39);'
+        style: 'left:0;position: fixed;top: 0;width: 100%;height: 100%;background: rgba(0, 0, 0, 0.5);'
       });
       this._dom.insertChildren(this._containerEl, this._backdropEl);
     }

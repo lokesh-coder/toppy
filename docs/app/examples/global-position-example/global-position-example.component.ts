@@ -9,10 +9,11 @@ import { SimpleModalComponent } from '../../host-components/simple-modal/simple-
   styles: [
     `
       .global-content-wrapper {
-        background: #fff;
+        background: #ff5722;
         padding: 1rem 2rem;
-        border: 2px solid #3f51b5;
+        border: 2px solid #c4532f;
         border-radius: 3px;
+        color: #fff;
       }
     `
   ]
@@ -35,15 +36,18 @@ export class GlobalPositionExampleComponent implements OnInit {
 
   ngOnInit() {
     this._toppyRef = this.toppy
-      .overlay(new GlobalPosition({ placement: this.selectedPlacement, hostHeight: 'auto', hostWidth: 'auto' }), {
-        docClickCallback: () => {
-          console.log('doc click callback');
-        },
-        dismissOnDocumentClick: true,
-        wrapperClass: 'global-content-wrapper',
-        backdrop: true,
-        bodyClassNameOnOpen: 'global-toastr'
-      })
+      .overlay(
+        new GlobalPosition({ placement: this.selectedPlacement, hostHeight: 'auto', hostWidth: 'auto', offset: 10 }),
+        {
+          docClickCallback: () => {
+            console.log('doc click callback');
+          },
+          dismissOnDocumentClick: true,
+          wrapperClass: 'global-content-wrapper',
+          backdrop: true,
+          bodyClassNameOnOpen: 'global-toastr'
+        }
+      )
       .host(SimpleModalComponent)
       .create();
   }
