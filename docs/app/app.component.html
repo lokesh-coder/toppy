@@ -3,7 +3,14 @@
     <div class="col-md-8 mx-auto">
       <div class="brand d-flex flex-column justify-center align-items-center mt-5 mb-3">
         <h2>Toppy</h2>
-        <p>Angular overlay library</p>
+        <p>
+          Angular overlay library
+          <select name="versions" [(ngModel)]="selectedVersion" (ngModelChange)="onVersionChange(selectedVersion)">
+            <option [ngValue]="version" *ngFor="let version of versions" [selected]="selectedVersion">{{
+              version
+            }}</option>
+          </select>
+        </p>
       </div>
       <app-section heading="" class="d-block text-center mb-5">
         <markdown ngPreserveWhitespaces [src]="'./assets/md/introduction.md'"></markdown>

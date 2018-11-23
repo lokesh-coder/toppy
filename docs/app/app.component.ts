@@ -1,3 +1,4 @@
+import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 // import { Toppy } from 'toppy';
 import { code } from './codes';
@@ -7,30 +8,38 @@ import { code } from './codes';
   templateUrl: './app.component.html'
 })
 export class AppComponent {
+  latestVersion = '';
+  versions = [];
   title = 'toppy-app';
+  selectedVersion = '';
   @ViewChild('el', { read: ElementRef })
   el: ElementRef;
   ins;
   code = code;
-  // constructor(private _toppy: Toppy) {}
-  // ngOnInit() {
-  //   console.log('what???', SlidePlacement.RIGHT);
-  //   this.ins = this._toppy
-  //     .overlay(
-  //       new RelativePosition({
-  //         placement: OutsidePlacement.BOTTOM_LEFT,
-  //         hostWidth: 'auto',
-  //         hostHeight: 'auto',
-  //         src: this.el.nativeElement
-  //       })
-  //     )
-  //     .host(TestComponent)
-  //     .create();
-  // }
-  // open() {
-  //   this.ins.open();
-  // }
-  // close() {
-  //   this.ins.close();
-  // }
+  constructor(private http: HttpClient) {
+    this.http.get('./assets/archived-versions.json').subscribe(data => {
+      this.versions = Object.keys(data)
+        .filter(a => a !== 'undefined')
+        .sort((a, b) => ('' + b).localeCompare(a));
+      this.latestVersion = this.versions[0];
+      this.getCurrentVerison();
+    });
+  }
+
+  ngafterViewInit() {
+    this.getCurrentVerison();
+  }
+
+  getCurrentVerison() {
+    const parts = window.location.pathname.split('/').filter(a => a.length > 0);
+    if (parts.length === 2) {
+      this.selectedVersion = parts[1];
+    } else {
+      this.selectedVersion = '1.0.15';
+    }
+  }
+
+  onVersionChange(version) {
+    (window as any).location = `https://lokesh-coder.github.io/toppy/${version}`;
+  }
 }
