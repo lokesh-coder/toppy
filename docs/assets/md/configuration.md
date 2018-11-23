@@ -13,6 +13,7 @@ this.toppy
 | backdropClass          | _'toppy-backdrop'_  | string           |
 | bodyClassNameOnOpen    | _''_                | string           |
 | dismissOnDocumentClick | _true_              | boolean          |
+| closeOnEsc             | _false_             | boolean          |
 | parentElement          | _null_              | HTMLElement      |
 | watchDocClick          | _true_              | boolean          |
 | watchWindowResize      | _true_              | boolean          |

@@ -14,7 +14,9 @@ export class FullscreenPositionExampleComponent implements OnInit {
 
   ngOnInit() {
     this._toppyRef = this.toppy
-      .overlay(new FullscreenPosition())
+      .overlay(new FullscreenPosition(), {
+        closeOnEsc: true
+      })
       .host(HeroScreenComponent)
       .create();
   }

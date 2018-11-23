@@ -28,6 +28,7 @@ export class ToppyRef {
     if (this._listenDocumentEvents) {
       this.onDocumentClick().subscribe();
       this.onWindowResize().subscribe();
+      this.onEscClick().subscribe();
     }
     setTimeout(_ => this._overlay.computePosition.next(true), 1);
     this._eventBus.post({ name: 'OPENED_OVERLAY_INS', data: this.overlayID });
@@ -49,6 +50,17 @@ export class ToppyRef {
 
   events() {
     return this._eventBus.watch();
+  }
+
+  onEscClick() {
+    return fromEvent(document.getElementsByTagName('body'), 'keydown').pipe(
+      takeUntil(this._alive),
+      skipWhile(() => !this._config.closeOnEsc),
+      filter((e: any) => (e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27) && e.target.nodeName === 'BODY'),
+      tap(e => e.preventDefault()),
+      map((e: any) => e.target),
+      tap(() => this.close())
+    );
   }
 
   onDocumentClick(): Observable<any> {
@@ -89,6 +101,7 @@ export class ToppyRef {
 
   updatePosition(positionConfig) {
     this._overlay.updatePositionConfig(positionConfig);
+    return this;
   }
 
   private _cleanup() {
