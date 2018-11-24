@@ -1,3 +1,14 @@
+# [1.2.0](https://github.com/lokesh-coder/toppy/compare/v1.1.1...v1.2.0) (2018-11-24)
+
+
+### Features
+
+*  added new config prop 'bodyClassNameOnOpen' ([0e047bf](https://github.com/lokesh-coder/toppy/commit/0e047bf))
+* add new config 'closeOnEsc' ([fc1577e](https://github.com/lokesh-coder/toppy/commit/fc1577e))
+* added support to change content after create ([02182b3](https://github.com/lokesh-coder/toppy/commit/02182b3))
+* added version selector in doc ([7554f7b](https://github.com/lokesh-coder/toppy/commit/7554f7b))
+* minor improvements and fixes ([8152b1c](https://github.com/lokesh-coder/toppy/commit/8152b1c))
+
 ## [1.1.1](https://github.com/lokesh-coder/toppy/compare/v1.1.0...v1.1.1) (2018-11-22)
 
 
