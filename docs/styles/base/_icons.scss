@@ -1,49 +1,49 @@
 $icons: (
-  arrow-down: '\e900',
-  arrow-down-left: '\e901',
-  arrow-down-right: '\e902',
-  arrow-left: '\e903',
-  arrow-right: '\e904',
-  arrow-up: '\e905',
-  arrow-up-left: '\e906',
-  arrow-up-right: '\e907',
-  chevron-down: '\e908',
-  chevron-left: '\e909',
-  chevron-right: '\e90a',
-  chevron-up: '\e90b',
-  chevrons-down: '\e90c',
-  chevrons-left: '\e90d',
-  chevrons-right: '\e90e',
-  chevrons-up: '\e90f',
-  corner-down-left: '\e910',
-  corner-down-right: '\e911',
-  corner-left-down: '\e912',
-  corner-left-up: '\e913',
-  corner-right-down: '\e914',
-  corner-right-up: '\e915',
-  corner-up-left: '\e916',
-  corner-up-right: '\e917',
-  external-link: '\e918',
-  home: '\e919',
-  more-horizontal: '\e91a',
-  more-vertical: '\e91b',
-  plus: '\e91c',
-  plus-square: '\e91d',
-  search: '\e91e',
-  settings: '\e91f',
-  sliders: '\e920',
-  trash: '\e921',
-  x: '\e922',
-  x-square: '\e923'
+  alert-circle: '\e902',
+  alert-triangle: '\e904',
+  arrow-left: '\e910',
+  arrow-right: '\e912',
+  check-circle: '\e92c',
+  copy: '\e944',
+  edit: '\e958',
+  external-link: '\e95b',
+  file-text: '\e964',
+  filter: '\e966',
+  github: '\e970',
+  hash: '\e975',
+  heart: '\e977',
+  help-circle: '\e978',
+  home: '\e979',
+  link: '\e982',
+  loader: '\e986',
+  maximize-2: '\e98e',
+  menu: '\e98f',
+  minimize-2: '\e995',
+  more-horizontal: '\e99b',
+  navigation-2: '\e9a0',
+  plus-circle: '\e9b2',
+  radio: '\e9b7',
+  repeat: '\e9ba',
+  rss: '\e9be',
+  settings: '\e9c4',
+  share-2: '\e9c6',
+  sliders: '\e9d1',
+  tag: '\e9db',
+  terminal: '\e9dd',
+  twitter: '\e9ea',
+  users: '\e9f6',
+  x: '\ea02',
+  x-circle: '\ea03',
+  zap: '\ea06'
 );
 
 @font-face {
-  font-family: 'ink';
+  font-family: 'toppy';
   font-style: normal;
   font-weight: normal;
-  src: url('#{$toppy--icon-font-path}/ink.ttf?olqd7c') format('truetype'),
-    url('#{$toppy--icon-font-path}/ink.woff?olqd7c') format('woff'),
-    url('#{$toppy--icon-font-path}/ink.svg?olqd7c#choosy') format('svg');
+  src: url('#{$toppy--icon-font-path}/toppy.ttf?olqd7c') format('truetype'),
+    url('#{$toppy--icon-font-path}/toppy.woff?olqd7c') format('woff'),
+    url('#{$toppy--icon-font-path}/toppy.svg?olqd7c#choosy') format('svg');
 }
 
 .toppy-icon {
@@ -59,6 +59,7 @@ $icons: (
   -moz-osx-font-smoothing: grayscale;
   speak: none;
   text-transform: none;
+  font-size: 80%;
 }
 @each $icon in $icons {
   .icon-#{nth($icon, 1)} {

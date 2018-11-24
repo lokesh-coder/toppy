@@ -1,4 +1,4 @@
-- ##### Plain text
+**Plain text**
 
 ```typescript
 this.overlayIns = this._toppy
@@ -7,9 +7,7 @@ this.overlayIns = this._toppy
   .create();
 ```
 
-<br/>
-
-- ##### Using html
+**Using html**
 
 ```typescript
 this.overlayIns = this._toppy
@@ -18,9 +16,7 @@ this.overlayIns = this._toppy
   .create();
 ```
 
-<br/>
-
-- ##### Using component
+**Using component**
 
 ```typescript
 @Component({
@@ -36,9 +32,7 @@ this.overlayIns = this._toppy
   .create();
 ```
 
-<br/>
-
-- ##### Using TemplateRef
+**Using TemplateRef**
 
 ```html
 <ng-template #tpl>Hello world!</ng-template>

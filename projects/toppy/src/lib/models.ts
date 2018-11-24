@@ -53,6 +53,8 @@ export interface ToppyConfig {
   watchWindowResize: boolean;
   watchDocClick: boolean;
   dismissOnDocumentClick: boolean;
+  bodyClassNameOnOpen: string;
+  closeOnEsc: boolean;
   parentElement: HTMLElement | null;
   windowResizeCallback: () => void;
   docClickCallback: () => void;

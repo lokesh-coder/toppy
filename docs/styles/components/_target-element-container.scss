@@ -5,7 +5,7 @@
   align-items: center;
   justify-content: center;
   .target-element {
-    background: #000000;
+    background: #3d3844;
     padding: 1rem;
     border-radius: 2px;
     color: #fff;
@@ -17,5 +17,6 @@
   .target-element-basic {
     padding: 1rem 2rem;
     border: 1px dashed #d8d8e3;
+    cursor: pointer;
   }
 }

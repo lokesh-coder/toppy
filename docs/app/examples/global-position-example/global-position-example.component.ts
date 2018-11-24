@@ -1,11 +1,24 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewEncapsulation } from '@angular/core';
 import { GlobalPosition, InsidePlacement, Toppy, ToppyRef } from 'toppy';
 import { SimpleModalComponent } from '../../host-components/simple-modal/simple-modal.component';
 
 @Component({
   selector: 'app-global-position-example',
   templateUrl: './global-position-example.component.html',
-  styles: []
+  encapsulation: ViewEncapsulation.None,
+  styles: [
+    `
+      .global-content-wrapper {
+        background: #ff5722;
+        padding: 1rem 2rem;
+        border: 2px solid #c4532f;
+        border-radius: 3px;
+        color: #fff;
+        text-transform: uppercase;
+        font-weight: 700;
+      }
+    `
+  ]
 })
 export class GlobalPositionExampleComponent implements OnInit {
   placements: { name: string; value: InsidePlacement }[] = [
@@ -25,30 +38,28 @@ export class GlobalPositionExampleComponent implements OnInit {
 
   ngOnInit() {
     this._toppyRef = this.toppy
-      .overlay(new GlobalPosition({ placement: this.selectedPlacement, hostHeight: 'auto', hostWidth: 'auto' }), {
-        docClickCallback: () => {
-          console.log('doc click callback');
-        },
-        dismissOnDocumentClick: true,
-        backdrop: true
-      })
+      .overlay(
+        new GlobalPosition({ placement: this.selectedPlacement, hostHeight: 'auto', hostWidth: 'auto', offset: 10 }),
+        {
+          docClickCallback: () => {
+            console.log('doc click callback');
+          },
+          dismissOnDocumentClick: true,
+          wrapperClass: 'global-content-wrapper',
+          backdrop: true,
+          bodyClassNameOnOpen: 'global-toastr'
+        }
+      )
       .host(SimpleModalComponent)
       .create();
   }
 
   open() {
-    if (this._toppyRef) {
-      this._toppyRef.close();
-    }
-
-    // this._toppyRef.onDocumentClick().subscribe(_ => {
-    //   console.log('doc click');
-    // });
-    this._toppyRef.open();
+    const content = this.placements.find(a => a.value === this.selectedPlacement).name;
+    this._toppyRef.updateHost(content).open();
   }
 
   onOptionChange() {
-    console.log('option changed');
     this._toppyRef.updatePosition({
       placement: this.selectedPlacement
     });

@@ -1,4 +1,4 @@
-import { Component, OnInit, Input } from '@angular/core';
+import { Component, Input, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-sub-section',
@@ -7,7 +7,7 @@ import { Component, OnInit, Input } from '@angular/core';
 })
 export class SubSectionComponent implements OnInit {
   @Input()
-  title;
+  heading;
   constructor() {}
 
   ngOnInit() {}

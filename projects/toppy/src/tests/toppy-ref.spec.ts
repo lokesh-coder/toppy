@@ -28,10 +28,10 @@ export class TestModule {}
 @Injectable()
 export class ToppyRefMock extends ToppyRef {
   constructor(_overlay: OverlayInstance, _host: HostContainer, _messenger: EventBus) {
-    _overlay.setConfig(DefaultConfig);
+    _overlay.setConfig({ ...DefaultConfig, closeOnEsc: true });
     _overlay.configure(new GlobalPosition({ placement: InsidePlacement.CENTER }), '');
     _host.configure({ content: TestComponent, contentType: 'COMPONENT', props: {} });
-    super(_overlay, _host, _messenger, DefaultConfig, 'xyzabc');
+    super(_overlay, _host, _messenger, { ...DefaultConfig, closeOnEsc: true }, 'xyzabc');
   }
 }
 
@@ -73,7 +73,7 @@ describe('== Toppy ref ==', () => {
     (toppyRef as any)._eventBus.post({ name: 'TEST', data: 'HELLO' });
   });
   it('should return config on calling "getConfig" method', () => {
-    expect(toppyRef.getConfig()).toBe(DefaultConfig);
+    expect(toppyRef.getConfig()).toEqual({ ...DefaultConfig, closeOnEsc: true });
   });
   it('should toggle on calling "toggle" method', () => {
     expect((toppyRef as any)._isOpen).toBeFalsy();
@@ -154,6 +154,49 @@ describe('== Toppy ref ==', () => {
       });
       const el: any = document.querySelector('.toppy-container');
       el.click();
+    });
+  });
+
+  describe('on calling "updateHost" method', () => {
+    afterEach(() => {
+      toppyRef.close();
+    });
+    it('should update content', () => {
+      const overlayContainerElements = document.getElementsByClassName('toppy-container');
+      toppyRef.overlayID = 'QWERTY';
+      toppyRef.updateHost('new content');
+      toppyRef.open();
+      const content = overlayContainerElements[0].querySelector('.toppy-wrapper').textContent;
+      expect(content).toBe('new content');
+    });
+  });
+
+  describe('on calling "updatePosition" method', () => {
+    afterEach(() => {
+      toppyRef.close();
+    });
+    it('should update content', () => {
+      const overlayContainerElements = document.getElementsByClassName('toppy-container');
+      toppyRef.overlayID = 'QWERTY';
+      const placement = (toppyRef as any)._overlay._position._config.placement;
+      expect(placement).toEqual(InsidePlacement.CENTER);
+      toppyRef.updatePosition({ placement: InsidePlacement.TOP_LEFT });
+      const newplacement = (toppyRef as any)._overlay._position._config.placement;
+      expect(newplacement).toEqual(InsidePlacement.TOP_LEFT);
+    });
+  });
+
+  describe('on calling "onEscClick" method', () => {
+    afterEach(() => {
+      toppyRef.close();
+    });
+    it('should update content', () => {
+      const overlayContainerElements = document.getElementsByClassName('toppy-container');
+      toppyRef.overlayID = 'QWERTY';
+      toppyRef.open();
+      expect(overlayContainerElements.length).toEqual(1);
+      document.getElementsByTagName('body')[0].dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
+      expect(overlayContainerElements.length).toEqual(0);
     });
   });
 });
