@@ -1,3 +1,11 @@
+## [1.2.1](https://github.com/lokesh-coder/toppy/compare/v1.2.0...v1.2.1) (2018-11-26)
+
+
+### Bug Fixes
+
+* **docs:** set font icons path properly ([1d26809](https://github.com/lokesh-coder/toppy/commit/1d26809))
+* **docs:** set font icons path properly ([0ae8424](https://github.com/lokesh-coder/toppy/commit/0ae8424))
+
 # [1.2.0](https://github.com/lokesh-coder/toppy/compare/v1.1.1...v1.2.0) (2018-11-24)
 
 
