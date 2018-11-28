@@ -11,6 +11,7 @@ node_js:
   - 9.3.0
 install:
   - npm install
+  - npm install -g codecov
 before_script:
   - export CHROME_BIN=/usr/bin/google-chrome
   - export DISPLAY=:99.0
@@ -21,6 +22,7 @@ before_script:
   - sudo dpkg -i google-chrome*.deb
 script:
   - npm run test:lib -- --watch=false
+  - codecov
   - npm run build:lib
   - npm run build:app
 after_success:
