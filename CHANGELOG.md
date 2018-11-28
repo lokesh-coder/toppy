@@ -1,3 +1,11 @@
+## [1.2.2](https://github.com/lokesh-coder/toppy/compare/v1.2.1...v1.2.2) (2018-11-28)
+
+
+### Bug Fixes
+
+* updated vulnerable dependencies ([ace393d](https://github.com/lokesh-coder/toppy/commit/ace393d))
+* **docs:** update icon fonts path ([eedca4c](https://github.com/lokesh-coder/toppy/commit/eedca4c))
+
 ## [1.2.1](https://github.com/lokesh-coder/toppy/compare/v1.2.0...v1.2.1) (2018-11-26)
 
 
