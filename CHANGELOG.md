@@ -1,3 +1,10 @@
+## [1.2.4](https://github.com/lokesh-coder/toppy/compare/v1.2.3...v1.2.4) (2018-11-28)
+
+
+### Bug Fixes
+
+* replace codeclimate with codecov config in travis ([af9d16f](https://github.com/lokesh-coder/toppy/commit/af9d16f))
+
 ## [1.2.3](https://github.com/lokesh-coder/toppy/compare/v1.2.2...v1.2.3) (2018-11-28)
 
 
