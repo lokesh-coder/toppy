@@ -1,3 +1,11 @@
+## [1.2.3](https://github.com/lokesh-coder/toppy/compare/v1.2.2...v1.2.3) (2018-11-28)
+
+
+### Bug Fixes
+
+* **docs:** update font path ([29834a5](https://github.com/lokesh-coder/toppy/commit/29834a5))
+* move artifacts after build ([d7ff131](https://github.com/lokesh-coder/toppy/commit/d7ff131))
+
 ## [1.2.2](https://github.com/lokesh-coder/toppy/compare/v1.2.1...v1.2.2) (2018-11-28)
 
 
