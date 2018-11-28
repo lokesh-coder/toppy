@@ -21,9 +21,9 @@ before_script:
   - sudo dpkg -i google-chrome*.deb
 script:
   - npm run test:lib -- --watch=false
-after_success:
   - npm run build:lib
   - npm run build:app
+after_success:
   - npm run travis-deploy-once "npm run release"
 branches:
   except:
