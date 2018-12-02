@@ -17,9 +17,13 @@ export class RelativePosition extends Position {
     hostWidth: '100%',
     hostHeight: '100%'
   };
+  _mutationObserver: MutationObserver;
   constructor(config: Config) {
     super();
     this._config = { ...this._config, ...config };
+    if (this._config.autoUpdate) {
+      this._watchElementPositionChange();
+    }
   }
   updateConfig(config) {
     this._config = { ...this._config, ...config };
@@ -232,5 +236,26 @@ export class RelativePosition extends Position {
       props[x] = Math.round(props[x]);
     });
     return props;
+  }
+
+  private _watchElementPositionChange() {
+    if (this._mutationObserver) {
+      this._mutationObserver.disconnect();
+    }
+    this._mutationObserver = new MutationObserver(mutationsList => {
+      for (const mutation of mutationsList) {
+        if (mutation.type === 'attributes') {
+          this.eventBus.post({ name: 'NEW_DYN_POS', data: null });
+        }
+      }
+    });
+
+    this._mutationObserver.observe(this._config.src, {
+      attributes: true,
+      childList: false,
+      subtree: false,
+      attributeOldValue: true,
+      attributeFilter: ['style']
+    });
   }
 }

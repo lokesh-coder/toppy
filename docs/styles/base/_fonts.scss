@@ -1,5 +1,6 @@
 @include default-theme() {
-  @import url('https://fonts.googleapis.com/css?family=Inconsolata:400,700');
+  @import url('https://fonts.googleapis.com/css?family=Roboto+Mono:400,500,700');
+  @import url('https://use.typekit.net/uur7gsm.css');
 }
 
 @include dark-theme() {

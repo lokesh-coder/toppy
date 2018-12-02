@@ -1,6 +1,6 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { filter, map, takeUntil } from 'rxjs/operators';
 import { DomHelper } from './helper/dom';
 import { EventBus } from './helper/event-bus';
 import { ToppyConfig } from './models';
@@ -65,8 +65,10 @@ export class OverlayInstance implements OnDestroy {
     }
 
     this._setPosition();
+    this._position.setEventBus(this._eventBus);
     this._dom.insertChildren(this.config.parentElement || this._dom.html.BODY, this._containerEl, this._wrapperEl);
     this._eventBus.post({ name: 'ATTACHED', data: null });
+    this._onNewComputedPosition();
     this._watchPositionChange();
     return this;
   }
@@ -127,7 +129,22 @@ export class OverlayInstance implements OnDestroy {
     this._eventBus.post({ name: 'POSITION_UPDATED', data: null });
   }
 
-  private _watchPositionChange(): void {
+  private _watchPositionChange() {
+    this._eventBus
+      .watch()
+      .pipe(
+        filter(data => data.name === 'NEW_DYN_POS'),
+        map(d => d.data),
+        takeUntil(this._alive)
+      )
+      .subscribe(e => {
+        if (!e) {
+          return this._setPosition(true);
+        }
+        this._dom.setPositions(this._wrapperEl, { left: e.x, top: e.y });
+      });
+  }
+  private _onNewComputedPosition(): void {
     this.computePosition.pipe(takeUntil(this._alive)).subscribe(_ => {
       this._setPosition(true);
     });
