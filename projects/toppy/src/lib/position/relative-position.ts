@@ -90,111 +90,72 @@ export class RelativePosition extends Position {
     return element;
   }
 
-  private calculateTop(src, host) {
+  private [`calculate_${OutsidePlacement.TOP}`](src, host) {
     const left = src.left + (src.width - host.width) / 2;
     const top = src.top - host.height;
     return { left, top };
   }
-  private calculateBottom(src, host) {
+  private [`calculate_${OutsidePlacement.BOTTOM}`](src, host) {
     const left = src.left + (src.width - host.width) / 2;
     const top = src.top + src.height;
     return { left, top };
   }
-  private calculateLeft(src, host) {
+  private [`calculate_${OutsidePlacement.LEFT}`](src, host) {
     const left = src.left - host.width;
     const top = src.top + (src.height - host.height) / 2;
     return { left, top };
   }
-  private calculateRight(src, host) {
+  private [`calculate_${OutsidePlacement.RIGHT}`](src, host) {
     const left = src.right;
     const top = src.top + (src.height - host.height) / 2;
     return { left, top };
   }
 
-  private calculateTopLeft(src, host) {
+  private [`calculate_${OutsidePlacement.TOP_LEFT}`](src, host) {
     const left = src.left;
     const top = src.top - host.height;
     return { left, top };
   }
-  private calculateTopRight(src, host) {
+  private [`calculate_${OutsidePlacement.TOP_RIGHT}`](src, host) {
     const left = src.left + src.width - host.width;
     const top = src.top - host.height;
     return { left, top };
   }
-  private calculateBottomLeft(src, host) {
+  private [`calculate_${OutsidePlacement.BOTTOM_LEFT}`](src, host) {
     const left = src.left;
     const top = src.top + src.height;
     return { left, top };
   }
-  private calculateBottomRight(src, host) {
+  private [`calculate_${OutsidePlacement.BOTTOM_RIGHT}`](src, host) {
     const left = src.left + src.width - host.width;
     const top = src.top + src.height;
     return { left, top };
   }
 
-  private calculateLeftTop(src, host) {
+  private [`calculate_${OutsidePlacement.LEFT_TOP}`](src, host) {
     const left = src.left - host.width;
     const top = src.top;
     return { left, top };
   }
-  private calculateLeftBottom(src, host) {
+  private [`calculate_${OutsidePlacement.LEFT_BOTTOM}`](src, host) {
     const left = src.left - host.width;
     const top = src.top + src.height - host.height;
     return { left, top };
   }
 
-  private calculateRightTop(src, host) {
+  private [`calculate_${OutsidePlacement.RIGHT_TOP}`](src, host) {
     const left = src.right;
     const top = src.top;
     return { left, top };
   }
-  private calculateRightBottom(src, host) {
+  private [`calculate_${OutsidePlacement.RIGHT_BOTTOM}`](src, host) {
     const left = src.right;
     const top = src.top + src.height - host.height;
     return { left, top };
   }
 
   private getProps(pos, s, h) {
-    let props;
-    switch (pos) {
-      case OutsidePlacement.BOTTOM:
-        props = this.calculateBottom(s, h);
-        break;
-      case OutsidePlacement.TOP:
-        props = this.calculateTop(s, h);
-        break;
-      case OutsidePlacement.LEFT:
-        props = this.calculateLeft(s, h);
-        break;
-      case OutsidePlacement.RIGHT:
-        props = this.calculateRight(s, h);
-        break;
-      case OutsidePlacement.TOP_LEFT:
-        props = this.calculateTopLeft(s, h);
-        break;
-      case OutsidePlacement.TOP_RIGHT:
-        props = this.calculateTopRight(s, h);
-        break;
-      case OutsidePlacement.BOTTOM_LEFT:
-        props = this.calculateBottomLeft(s, h);
-        break;
-      case OutsidePlacement.BOTTOM_RIGHT:
-        props = this.calculateBottomRight(s, h);
-        break;
-      case OutsidePlacement.RIGHT_TOP:
-        props = this.calculateRightTop(s, h);
-        break;
-      case OutsidePlacement.RIGHT_BOTTOM:
-        props = this.calculateRightBottom(s, h);
-        break;
-      case OutsidePlacement.LEFT_TOP:
-        props = this.calculateLeftTop(s, h);
-        break;
-      case OutsidePlacement.LEFT_BOTTOM:
-        props = this.calculateLeftBottom(s, h);
-        break;
-    }
-    return props;
+    return this[`calculate_${pos}`](s, h);
   }
 
   private calculatePos(pos, s, h, c = true) {

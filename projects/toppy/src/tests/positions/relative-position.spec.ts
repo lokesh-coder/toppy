@@ -3,12 +3,11 @@
 import { EventBus } from '../../lib/helper/event-bus';
 import { OutsidePlacement } from '../../lib/models';
 import { RelativePosition } from '../../lib/position';
-console.log({ viewport });
 
 describe('== Relative position ==', () => {
   let targetElement: HTMLElement;
   let hostElement: HTMLElement;
-  beforeAll(() => {
+  beforeEach(() => {
     targetElement = document.createElement('div');
     targetElement.setAttribute('class', 'foobar');
     const textnode = document.createTextNode('Hello');
@@ -21,6 +20,10 @@ describe('== Relative position ==', () => {
     hostElement.appendChild(textnode2);
     document.getElementsByTagName('body')[0].appendChild(hostElement);
     viewport.set(1000, 480);
+  });
+  afterEach(() => {
+    document.getElementsByTagName('body')[0].removeChild(targetElement);
+    document.getElementsByTagName('body')[0].removeChild(hostElement);
   });
 
   it('should have target element in document', () => {
@@ -40,6 +43,82 @@ describe('== Relative position ==', () => {
   it('should return correct class name', () => {
     const relPos = new RelativePosition({});
     expect(relPos.getClassName()).toBe('relative-position');
+  });
+  it('should return offset size of element', () => {
+    const relPos = new RelativePosition({});
+    expect((relPos as any).getSize(targetElement)).toEqual({ x: 967, y: 18 });
+  });
+  it('should reset position props of element', () => {
+    const relPos = new RelativePosition({});
+    targetElement.style.top = '10px';
+    expect(targetElement.style.top).toBe('10px');
+    (relPos as any).resetCoOrds(targetElement);
+    expect(targetElement.style.top).toBe('');
+  });
+  describe('should update position based on "autoUpdate"', () => {
+    it('when autoUpdate is true', () => {
+      const relPos = new RelativePosition({
+        src: targetElement,
+        placement: OutsidePlacement.TOP,
+        hostHeight: 500,
+        autoUpdate: true
+      });
+      const srcCoords = targetElement.getBoundingClientRect();
+      const hostElCoords = {
+        width: 4, // actual 967
+        height: 450
+      };
+      expect((relPos as any).calculatePos(OutsidePlacement.TOP, srcCoords, hostElCoords, true)).toEqual({
+        left: 8 + (srcCoords.width - 4) / 2,
+        top: srcCoords.top + srcCoords.height
+      });
+    });
+    it('when autoUpdate is false', () => {
+      const relPos = new RelativePosition({
+        src: targetElement,
+        placement: OutsidePlacement.TOP,
+        hostHeight: 500,
+        autoUpdate: false
+      });
+      const srcCoords = targetElement.getBoundingClientRect();
+      const hostElCoords = {
+        width: 4, // actual 967
+        height: 150
+      };
+      expect((relPos as any).calculatePos(OutsidePlacement.TOP, srcCoords, hostElCoords, true)).toEqual({
+        left: 8 + (srcCoords.width - 4) / 2,
+        top: srcCoords.top - 150
+      });
+    });
+  });
+  describe('should return correct position coords of host element', () => {
+    let srcCoords;
+    beforeEach(() => {
+      srcCoords = targetElement.getBoundingClientRect();
+    });
+    it('when exact width and height is provided', () => {
+      const relPos = new RelativePosition({
+        hostWidth: 4,
+        hostHeight: 10,
+        src: targetElement,
+        placement: OutsidePlacement.TOP
+      });
+      expect(relPos.getPositions(hostElement)).toEqual({
+        left: Math.round(8 + (967 - 4) / 2),
+        top: Math.round(srcCoords.top - 10),
+        width: 4,
+        height: 10
+      });
+    });
+    it('when no width and height is provided', () => {
+      const relPos = new RelativePosition({ src: targetElement, placement: OutsidePlacement.TOP });
+      expect(relPos.getPositions(hostElement)).toEqual({
+        left: Math.round(8 + (967 - 967) / 2),
+        top: Math.round(srcCoords.top - 18),
+        width: 967,
+        height: 'auto'
+      });
+    });
   });
   describe('on element position change', () => {
     let relPos;
@@ -61,7 +140,7 @@ describe('== Relative position ==', () => {
       targetElement.style.left = '0px';
     });
   });
-  describe('should get correction position', () => {
+  describe('should get correction position for', () => {
     const targetElCoords = {
       bottom: 76,
       height: 18,
@@ -72,8 +151,8 @@ describe('== Relative position ==', () => {
     };
 
     const hostElCoords = {
-      width: 4,
-      height: 10
+      width: 4, // actual 967
+      height: 10 // actual 18
     };
     getData().forEach(data => {
       it(data.name, () => {
@@ -95,73 +174,73 @@ function getData() {
     {
       name: 'bottom',
       placement: OutsidePlacement.BOTTOM,
-      method: 'calculateBottom',
+      method: `calculate_${OutsidePlacement.BOTTOM}`,
       expected: { left: 8 + (967 - 4) / 2, top: 76 }
     },
     {
       name: 'top',
       placement: OutsidePlacement.TOP,
-      method: 'calculateTop',
+      method: `calculate_${OutsidePlacement.TOP}`,
       expected: { left: 8 + (967 - 4) / 2, top: 48 }
     },
     {
       name: 'left',
       placement: OutsidePlacement.LEFT,
-      method: 'calculateLeft',
+      method: `calculate_${OutsidePlacement.LEFT}`,
       expected: { left: 8 - 4, top: 58 + (18 - 10) / 2 }
     },
     {
       name: 'right',
       placement: OutsidePlacement.RIGHT,
-      method: 'calculateRight',
+      method: `calculate_${OutsidePlacement.RIGHT}`,
       expected: { left: 975, top: 58 + (18 - 10) / 2 }
     },
     {
       name: 'top left',
       placement: OutsidePlacement.TOP_LEFT,
-      method: 'calculateTopLeft',
+      method: `calculate_${OutsidePlacement.TOP_LEFT}`,
       expected: { left: 8, top: 58 - 10 }
     },
     {
       name: 'top right',
       placement: OutsidePlacement.TOP_RIGHT,
-      method: 'calculateTopRight',
+      method: `calculate_${OutsidePlacement.TOP_RIGHT}`,
       expected: { left: 8 + (967 - 4), top: 58 - 10 }
     },
     {
       name: 'bottom left',
       placement: OutsidePlacement.BOTTOM_LEFT,
-      method: 'calculateBottomLeft',
+      method: `calculate_${OutsidePlacement.BOTTOM_LEFT}`,
       expected: { left: 8, top: 76 }
     },
     {
       name: 'bottom right',
       placement: OutsidePlacement.BOTTOM_RIGHT,
-      method: 'calculateBottomRight',
+      method: `calculate_${OutsidePlacement.BOTTOM_RIGHT}`,
       expected: { left: 8 + (967 - 4), top: 76 }
     },
     {
       name: 'right top',
       placement: OutsidePlacement.RIGHT_TOP,
-      method: 'calculateRightTop',
+      method: `calculate_${OutsidePlacement.RIGHT_TOP}`,
       expected: { left: 975, top: 58 }
     },
     {
       name: 'right bottom',
       placement: OutsidePlacement.RIGHT_BOTTOM,
-      method: 'calculateRightBottom',
+      method: `calculate_${OutsidePlacement.RIGHT_BOTTOM}`,
       expected: { left: 975, top: 76 - 10 }
     },
     {
       name: 'left top',
       placement: OutsidePlacement.LEFT_TOP,
-      method: 'calculateLeftTop',
+      method: `calculate_${OutsidePlacement.LEFT_TOP}`,
       expected: { left: 8 - 4, top: 58 }
     },
     {
       name: 'left bottom',
       placement: OutsidePlacement.LEFT_BOTTOM,
-      method: 'calculateLeftBottom',
+      method: `calculate_${OutsidePlacement.LEFT_BOTTOM}`,
       expected: { left: 8 - 4, top: 76 - 10 }
     }
   ];

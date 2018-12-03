@@ -68,6 +68,11 @@ describe('== Toppy ==', () => {
     overlaySpy = jasmine.createSpyObj('overlayMock', ['configure']);
   }));
 
+  afterEach(function() {
+    templateRefCompFixture.destroy();
+    document.body.removeChild(templateRefCompFixture.debugElement.nativeElement);
+  });
+
   afterEach(() => {
     toppy.ngOnDestroy();
   });
