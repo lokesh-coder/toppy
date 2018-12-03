@@ -24,6 +24,7 @@ describe('== Relative position ==', () => {
   afterEach(() => {
     document.getElementsByTagName('body')[0].removeChild(targetElement);
     document.getElementsByTagName('body')[0].removeChild(hostElement);
+    viewport.set(1000, 480);
   });
 
   it('should have target element in document', () => {
@@ -46,7 +47,7 @@ describe('== Relative position ==', () => {
   });
   it('should return offset size of element', () => {
     const relPos = new RelativePosition({});
-    expect((relPos as any).getSize(targetElement)).toEqual({ x: 967, y: 18 });
+    expect((relPos as any).getSize(targetElement)).toEqual({ x: targetElement.offsetWidth, y: targetElement.offsetHeight });
   });
   it('should reset position props of element', () => {
     const relPos = new RelativePosition({});
@@ -104,7 +105,7 @@ describe('== Relative position ==', () => {
         placement: OutsidePlacement.TOP
       });
       expect(relPos.getPositions(hostElement)).toEqual({
-        left: Math.round(8 + (967 - 4) / 2),
+        left: Math.round(8 + (targetElement.offsetWidth - 4) / 2),
         top: Math.round(srcCoords.top - 10),
         width: 4,
         height: 10
@@ -115,7 +116,7 @@ describe('== Relative position ==', () => {
       expect(relPos.getPositions(hostElement)).toEqual({
         left: Math.round(8 + (967 - 967) / 2),
         top: Math.round(srcCoords.top - 18),
-        width: 967,
+        width: targetElement.offsetWidth,
         height: 'auto'
       });
     });
