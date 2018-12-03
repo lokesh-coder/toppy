@@ -127,7 +127,11 @@ describe('== Toppy ==', () => {
     it('should set HTML string as input content', () => {
       const content = '<b>Hello</b>';
       toppy.host(content, { hasHTML: true });
-      expect(hostContainer.configure).toHaveBeenCalledWith({ content, props: { hasHTML: true } });
+      expect(hostContainer.configure).toHaveBeenCalledWith({
+        content,
+        contentType: 'STRING',
+        props: { hasHTML: true }
+      });
     });
     it('should set TemplateRef as input content', fakeAsync(() => {
       const content = templateRefComp.tpl;

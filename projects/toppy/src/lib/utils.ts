@@ -4,12 +4,12 @@ import { ComponentType, HostArgs } from './models';
 export function getContentMeta(
   content: string | TemplateRef<any> | ComponentType<any>,
   props: { [x: string]: any } = {},
-  overlayID
+  overlayID = ''
 ) {
   let data: HostArgs;
 
   if (typeof content === 'string' && props['hasHTML']) {
-    data = { content, props };
+    data = { content, contentType: 'STRING', props };
   } else if (typeof content === 'string') {
     data = { content };
   } else if (content instanceof TemplateRef) {

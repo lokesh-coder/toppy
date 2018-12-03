@@ -29,12 +29,16 @@ export class DragExampleComponent implements OnInit {
           dismissOnDocumentClick: false
         }
       )
-      .host('tooltip!')
+      .host('<div class="tooltip">tooltip</div>', { hasHTML: true })
       .create();
   }
 
   ngAfterViewInit() {
     this.dragElement();
+  }
+  reset() {
+    this.el.nativeElement.style.left = '0px';
+    this.el.nativeElement.style.top = '0px';
   }
   onMouseOver() {
     this._toppyRef.open();

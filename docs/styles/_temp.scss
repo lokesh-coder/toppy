@@ -35,11 +35,22 @@ h4 {
   padding: 0 12px;
 }
 
+.drag-element-holder {
+  width: calc(9rem + 2px);
+  border: 1px dashed #aaa;
+  display: inline-block;
+  position: relative;
+  height: 52px;
+  box-sizing: border-box;
+}
 .drag-element {
   background: #e6e8f3;
   padding: 1rem;
   position: absolute;
   width: 9rem;
+  height: 50px;
   display: inline-block;
   text-align: center;
+  border: 1px solid transparent;
+  cursor: grab;
 }

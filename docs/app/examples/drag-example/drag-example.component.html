@@ -1,1 +1,7 @@
-<span draggable="true" #el class="drag-element" (mouseenter)="onMouseOver()" (mouseleave)="onMouseLeave()">Hello</span>
+<div class="drag-element-holder">
+  <span draggable="true" #el class="drag-element" (mouseenter)="onMouseOver()" (mouseleave)="onMouseLeave()"
+    >Drag me</span
+  >
+</div>
+
+<div class="reset-link" (click)="reset()">reset</div>

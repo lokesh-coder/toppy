@@ -11,6 +11,29 @@
             >
           </select>
         </p>
+        <div class="badges">
+          <div class="badge">
+            <a
+              class="github-button"
+              href="https://github.com/lokesh-coder/toppy"
+              data-show-count="true"
+              aria-label="Star lokesh-coder/toppy on GitHub"
+              >Star</a
+            >
+          </div>
+          <div class="badge">
+            <a
+              href="https://twitter.com/share?ref_src=twsrc%5Etfw"
+              class="twitter-share-button"
+              data-text="Cute overlay library for Angular - tooltips, modals, toastr, menu, dropdowns, alerts, popovers, sidebar and more... "
+              data-url="https://lokesh-coder.github.io/toppy/"
+              data-via="lokesh-coder"
+              data-hashtags="angular"
+              data-show-count="false"
+              >Tweet</a
+            >
+          </div>
+        </div>
       </div>
       <app-section heading="" class="d-block text-center mb-5">
         <markdown ngPreserveWhitespaces [src]="'./assets/md/introduction.md'"></markdown>
@@ -47,10 +70,12 @@
       <app-section heading="Configuration" class="table" icon="settings">
         <markdown ngPreserveWhitespaces [src]="'./assets/md/configuration.md'"></markdown>
       </app-section>
+      <app-section heading="Examples" icon="zap">
+        <markdown ngPreserveWhitespaces [src]="'./assets/md/drag.md'"></markdown> <app-drag-example></app-drag-example>
+      </app-section>
       <app-section heading="API" icon="file-text">
         <markdown ngPreserveWhitespaces [src]="'./assets/md/api.md'"></markdown>
       </app-section>
-      <app-section heading="Examples" icon="zap"> <app-drag-example></app-drag-example> </app-section>
       <app-section heading="Contribution" icon="users">
         <markdown ngPreserveWhitespaces [src]="'./assets/md/contribution.md'"></markdown>
       </app-section>
