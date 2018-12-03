@@ -39,6 +39,12 @@ export class RelativePosition extends Position {
     if (this._config.hostHeight === '100%') {
       this._config.hostHeight = 'auto';
     }
+    if (typeof this._config.hostHeight === 'number') {
+      h.height = this._config.hostHeight;
+    }
+    if (typeof this._config.hostWidth === 'number') {
+      h.width = this._config.hostWidth;
+    }
     const props = this.calculatePos(this._config.placement, s, h);
     return { ...this.round(props), width: this._config.hostWidth, height: this._config.hostHeight };
   }

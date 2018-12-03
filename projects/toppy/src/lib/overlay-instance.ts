@@ -53,7 +53,7 @@ export class OverlayInstance implements OnDestroy {
 
     this._wrapperEl = this._dom.createElement('div', {
       class: this.config.wrapperClass,
-      style: 'position: absolute;visibility:hidden;opacity:0;transition:opacity 0.2s ease;'
+      style: 'position: absolute;visibility:hidden;opacity:0;transition:opacity 0.2s ease;overflow: hidden;'
     });
 
     if (this.config.backdrop) {
