@@ -1,3 +1,10 @@
+# [1.3.0](https://github.com/lokesh-coder/toppy/compare/v1.2.4...v1.3.0) (2018-12-04)
+
+
+### Features
+
+* **relative position:** added support for content sticking with target element when `autoUpdate` is set to true ([6fa37e7](https://github.com/lokesh-coder/toppy/commit/6fa37e7))
+
 ## [1.2.4](https://github.com/lokesh-coder/toppy/compare/v1.2.3...v1.2.4) (2018-11-28)
 
 
