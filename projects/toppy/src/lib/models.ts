@@ -9,35 +9,42 @@ export interface PositionCoOrds {
   width?: number | string;
   position?: string;
 }
-export enum InsidePlacement {
-  TOP,
-  LEFT,
-  RIGHT,
-  CENTER,
-  BOTTOM,
-  TOP_LEFT,
-  TOP_RIGHT,
-  BOTTOM_LEFT,
-  BOTTOM_RIGHT
-}
-export enum OutsidePlacement {
-  TOP,
-  LEFT,
-  RIGHT,
-  BOTTOM,
-  LEFT_TOP,
-  TOP_LEFT,
-  RIGHT_TOP,
-  TOP_RIGHT,
-  BOTTOM_LEFT,
-  LEFT_BOTTOM,
-  BOTTOM_RIGHT,
-  RIGHT_BOTTOM
+
+enum p {
+  TOP = 't',
+  LEFT = 'l',
+  RIGHT = 'r',
+  BOTTOM = 'b',
+  TOP_LEFT = 'tl',
+  TOP_RIGHT = 'tr',
+  BOTTOM_LEFT = 'bl',
+  BOTTOM_RIGHT = 'br'
 }
 
+enum o {
+  LEFT_TOP = 'lt',
+  RIGHT_TOP = 'rt',
+  LEFT_BOTTOM = 'lb',
+  RIGHT_BOTTOM = 'rb'
+}
+
+enum i {
+  CENTER = 'c'
+}
+export const OutsidePlacement = {
+  ...p,
+  ...o
+};
+export const InsidePlacement = {
+  ...p,
+  ...i
+};
+export type OutsidePlacement = p | o;
+export type InsidePlacement = p | i;
+
 export enum SlidePlacement {
-  LEFT,
-  RIGHT
+  LEFT = 'l',
+  RIGHT = 'r'
 }
 
 export interface ContainerSize {

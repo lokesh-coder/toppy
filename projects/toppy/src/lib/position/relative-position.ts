@@ -10,7 +10,7 @@ export interface Config {
 }
 
 export class RelativePosition extends Position {
-  private _config: Config = {
+  protected _config: Config = {
     src: null,
     placement: OutsidePlacement.TOP,
     autoUpdate: false,
@@ -25,9 +25,7 @@ export class RelativePosition extends Position {
       this._watchElementPositionChange();
     }
   }
-  updateConfig(config) {
-    this._config = { ...this._config, ...config };
-  }
+
   getPositions(hostElement: HTMLElement): PositionCoOrds {
     const s = this.getCoords(this._config.src);
     const h = this.getCoords(hostElement);
@@ -90,72 +88,47 @@ export class RelativePosition extends Position {
     return element;
   }
 
-  private [`calculate_${OutsidePlacement.TOP}`](src, host) {
-    const left = src.left + (src.width - host.width) / 2;
-    const top = src.top - host.height;
-    return { left, top };
-  }
-  private [`calculate_${OutsidePlacement.BOTTOM}`](src, host) {
-    const left = src.left + (src.width - host.width) / 2;
-    const top = src.top + src.height;
-    return { left, top };
-  }
-  private [`calculate_${OutsidePlacement.LEFT}`](src, host) {
-    const left = src.left - host.width;
-    const top = src.top + (src.height - host.height) / 2;
-    return { left, top };
-  }
-  private [`calculate_${OutsidePlacement.RIGHT}`](src, host) {
-    const left = src.right;
-    const top = src.top + (src.height - host.height) / 2;
-    return { left, top };
-  }
+  private calc(placement: OutsidePlacement, src, host) {
+    const [main, sub] = placement.split('');
+    const p = { left: 0, top: 0 };
+    if ((main === 't' || main === 'b') && !sub) {
+      p.left = src.left + (src.width - host.width) / 2;
+    }
 
-  private [`calculate_${OutsidePlacement.TOP_LEFT}`](src, host) {
-    const left = src.left;
-    const top = src.top - host.height;
-    return { left, top };
-  }
-  private [`calculate_${OutsidePlacement.TOP_RIGHT}`](src, host) {
-    const left = src.left + src.width - host.width;
-    const top = src.top - host.height;
-    return { left, top };
-  }
-  private [`calculate_${OutsidePlacement.BOTTOM_LEFT}`](src, host) {
-    const left = src.left;
-    const top = src.top + src.height;
-    return { left, top };
-  }
-  private [`calculate_${OutsidePlacement.BOTTOM_RIGHT}`](src, host) {
-    const left = src.left + src.width - host.width;
-    const top = src.top + src.height;
-    return { left, top };
-  }
+    if ((main === 't' || main === 'b') && sub) {
+      p.left = src.left;
+    }
+    if ((main === 't' || main === 'b') && sub === 'r') {
+      p.left = src.left + src.width - host.width;
+    }
+    if (main === 'l') {
+      p.left = src.left - host.width;
+    }
+    if (main === 'r') {
+      p.left = src.right;
+    }
 
-  private [`calculate_${OutsidePlacement.LEFT_TOP}`](src, host) {
-    const left = src.left - host.width;
-    const top = src.top;
-    return { left, top };
-  }
-  private [`calculate_${OutsidePlacement.LEFT_BOTTOM}`](src, host) {
-    const left = src.left - host.width;
-    const top = src.top + src.height - host.height;
-    return { left, top };
-  }
-
-  private [`calculate_${OutsidePlacement.RIGHT_TOP}`](src, host) {
-    const left = src.right;
-    const top = src.top;
-    return { left, top };
-  }
-  private [`calculate_${OutsidePlacement.RIGHT_BOTTOM}`](src, host) {
-    const left = src.right;
-    const top = src.top + src.height - host.height;
-    return { left, top };
+    if (main === 't') {
+      p.top = src.top - host.height;
+    }
+    if (main === 'b') {
+      p.top = src.top + src.height;
+    }
+    if (main === 'l' || main === 'r') {
+      p.top = src.top + (src.height - host.height) / 2;
+    }
+    if (sub === 't' && (main === 'l' || main === 'r')) {
+      p.top = src.top;
+    }
+    if (sub === 'b' && (main === 'l' || main === 'r')) {
+      p.top = src.top + src.height - host.height;
+    }
+    return p;
   }
 
   private getProps(pos, s, h) {
-    return this[`calculate_${pos}`](s, h);
+    return this.calc(pos, s, h);
+    // return this[`calculate_${pos}`](s, h);
   }
 
   private calculatePos(pos, s, h, c = true) {

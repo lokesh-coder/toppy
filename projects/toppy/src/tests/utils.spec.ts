@@ -32,27 +32,27 @@ describe('== Utils ==', () => {
   describe('on calling "getContentMeta" function', () => {
     it('should return as string type', () => {
       const result = getContentMeta('hello');
-      expect(result).toEqual({ content: 'hello' });
+      expect(result).toEqual({ content: 'hello' } as any);
     });
     it('should return html type', () => {
       const result = getContentMeta('<div>Hello</div>', { hasHTML: true });
-      expect(result).toEqual({ content: '<div>Hello</div>', props: { hasHTML: true }, contentType: 'STRING' });
+      expect(result).toEqual({ content: '<div>Hello</div>', props: { hasHTML: true }, contentType: 'STRING' } as any);
     });
     it('should return component type', () => {
       const result = getContentMeta(fixture as any);
-      expect(result).toEqual({ content: fixture, props: { id: '' }, contentType: 'COMPONENT' });
+      expect(result).toEqual({ content: fixture, props: { id: '' }, contentType: 'COMPONENT' } as any);
     });
     it('should return component type with props', () => {
       const result = getContentMeta(fixture as any, { name: 'john' });
-      expect(result).toEqual({ content: fixture, props: { name: 'john', id: '' }, contentType: 'COMPONENT' });
+      expect(result).toEqual({ content: fixture, props: { name: 'john', id: '' }, contentType: 'COMPONENT' } as any);
     });
     it('should return component type with overlay id', () => {
       const result = getContentMeta(fixture as any, {}, 'XYZ');
-      expect(result).toEqual({ content: fixture, props: { id: 'XYZ' }, contentType: 'COMPONENT' });
+      expect(result).toEqual({ content: fixture, props: { id: 'XYZ' }, contentType: 'COMPONENT' } as any);
     });
     it('should return template type', () => {
       const result = getContentMeta(component.tpl);
-      expect(result).toEqual({ content: component.tpl, contentType: 'TEMPLATEREF' });
+      expect(result).toEqual({ content: component.tpl, contentType: 'TEMPLATEREF' } as any);
     });
   });
 });

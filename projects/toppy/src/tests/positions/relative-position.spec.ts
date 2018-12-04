@@ -47,7 +47,10 @@ describe('== Relative position ==', () => {
   });
   it('should return offset size of element', () => {
     const relPos = new RelativePosition({});
-    expect((relPos as any).getSize(targetElement)).toEqual({ x: targetElement.offsetWidth, y: targetElement.offsetHeight });
+    expect((relPos as any).getSize(targetElement)).toEqual({
+      x: targetElement.offsetWidth,
+      y: targetElement.offsetHeight
+    });
   });
   it('should reset position props of element', () => {
     const relPos = new RelativePosition({});
@@ -163,7 +166,7 @@ describe('== Relative position ==', () => {
           hostHeight: hostElCoords.height,
           placement: data.placement
         });
-        const pos = relPos[data.method](targetElCoords, hostElCoords);
+        const pos = (relPos as any).calc(data.placement, targetElCoords, hostElCoords);
         expect(pos).toEqual(data.expected);
       });
     });
