@@ -1,5 +1,7 @@
 /* well here comes, some temperory fix styles, which will be removed later */
-
+code {
+  font-size: 0.9rem;
+}
 .tooltip {
   background: #673ab7;
   padding: 2px 9px;
@@ -31,4 +33,24 @@ h4 {
   background: #3d3844;
   color: #fff;
   padding: 0 12px;
+}
+
+.drag-element-holder {
+  width: calc(9rem + 2px);
+  border: 1px dashed #aaa;
+  display: inline-block;
+  position: relative;
+  height: 52px;
+  box-sizing: border-box;
+}
+.drag-element {
+  background: #e6e8f3;
+  padding: 1rem;
+  position: absolute;
+  width: 9rem;
+  height: 50px;
+  display: inline-block;
+  text-align: center;
+  border: 1px solid transparent;
+  cursor: grab;
 }

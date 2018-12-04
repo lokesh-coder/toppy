@@ -5,6 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { MarkdownModule } from 'ngx-markdown';
 import { ToppyModule } from 'toppy';
 import { AppComponent } from './app.component';
+import { DragExampleComponent } from './examples/drag-example/drag-example.component';
 import { FullscreenPositionExampleComponent } from './examples/fullscreen-position-example/fullscreen-position-example.component';
 import { GlobalPositionExampleComponent } from './examples/global-position-example/global-position-example.component';
 import { RelativePositionExampleComponent } from './examples/relative-position-example/relative-position-example.component';
@@ -32,7 +33,8 @@ import { SubSectionComponent } from './utils/sub-section/sub-section.component';
     SlidePositionExampleComponent,
     FullscreenPositionExampleComponent,
     HeroScreenComponent,
-    ScollSpyDirective
+    ScollSpyDirective,
+    DragExampleComponent
   ],
   imports: [BrowserModule, FormsModule, HttpClientModule, MarkdownModule.forRoot({ loader: HttpClient }), ToppyModule],
   providers: [],

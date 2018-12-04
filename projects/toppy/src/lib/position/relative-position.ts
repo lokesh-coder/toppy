@@ -10,20 +10,22 @@ export interface Config {
 }
 
 export class RelativePosition extends Position {
-  private _config: Config = {
+  protected _config: Config = {
     src: null,
     placement: OutsidePlacement.TOP,
     autoUpdate: false,
     hostWidth: '100%',
     hostHeight: '100%'
   };
+  _mutationObserver: MutationObserver;
   constructor(config: Config) {
     super();
     this._config = { ...this._config, ...config };
+    if (this._config.autoUpdate) {
+      this._watchElementPositionChange();
+    }
   }
-  updateConfig(config) {
-    this._config = { ...this._config, ...config };
-  }
+
   getPositions(hostElement: HTMLElement): PositionCoOrds {
     const s = this.getCoords(this._config.src);
     const h = this.getCoords(hostElement);
@@ -34,6 +36,12 @@ export class RelativePosition extends Position {
 
     if (this._config.hostHeight === '100%') {
       this._config.hostHeight = 'auto';
+    }
+    if (typeof this._config.hostHeight === 'number') {
+      h.height = this._config.hostHeight;
+    }
+    if (typeof this._config.hostWidth === 'number') {
+      h.width = this._config.hostWidth;
     }
     const props = this.calculatePos(this._config.placement, s, h);
     return { ...this.round(props), width: this._config.hostWidth, height: this._config.hostHeight };
@@ -80,111 +88,47 @@ export class RelativePosition extends Position {
     return element;
   }
 
-  private calculateTop(src, host) {
-    const left = src.left + (src.width - host.width) / 2;
-    const top = src.top - host.height;
-    return { left, top };
-  }
-  private calculateBottom(src, host) {
-    const left = src.left + (src.width - host.width) / 2;
-    const top = src.top + src.height;
-    return { left, top };
-  }
-  private calculateLeft(src, host) {
-    const left = src.left - host.width;
-    const top = src.top + (src.height - host.height) / 2;
-    return { left, top };
-  }
-  private calculateRight(src, host) {
-    const left = src.right;
-    const top = src.top + (src.height - host.height) / 2;
-    return { left, top };
-  }
+  private calc(placement: OutsidePlacement, src, host) {
+    const [main, sub] = placement.split('');
+    const p = { left: 0, top: 0 };
+    if ((main === 't' || main === 'b') && !sub) {
+      p.left = src.left + (src.width - host.width) / 2;
+    }
 
-  private calculateTopLeft(src, host) {
-    const left = src.left;
-    const top = src.top - host.height;
-    return { left, top };
-  }
-  private calculateTopRight(src, host) {
-    const left = src.left + src.width - host.width;
-    const top = src.top - host.height;
-    return { left, top };
-  }
-  private calculateBottomLeft(src, host) {
-    const left = src.left;
-    const top = src.top + src.height;
-    return { left, top };
-  }
-  private calculateBottomRight(src, host) {
-    const left = src.left + src.width - host.width;
-    const top = src.top + src.height;
-    return { left, top };
-  }
+    if ((main === 't' || main === 'b') && sub) {
+      p.left = src.left;
+    }
+    if ((main === 't' || main === 'b') && sub === 'r') {
+      p.left = src.left + src.width - host.width;
+    }
+    if (main === 'l') {
+      p.left = src.left - host.width;
+    }
+    if (main === 'r') {
+      p.left = src.right;
+    }
 
-  private calculateLeftTop(src, host) {
-    const left = src.left - host.width;
-    const top = src.top;
-    return { left, top };
-  }
-  private calculateLeftBottom(src, host) {
-    const left = src.left - host.width;
-    const top = src.top + src.height - host.height;
-    return { left, top };
-  }
-
-  private calculateRightTop(src, host) {
-    const left = src.right;
-    const top = src.top;
-    return { left, top };
-  }
-  private calculateRightBottom(src, host) {
-    const left = src.right;
-    const top = src.top + src.height - host.height;
-    return { left, top };
+    if (main === 't') {
+      p.top = src.top - host.height;
+    }
+    if (main === 'b') {
+      p.top = src.top + src.height;
+    }
+    if (main === 'l' || main === 'r') {
+      p.top = src.top + (src.height - host.height) / 2;
+    }
+    if (sub === 't' && (main === 'l' || main === 'r')) {
+      p.top = src.top;
+    }
+    if (sub === 'b' && (main === 'l' || main === 'r')) {
+      p.top = src.top + src.height - host.height;
+    }
+    return p;
   }
 
   private getProps(pos, s, h) {
-    let props;
-    switch (pos) {
-      case OutsidePlacement.BOTTOM:
-        props = this.calculateBottom(s, h);
-        break;
-      case OutsidePlacement.TOP:
-        props = this.calculateTop(s, h);
-        break;
-      case OutsidePlacement.LEFT:
-        props = this.calculateLeft(s, h);
-        break;
-      case OutsidePlacement.RIGHT:
-        props = this.calculateRight(s, h);
-        break;
-      case OutsidePlacement.TOP_LEFT:
-        props = this.calculateTopLeft(s, h);
-        break;
-      case OutsidePlacement.TOP_RIGHT:
-        props = this.calculateTopRight(s, h);
-        break;
-      case OutsidePlacement.BOTTOM_LEFT:
-        props = this.calculateBottomLeft(s, h);
-        break;
-      case OutsidePlacement.BOTTOM_RIGHT:
-        props = this.calculateBottomRight(s, h);
-        break;
-      case OutsidePlacement.RIGHT_TOP:
-        props = this.calculateRightTop(s, h);
-        break;
-      case OutsidePlacement.RIGHT_BOTTOM:
-        props = this.calculateRightBottom(s, h);
-        break;
-      case OutsidePlacement.LEFT_TOP:
-        props = this.calculateLeftTop(s, h);
-        break;
-      case OutsidePlacement.LEFT_BOTTOM:
-        props = this.calculateLeftBottom(s, h);
-        break;
-    }
-    return props;
+    return this.calc(pos, s, h);
+    // return this[`calculate_${pos}`](s, h);
   }
 
   private calculatePos(pos, s, h, c = true) {
@@ -232,5 +176,26 @@ export class RelativePosition extends Position {
       props[x] = Math.round(props[x]);
     });
     return props;
+  }
+
+  private _watchElementPositionChange() {
+    if (this._mutationObserver) {
+      this._mutationObserver.disconnect();
+    }
+    this._mutationObserver = new MutationObserver(mutationsList => {
+      for (const mutation of mutationsList) {
+        if (mutation.type === 'attributes') {
+          this.eventBus.post({ name: 'NEW_DYN_POS', data: null });
+        }
+      }
+    });
+
+    this._mutationObserver.observe(this._config.src, {
+      attributes: true,
+      childList: false,
+      subtree: false,
+      attributeOldValue: true,
+      attributeFilter: ['style']
+    });
   }
 }

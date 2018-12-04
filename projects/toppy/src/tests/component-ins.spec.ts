@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { async, TestBed } from '@angular/core/testing';
+import { async, TestBed, ComponentFixture } from '@angular/core/testing';
 import { ComponentInstance } from 'toppy/lib/component-ins';
 
 @Component({
@@ -10,13 +10,19 @@ export class TestComponent {}
 
 describe('== ComponentInstance ==', () => {
   let component: TestComponent = null;
+  let fixture: ComponentFixture<TestComponent> = null;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       declarations: [TestComponent],
       providers: []
     }).compileComponents();
-    component = TestBed.createComponent(TestComponent).componentInstance;
+    fixture = TestBed.createComponent(TestComponent);
+    component = fixture.componentInstance;
   }));
+  afterEach(function() {
+    fixture.destroy();
+    document.body.removeChild(fixture.debugElement.nativeElement);
+  });
 
   it('should return host component instance on calling "getInstance" method', () => {
     const compIns = new ComponentInstance(component, {});

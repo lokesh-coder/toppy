@@ -59,6 +59,12 @@ describe('== Toppy ref ==', () => {
     debugEl = fixture.debugElement;
   }));
 
+  afterEach(function() {
+    fixture.destroy();
+    document.body.removeChild(fixture.debugElement.nativeElement);
+  });
+
+
   it('should initialize', () => {
     expect(toppyRef).toBeTruthy();
   });

@@ -151,7 +151,7 @@ InsidePlacement.TOP_RIGHT;
 ```
 
 ```typescript
-InsidePlacement.CENTER**
+InsidePlacement.CENTER;
 ```
 
 </div>
