@@ -136,10 +136,12 @@ describe('== Toppy ==', () => {
     it('should set TemplateRef as input content', fakeAsync(() => {
       const content = templateRefComp.tpl;
       templateRefCompFixture.detectChanges();
+      const id = ((toppy as any)._overlayID = 'abc123');
       toppy.host(content);
       expect(hostContainer.configure).toHaveBeenCalledWith({
         content,
-        contentType: 'TEMPLATEREF'
+        contentType: 'TEMPLATEREF',
+        props: {id: 'abc123'}
       });
     }));
     it('should set component as input content', fakeAsync(() => {

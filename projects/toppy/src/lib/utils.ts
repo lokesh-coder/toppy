@@ -13,7 +13,7 @@ export function getContentMeta(
   } else if (typeof content === 'string') {
     data = { content };
   } else if (content instanceof TemplateRef) {
-    data = { content, contentType: 'TEMPLATEREF' };
+    data = { content, contentType: 'TEMPLATEREF', props: {id: overlayID} };
   } else {
     data = {
       content,

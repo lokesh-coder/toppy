@@ -1,0 +1,15 @@
+<button (click)="open()">Open modal</button>
+
+<ng-template #modalTpl let-foo>
+  <div class="modal-container">
+    <div class="modal-header">
+      <h3>Modal example</h3>
+    </div>
+    <div class="modal-body">
+      <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consequuntur assumenda aspernatur, eligendi dignissimos itaque provident accusantium dolor repellendus maiores quia veniam blanditiis ipsum, perspiciatis perferendis a ex, quibusdam voluptatibus? Vel.</p>
+    </div>
+    <div class="modal-footer">
+      <button class="dismiss" (click)="foo.close()">Close</button>
+    </div>
+  </div>
+</ng-template>

@@ -51,8 +51,8 @@ describe('== Utils ==', () => {
       expect(result).toEqual({ content: fixture, props: { id: 'XYZ' }, contentType: 'COMPONENT' } as any);
     });
     it('should return template type', () => {
-      const result = getContentMeta(component.tpl);
-      expect(result).toEqual({ content: component.tpl, contentType: 'TEMPLATEREF' } as any);
+      const result = getContentMeta(component.tpl, {}, 'ABC');
+      expect(result).toEqual({ content: component.tpl, contentType: 'TEMPLATEREF', props: {id: 'ABC'} } as any);
     });
   });
 });

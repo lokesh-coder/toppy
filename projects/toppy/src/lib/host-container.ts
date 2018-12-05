@@ -45,8 +45,10 @@ export class HostContainer {
   createViewFromString(content: string): Text {
     return document.createTextNode(content);
   }
-  createViewFromTemplate(template: TemplateRef<any>, ctx = {}): EmbeddedViewRef<any> {
-    return template.createEmbeddedView(ctx);
+  createViewFromTemplate(template: TemplateRef<any>, ctx: any = {}): EmbeddedViewRef<any> {
+    console.log(ctx);
+    const data = ctx.id ? new CurrentOverlay(this.toppyRef(ctx.id)) : {};
+    return template.createEmbeddedView({$implicit: data } );
   }
   createViewFromComponent(component, props: any = {}): ViewRef {
     this._compFac = this._compFacResolver.resolveComponentFactory(component);
@@ -75,7 +77,7 @@ export class HostContainer {
         viewEl = this.getComponentViewEl();
         break;
       case 'TEMPLATEREF':
-        view = this.createViewFromTemplate(this._content);
+        view = this.createViewFromTemplate(this._content, this._contentProps);
         this._appRef.attachView(view);
         viewEl = view.rootNodes[0];
         break;

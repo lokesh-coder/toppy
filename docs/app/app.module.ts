@@ -18,6 +18,7 @@ import { TestComponent } from './test/test.component';
 import { ScollSpyDirective } from './utils/scollspy.directive';
 import { SectionComponent } from './utils/section/section.component';
 import { SubSectionComponent } from './utils/sub-section/sub-section.component';
+import { ModalExampleComponent } from './examples/modal-example/modal-example.component';
 
 @NgModule({
   declarations: [
@@ -34,7 +35,8 @@ import { SubSectionComponent } from './utils/sub-section/sub-section.component';
     FullscreenPositionExampleComponent,
     HeroScreenComponent,
     ScollSpyDirective,
-    DragExampleComponent
+    DragExampleComponent,
+    ModalExampleComponent
   ],
   imports: [BrowserModule, FormsModule, HttpClientModule, MarkdownModule.forRoot({ loader: HttpClient }), ToppyModule],
   providers: [],
