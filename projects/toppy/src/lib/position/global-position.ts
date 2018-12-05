@@ -20,11 +20,12 @@ export class GlobalPosition extends Position {
       width: (window as any).innerWidth,
       height: (window as any).innerHeight
     };
+
     if (typeof this._config.hostHeight === 'number') {
-      host.height = this._config.hostHeight;
+      host.height = this._config.hostHeight = Math.abs(this._config.hostHeight);
     }
     if (typeof this._config.hostWidth === 'number') {
-      host.width = this._config.hostWidth;
+      host.width = this._config.hostWidth = Math.abs(this._config.hostWidth);
     }
     if (typeof this._config.hostWidth === 'string' && this._config.hostWidth.endsWith('%')) {
       this._config.hostWidth = this._getPercentageToCssPx(src.width, this._config.hostWidth);
@@ -33,7 +34,7 @@ export class GlobalPosition extends Position {
       this._config.hostHeight = this._getPercentageToCssPx(src.height, this._config.hostHeight);
     }
 
-    const props = this[`calculate_${this._config.placement}`](src, host);
+    const props = this._calc(this._config.placement, src, host);
     return { ...props, width: this._config.hostWidth, height: this._config.hostHeight, position: 'fixed' };
   }
   private _getPercentageToCssPx(max, percentage: string) {
@@ -69,51 +70,5 @@ export class GlobalPosition extends Position {
     }
 
     return p;
-  }
-
-  private [`calculate_${InsidePlacement.TOP}`](src, host) {
-    const top = this._config.offset; //
-    const left = (src.width - host.width) / 2; //
-    return { left, top };
-  }
-  private [`calculate_${InsidePlacement.BOTTOM}`](src, host) {
-    const bottom = this._config.offset; //
-    const left = (src.width - host.width) / 2; //
-    return { left, bottom };
-  }
-  private [`calculate_${InsidePlacement.LEFT}`](src, host) {
-    const top = (src.height - host.height) / 2; //
-    const left = this._config.offset; //
-    return { left, top };
-  }
-  private [`calculate_${InsidePlacement.RIGHT}`](src, host) {
-    const top = (src.height - host.height) / 2; //
-    const right = this._config.offset;
-    return { right, top };
-  }
-  private [`calculate_${InsidePlacement.CENTER}`](src, host) {
-    const top = (src.height - host.height) / 2; //
-    const left = (src.width - host.width) / 2; //
-    return { left, top };
-  }
-  private [`calculate_${InsidePlacement.TOP_LEFT}`](src, host) {
-    const top = this._config.offset; //
-    const left = this._config.offset; //
-    return { left, top };
-  }
-  private [`calculate_${InsidePlacement.TOP_RIGHT}`](src, host) {
-    const top = this._config.offset; //
-    const right = this._config.offset;
-    return { right, top };
-  }
-  private [`calculate_${InsidePlacement.BOTTOM_LEFT}`](src, host) {
-    const bottom = this._config.offset; //
-    const left = this._config.offset; //
-    return { left, bottom };
-  }
-  private [`calculate_${InsidePlacement.BOTTOM_RIGHT}`](src, host) {
-    const bottom = this._config.offset; //
-    const right = this._config.offset;
-    return { right, bottom };
   }
 }

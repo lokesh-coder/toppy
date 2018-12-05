@@ -54,7 +54,7 @@ describe('== Global position ==', () => {
     beforeEach(() => {
       srcCoords = targetElement.getBoundingClientRect();
     });
-    it('when exact width and height is provided', () => {
+    it('when exact width and height is provided in px', () => {
       const gloPos = new GlobalPosition({
         hostWidth: 4,
         hostHeight: 10,
@@ -65,6 +65,48 @@ describe('== Global position ==', () => {
         top: 0,
         width: 4,
         height: 10,
+        position: 'fixed'
+      });
+    });
+    it('when exact width and height is provided in negative px', () => {
+      const gloPos = new GlobalPosition({
+        hostWidth: -4,
+        hostHeight: -10,
+        placement: InsidePlacement.TOP
+      });
+      expect(gloPos.getPositions(hostElement)).toEqual({
+        left: (ww - 4) / 2,
+        top: 0,
+        width: 4,
+        height: 10,
+        position: 'fixed'
+      });
+    });
+    it('when exact width and height is provided in percentage', () => {
+      const gloPos = new GlobalPosition({
+        hostWidth: '50%',
+        hostHeight: '50%',
+        placement: InsidePlacement.TOP
+      });
+      expect(gloPos.getPositions(hostElement)).toEqual({
+        left: (ww - 967) / 2,
+        top: 0,
+        width: `calc(${ww}px - 50%)`,
+        height: `calc(${wh}px - 50%)`,
+        position: 'fixed'
+      });
+    });
+    it('when exact width and height is provided in higher percentage', () => {
+      const gloPos = new GlobalPosition({
+        hostWidth: '150%',
+        hostHeight: '150%',
+        placement: InsidePlacement.TOP
+      });
+      expect(gloPos.getPositions(hostElement)).toEqual({
+        left: (ww - 967) / 2,
+        top: 0,
+        width: `calc(${ww}px - 0%)`,
+        height: `calc(${wh}px - 0%)`,
         position: 'fixed'
       });
     });
@@ -84,31 +126,6 @@ describe('== Global position ==', () => {
       width: (window as any).innerWidth,
       height: (window as any).innerHeight
     };
-    console.log(targetElCoords);
-
-    const hostElCoords = {
-      width: 4, // actual 967
-      height: 10 // actual 18
-    };
-    getData().forEach(data => {
-      it(data.name, () => {
-        const gloPos = new GlobalPosition({
-          hostWidth: hostElCoords.width,
-          hostHeight: hostElCoords.height,
-          placement: data.placement,
-          offset: 2
-        });
-        const pos = (gloPos as any)[`calculate_${data.placement}`](targetElCoords, hostElCoords);
-        expect(pos).toEqual(data.expected);
-      });
-    });
-  });
-  describe('___TEST____', () => {
-    const targetElCoords = {
-      width: (window as any).innerWidth,
-      height: (window as any).innerHeight
-    };
-    console.log(targetElCoords);
 
     const hostElCoords = {
       width: 4, // actual 967
