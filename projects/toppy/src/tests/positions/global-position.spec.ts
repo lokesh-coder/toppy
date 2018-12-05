@@ -89,7 +89,7 @@ describe('== Global position ==', () => {
         placement: InsidePlacement.TOP
       });
       expect(gloPos.getPositions(hostElement)).toEqual({
-        left: (ww - 967) / 2,
+        left: (ww - hostElement.offsetWidth) / 2,
         top: 0,
         width: `calc(${ww}px - 50%)`,
         height: `calc(${wh}px - 50%)`,
@@ -103,7 +103,7 @@ describe('== Global position ==', () => {
         placement: InsidePlacement.TOP
       });
       expect(gloPos.getPositions(hostElement)).toEqual({
-        left: (ww - 967) / 2,
+        left: (ww - hostElement.offsetWidth) / 2,
         top: 0,
         width: `calc(${ww}px - 0%)`,
         height: `calc(${wh}px - 0%)`,
