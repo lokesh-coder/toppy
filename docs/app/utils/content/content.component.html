@@ -1,0 +1,337 @@
+
+<h3>Introduction</h3>
+<p><strong><code>Step 1:</code></strong> You can install through <a href="https://www.npmjs.com/package/toppy">npm</a> or <a href="https://yarnpkg.com/en/package/toppy">yarn</a></p>
+<pre><code class="hljs language-powershell">npm install toppy --save
+</code></pre>
+<pre><code class="hljs language-powershell">yarn add toppy
+</code></pre>
+<p><strong><code>Step 2:</code></strong> Add module in your angular app</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">import</span> &#123; ToppyModule &#125; <span class="hljs-keyword">from</span> <span class="hljs-string">'toppy'</span>;
+
+<span class="hljs-meta">@NgModule</span>(&#123;
+  declarations: [AppComponent],
+  imports: [BrowserModule, ToppyModule],
+  bootstrap: [AppComponent]
+&#125;)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> AppModule &#123;&#125;
+</code></pre>
+<p><strong><code>Step 3:</code></strong> Use Toppy in any component</p>
+<pre><code class="hljs language-typescript"><span class="hljs-meta">@Component</span>(&#123;
+  selector: <span class="hljs-string">'app-root'</span>,
+  template: <span class="hljs-string">'&#x3C;div #el>Click me&#x3C;/div>'</span>
+&#125;)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> AppComponent &#123;
+  <span class="hljs-meta">@ViewChild</span>(<span class="hljs-string">'el'</span>, &#123; read: ElementRef &#125;)
+  el: ElementRef;
+
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> _toppy: Toppy</span>) &#123;&#125;
+
+  ngOnInit() &#123;
+    <span class="hljs-keyword">const</span> position = <span class="hljs-keyword">new</span> RelativePosition(&#123;
+      placement: OutsidePlacement.BOTTOM_LEFT,
+      src: <span class="hljs-keyword">this</span>.el.nativeElement
+    &#125;);
+
+    <span class="hljs-keyword">this</span>.overlayIns = <span class="hljs-keyword">this</span>._toppy
+      .overlay(position)
+      .host(<span class="hljs-string">'hello'</span>) <span class="hljs-comment">// content</span>
+      .create();
+  &#125;
+  open() &#123;
+    <span class="hljs-keyword">this</span>.overlayIns.open();
+  &#125;
+  close() &#123;
+    <span class="hljs-keyword">this</span>.overlayIns.close();
+  &#125;
+&#125;
+</code></pre>
+<h3>Content types</h3>
+<p><strong>Plain text</strong></p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">this</span>.overlayIns = <span class="hljs-keyword">this</span>._toppy
+  .overlay(position)
+  .host(<span class="hljs-string">`some plain text content`</span>) <span class="hljs-comment">// simple text</span>
+  .create();
+</code></pre>
+<p><strong>Using html</strong></p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">this</span>.overlayIns = <span class="hljs-keyword">this</span>._toppy
+  .overlay(position)
+  .host(<span class="hljs-string">`&#x3C;div>any HTML content&#x3C;/div>`</span>, &#123; hasHTML: <span class="hljs-literal">true</span> &#125;) <span class="hljs-comment">// html</span>
+  .create();
+</code></pre>
+<p><strong>Using component</strong></p>
+<pre><code class="hljs language-typescript"><span class="hljs-meta">@Component</span>(&#123;
+  template: <span class="hljs-string">'&#x3C;div>Hello&#x3C;/div>'</span>
+&#125;)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> HelloComponent &#123;&#125;
+</code></pre>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">this</span>.overlayIns = <span class="hljs-keyword">this</span>._toppy
+  .overlay(position)
+  .host(HelloComponent) <span class="hljs-comment">// host a component</span>
+  .create();
+</code></pre>
+<p><strong>Using TemplateRef</strong></p>
+<pre><code class="hljs language-html" id="tpl>Hello"><span class="hljs-tag">&#x3C;<span class="hljs-name">ng-template</span> #<span class="hljs-attr">tpl</span>></span>Hello world!<span class="hljs-tag">&#x3C;/<span class="hljs-name">ng-template</span>></span>
+</code></pre>
+<pre><code class="hljs language-typescript"><span class="hljs-meta">@ViewChild</span>(<span class="hljs-string">'tpl'</span>) tpl:TemplateRef&#x3C;<span class="hljs-built_in">any</span>>;
+
+<span class="hljs-keyword">this</span>.overlayIns = <span class="hljs-keyword">this</span>._toppy
+  .overlay(position)
+  .host(<span class="hljs-keyword">this</span>.tpl) <span class="hljs-comment">// template ref</span>
+  .create();
+</code></pre>
+<h3>Positions</h3>
+<h5>Realtive position</h5>
+<p>
+  <app-relative-position-example></app-relative-position-example>
+</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">new</span> RelativePosition(&#123;
+  src: HTMLElement, <span class="hljs-comment">// target element</span>
+  placement: OutsidePlacement, <span class="hljs-comment">// location of the content</span>
+  hostWidth: <span class="hljs-built_in">string</span> | <span class="hljs-built_in">number</span>, <span class="hljs-comment">// content width eg, `auto`, 150, `30%`</span>
+  hostHeight: <span class="hljs-built_in">string</span> | <span class="hljs-built_in">number</span>, <span class="hljs-comment">// content height eg, `auto`, 150, `30%`</span>
+  autoUpdate: <span class="hljs-built_in">boolean</span> <span class="hljs-comment">// update position when window scroll/resize/drag</span>
+&#125;);
+</code></pre>
+<h5>Global position</h5>
+<p>
+  <app-global-position-example></app-global-position-example>
+</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">new</span> GlobalPosition(&#123;
+  placement: InsidePlacement, <span class="hljs-comment">// location of the content.</span>
+  hostWidth: <span class="hljs-built_in">string</span> | <span class="hljs-built_in">number</span>, <span class="hljs-comment">// content width eg, `auto`, `150`, `30%`</span>
+  hostHeight: <span class="hljs-built_in">string</span> | <span class="hljs-built_in">number</span>, <span class="hljs-comment">//content height eg, `auto`, 150, `30%`</span>
+  offset: <span class="hljs-built_in">number</span> <span class="hljs-comment">// oustide space of the content, in px</span>
+&#125;);
+</code></pre>
+<h5>Slide position</h5>
+<p>
+  <app-slide-position-example></app-slide-position-example>
+</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">new</span> SlidePosition(&#123;
+  placement: SlidePlacement, <span class="hljs-comment">// rigth or left</span>
+  width: <span class="hljs-built_in">string</span> <span class="hljs-comment">// width eg, '300px' or '30%'</span>
+&#125;);
+</code></pre>
+<h5>Fullscreen position</h5>
+<p>
+  <app-fullscreen-position-example></app-fullscreen-position-example>
+</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">new</span> FullscreenPosition();
+</code></pre>
+<h3>Communication</h3>
+<p>When you host a component, you can control the overlay through <code>CurrentOverlay</code> service. As of now, this service has only one method <code>close</code> to close the overlay from the host component. But, soon more API will be added to this service.</p>
+<pre><code class="hljs language-typescript"><span class="hljs-comment">// host component</span>
+<span class="hljs-meta">@Component</span>(&#123;
+  template: <span class="hljs-string">'&#x3C;div>Some text&#x3C;/div>'</span>
+&#125;)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> HostComponent &#123;
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">private</span> _overlay: CurrentOverlay</span>) &#123;&#125;
+
+  close() &#123;
+    <span class="hljs-keyword">this</span>._overlay.close();
+  &#125;
+&#125;
+</code></pre>
+<p>You can also set properties to component when creating the overlay.</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">this</span>.overlayIns = <span class="hljs-keyword">this</span>._toppy
+  .overlay(position)
+  .host(HelloComponent, &#123; propName: <span class="hljs-string">'toppy-test-prop'</span> &#125;)
+  .create();
+</code></pre>
+<p>Now automatically all props are attached to host component and you can access it like,</p>
+<pre><code class="hljs language-typescript"><span class="hljs-comment">// host component</span>
+<span class="hljs-meta">@Component</span>(&#123;
+  template: <span class="hljs-string">'&#x3C;div>Some text&#x3C;/div>'</span>
+&#125;)
+<span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> HostComponent &#123;
+  propName; <span class="hljs-comment">// else tslint will throw error</span>
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params"></span>) &#123;
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>.propName); <span class="hljs-comment">// will return 'toppy-test-prop'</span>
+  &#125;
+&#125;
+</code></pre>
+<h3>Examples</h3>
+<h5>1. Stick content on dragging</h5>
+<p>In below example you can see that the tooltip content is sticked with the <code>src</code> element in <code>RelativePosition</code></p>
+<p>
+  <app-drag-example></app-drag-example>
+</p>
+<h5>2. Dynamic text content</h5>
+<p>When the provided content is just a string, you might sometimes need to update that dynamically.</p>
+<p>
+  <app-dynamic-text-example></app-dynamic-text-example>
+</p>
+<h5>3. Modal content</h5>
+<p>Simple modal example shows center aligned templateRef content.</p>
+<p>
+  <app-modal-example></app-modal-example>
+</p>
+<h5>4. Dropdown selector</h5>
+<p>Custom dropdown example</p>
+<p>
+  <app-dropdown-example></app-dropdown-example>
+</p>
+<h3>Configuration</h3>
+<pre><code class="hljs language-typescript"><span class="hljs-comment">// config</span>
+<span class="hljs-keyword">this</span>.toppy
+  .overlay(position:Position, configuration:ToppyConfig=&#123;&#125;)
+  .host(<span class="hljs-string">'hello'</span>)
+  .create();
+</code></pre>
+<table>
+  <thead>
+    <tr>
+      <th><code>property</code></th>
+      <th><code>for</code></th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td><strong>backdrop</strong></td>
+      <td><code>boolean</code> · whether to show backdrop layer · default: <em>false</em></td>
+    </tr>
+    <tr>
+      <td><strong>closeOnEsc</strong></td>
+      <td><code>boolean</code> · clicking Escape button will close overlay · default: <em>false</em></td>
+    </tr>
+    <tr>
+      <td><strong>dismissOnDocumentClick</strong></td>
+      <td><code>boolean</code> · dismiss on clicking outside of content · default: <em>false</em></td>
+    </tr>
+    <tr>
+      <td><strong>isHover</strong></td>
+      <td><code>boolean</code> · should set to true if it is triggered on hover · default: <em>false</em></td>
+    </tr>
+    <tr>
+      <td><strong>watchWindowResize</strong></td>
+      <td><code>boolean</code> · auto adjust the position on scroll · default: <em>true</em></td>
+    </tr>
+    <tr>
+      <td><strong>containerClass</strong></td>
+      <td><code>string</code> · overlay container class name · default: <em>toppy-container'</em></td>
+    </tr>
+    <tr>
+      <td><strong>wrapperClass</strong></td>
+      <td><code>string</code> · overlay wrapper class name · default: <em>'toppy-wrapper'</em></td>
+    </tr>
+    <tr>
+      <td><strong>backdropClass</strong></td>
+      <td><code>string</code> · overlay backdrop class name · default: <em>'toppy-backdrop'</em></td>
+    </tr>
+    <tr>
+      <td><strong>bodyClassNameOnOpen</strong></td>
+      <td><code>string</code> · if set, the classname will be added when overlay is open</td>
+    </tr>
+    <tr>
+      <td><strong>windowResizeCallback</strong></td>
+      <td><code>function</code> · callback function, will be triggered on window scroll</td>
+    </tr>
+    <tr>
+      <td><strong>docClickCallback</strong></td>
+      <td><code>function</code> · callback function, will be triggered on document click</td>
+    </tr>
+    <tr>
+      <td><strong>parentElement</strong></td>
+      <td><code>HTMLElement</code> · overlay parent element · default: <em>body</em></td>
+    </tr>
+  </tbody>
+</table>
+<h3>API</h3>
+<pre><code class="hljs language-typescript">Toppy.overlay(position:Position,config:ToppyConfig):Toppy
+</code></pre>
+<pre><code class="hljs language-typescript">Toppy.host(
+  content: <span class="hljs-built_in">string</span> | TemplateRef&#x3C;<span class="hljs-built_in">any</span>> | ComponentType&#x3C;<span class="hljs-built_in">any</span>>,
+  props: &#123; [x: <span class="hljs-built_in">string</span>]: <span class="hljs-built_in">any</span> &#125; = &#123;&#125;
+):Toppy
+</code></pre>
+<pre><code class="hljs language-typescript">Toppy.create(position:Position,config:ToppyConfig):ToppyRef
+</code></pre>
+<hr>
+<pre><code class="hljs language-typescript">ToppyRef.open():<span class="hljs-built_in">void</span>
+</code></pre>
+<pre><code class="hljs language-typescript">ToppyRef.close():<span class="hljs-built_in">void</span>
+</code></pre>
+<pre><code class="hljs language-typescript">ToppyRef.toggle():<span class="hljs-built_in">void</span>
+</code></pre>
+<pre><code class="hljs language-typescript">ToppyRef.onDocumentClick():Observable
+</code></pre>
+<pre><code class="hljs language-typescript">ToppyRef.onWindowResize():Observable
+</code></pre>
+<pre><code class="hljs language-typescript">ToppyRef.getConfig():ToppyConfig
+</code></pre>
+<pre><code class="hljs language-typescript">ToppyRef.updateHost(
+  content: <span class="hljs-built_in">string</span> | TemplateRef&#x3C;<span class="hljs-built_in">any</span>> | ComponentType&#x3C;<span class="hljs-built_in">any</span>>,
+  props: &#123; [x: <span class="hljs-built_in">string</span>]: <span class="hljs-built_in">any</span> &#125; = &#123;&#125;
+):ToppyRef
+</code></pre>
+<pre><code class="hljs language-typescript">ToppyRef.updatePosition(config:object):ToppyRef
+</code></pre>
+<hr>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">enum</span> OutsidePlacement &#123;&#125;
+</code></pre>
+<div class="inline-code">
+  <pre><code class="hljs language-typescript">OutsidePlacement.BOTTOM;
+</code></pre>
+  <pre><code class="hljs language-typescript">OutsidePlacement.BOTTOM_LEFT;
+</code></pre>
+  <pre><code class="hljs language-typescript">OutsidePlacement.BOTTOM_RIGHT;
+</code></pre>
+  <pre><code class="hljs language-typescript">OutsidePlacement.LEFT;
+</code></pre>
+  <pre><code class="hljs language-typescript">OutsidePlacement.LEFT_BOTTOM;
+</code></pre>
+  <pre><code class="hljs language-typescript">OutsidePlacement.LEFT_TOP;
+</code></pre>
+  <pre><code class="hljs language-typescript">OutsidePlacement.RIGHT;
+</code></pre>
+  <pre><code class="hljs language-typescript">OutsidePlacement.RIGHT_BOTTOM;
+</code></pre>
+  <pre><code class="hljs language-typescript">OutsidePlacement.RIGHT_TOP;
+</code></pre>
+  <pre><code class="hljs language-typescript">OutsidePlacement.TOP;
+</code></pre>
+  <pre><code class="hljs language-typescript">OutsidePlacement.TOP_LEFT;
+</code></pre>
+  <pre><code class="hljs language-typescript">OutsidePlacement.TOP_RIGHT;
+</code></pre>
+</div>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">enum</span> InsidePlacement &#123;&#125;
+</code></pre>
+<div class="inline-code">
+  <pre><code class="hljs language-typescript">InsidePlacement;
+</code></pre>
+  <pre><code class="hljs language-typescript">InsidePlacement.BOTTOM;
+</code></pre>
+  <pre><code class="hljs language-typescript">InsidePlacement.BOTTOM_LEFT;
+</code></pre>
+  <pre><code class="hljs language-typescript">InsidePlacement.BOTTOM_RIGHT;
+</code></pre>
+  <pre><code class="hljs language-typescript">InsidePlacement.LEFT;
+</code></pre>
+  <pre><code class="hljs language-typescript">InsidePlacement.RIGHT;
+</code></pre>
+  <pre><code class="hljs language-typescript">InsidePlacement.TOP;
+</code></pre>
+  <pre><code class="hljs language-typescript">InsidePlacement.TOP_LEFT;
+</code></pre>
+  <pre><code class="hljs language-typescript">InsidePlacement.TOP_RIGHT;
+</code></pre>
+  <pre><code class="hljs language-typescript">InsidePlacement.CENTER;
+</code></pre>
+</div>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">enum</span> SlidePlacement &#123;&#125;
+</code></pre>
+<div class="inline-code">
+  <pre><code class="hljs language-typescript">SlidePlacement.LEFT;
+</code></pre>
+  <pre><code class="hljs language-typescript">SlidePlacement.RIGHT;
+</code></pre>
+</div>
+<h3>Contibution</h3>
+<p>Any kind of contributions ( Typo fix, documentation, code quality, performance, refactor, pipeline, etc., ) are welcome. :)</p>
+<h3>Credits</h3>
+<ul>
+  <li>Icons from <a href="http://openmoji.org">openmoji</a></li>
+</ul>
+<h3>Issues</h3>
+<p>Found a bug? Have some idea? Or do you have questions? File it <a href="https://github.com/lokesh-coder/toppy/issues">github issues</a></p>

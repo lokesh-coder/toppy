@@ -11,9 +11,9 @@ export function getContentMeta(
   if (typeof content === 'string' && props['hasHTML']) {
     data = { content, contentType: 'STRING', props };
   } else if (typeof content === 'string') {
-    data = { content };
+    data = { content, props };
   } else if (content instanceof TemplateRef) {
-    data = { content, contentType: 'TEMPLATEREF', props: {id: overlayID} };
+    data = { content, contentType: 'TEMPLATEREF', props: { id: overlayID } };
   } else {
     data = {
       content,

@@ -43,7 +43,8 @@ export class RelativePositionExampleComponent implements OnInit {
         }),
         {
           backdrop: false,
-          dismissOnDocumentClick: false
+          dismissOnDocumentClick: false,
+          isHover: true
         }
       )
       .host(this.content)

@@ -1,15 +1,19 @@
-<button (click)="open()">Open modal</button>
+<div class="drag-element-holder"><img src="./assets/svg/bottle.svg" style="width: 100px;" #el (click)="open()" /></div>
+
+<div class="drag-element-holder">
+  <img src="./assets/svg/giraffe.svg" style="width: 100px;" #el2 (click)="openImage()" />
+</div>
 
 <ng-template #modalTpl let-foo>
   <div class="modal-container">
-    <div class="modal-header">
-      <h3>Modal example</h3>
-    </div>
+    <div class="modal-header"><h3 class="m-0">Modal example</h3></div>
     <div class="modal-body">
-      <p>Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consequuntur assumenda aspernatur, eligendi dignissimos itaque provident accusantium dolor repellendus maiores quia veniam blanditiis ipsum, perspiciatis perferendis a ex, quibusdam voluptatibus? Vel.</p>
+      <p>
+        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consequuntur assumenda aspernatur, eligendi
+        dignissimos itaque provident accusantium dolor repellendus maiores quia veniam blanditiis ipsum, perspiciatis
+        perferendis a ex, quibusdam voluptatibus? Vel.
+      </p>
     </div>
-    <div class="modal-footer">
-      <button class="dismiss" (click)="foo.close()">Close</button>
-    </div>
+    <div class="modal-footer"><button class="dismiss btn btn-danger" (click)="foo.close()">Close</button></div>
   </div>
 </ng-template>

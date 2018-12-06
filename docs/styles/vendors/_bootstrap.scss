@@ -1,21 +1,18 @@
 /* Bootstrap config */
-$body-bg: clr('bg', 'basic');
-$body-color: clr('text', 'basic');
-$link-color: clr('primary', 'theme');
-$link-hover-color: clr('primary-o', 'theme');
-$blue: clr('primary', 'theme');
-$red: clr('danger', 'theme');
-$orange: clr('warning', 'theme');
-$green: clr('success', 'theme');
+$body-bg: clr('bg');
+$body-color: clr('text');
+$link-color: clr('primary');
+$link-hover-color: clr('primary-o');
+$headings-color: clr('dark');
 
 $theme-colors: (
-  primary: clr('primary', 'theme'),
-  secondary: clr('secondary', 'theme'),
-  success: clr('success', 'theme'),
-  warning: clr('warning', 'theme'),
-  danger: clr('danger', 'theme'),
-  info: clr('info', 'theme'),
-  dark: clr('dark', 'theme')
+  primary: clr('primary'),
+  secondary: clr('secondary'),
+  success: clr('success'),
+  warning: clr('warning'),
+  danger: clr('danger'),
+  info: clr('info'),
+  dark: clr('dark')
 );
 $border-radius: $toppy--border-rad;
 $font-family-base: $toppy--font-family;
@@ -27,7 +24,7 @@ $h3-font-size: fs('h3');
 $h4-font-size: fs('h4');
 $h5-font-size: fs('h5');
 $h6-font-size: fs('h6');
-$input-btn-padding-y-lg: .8rem;
+$input-btn-padding-y-lg: 0.8rem;
 $input-btn-padding-x-lg: 1.5rem;
 
 $grid-breakpoints: $toppy--grid-breakpoints;

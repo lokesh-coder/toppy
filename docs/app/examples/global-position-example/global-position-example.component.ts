@@ -32,14 +32,14 @@ export class GlobalPositionExampleComponent implements OnInit {
     { name: 'Top right', value: InsidePlacement.TOP_RIGHT },
     { name: 'Center', value: InsidePlacement.CENTER }
   ];
-  selectedPlacement = this.placements[0].value;
+  selectedPlacement = this.placements[8].value;
   private _toppyRef: ToppyRef;
   constructor(private toppy: Toppy) {}
 
   ngOnInit() {
     this._toppyRef = this.toppy
       .overlay(
-        new GlobalPosition({ placement: this.selectedPlacement, hostHeight: 'auto', hostWidth: 'auto', offset: 10 }),
+        new GlobalPosition({ placement: this.selectedPlacement, hostHeight: '80%', hostWidth: '80%', offset: 10 }),
         {
           docClickCallback: () => {
             console.log('doc click callback');

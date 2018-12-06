@@ -25,6 +25,11 @@ export class DomHelper {
     return prevParent;
   }
 
+  setHtml(parentElement: HTMLElement, childElement: any): HTMLElement {
+    parentElement.innerHTML = childElement;
+    return parentElement;
+  }
+
   setPositions(element: HTMLElement, positions: object) {
     Object.keys(positions).forEach(prop => {
       element.style[prop] = typeof positions[prop] === 'number' ? `${positions[prop]}px` : positions[prop];

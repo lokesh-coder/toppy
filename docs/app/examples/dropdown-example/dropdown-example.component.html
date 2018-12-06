@@ -1,0 +1,11 @@
+<div class="dropdown-field" #el (click)="open()" [ngClass]="{ open: isOpen }">
+  <img src="./assets/svg/{{selectedData.icon}}.svg" alt="" /> {{ selectedData.name }}
+</div>
+
+<ng-template #tpl let-toppy>
+  <ul class="dropdown-ist">
+    <li (click)="select(item)" *ngFor="let item of items" [ngClass]="{ selected: item.name == selectedData.name }">
+      <img src="./assets/svg/{{item.icon}}.svg" alt="" /> {{ item.name }}
+    </li>
+  </ul>
+</ng-template>

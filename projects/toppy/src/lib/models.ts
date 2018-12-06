@@ -62,6 +62,7 @@ export interface ToppyConfig {
   dismissOnDocumentClick: boolean;
   bodyClassNameOnOpen: string;
   closeOnEsc: boolean;
+  isHover: boolean;
   parentElement: HTMLElement | null;
   windowResizeCallback: () => void;
   docClickCallback: () => void;

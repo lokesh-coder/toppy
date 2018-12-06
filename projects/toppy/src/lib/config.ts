@@ -11,6 +11,7 @@ export const DefaultConfig: ToppyConfig = {
   watchWindowResize: true,
   bodyClassNameOnOpen: '',
   closeOnEsc: false,
+  isHover: false,
   windowResizeCallback: () => {},
   docClickCallback: () => {}
 };

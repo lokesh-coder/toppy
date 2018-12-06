@@ -6,6 +6,7 @@ import {
   EmbeddedViewRef,
   Injectable,
   Injector,
+  Sanitizer,
   TemplateRef,
   ViewRef
 } from '@angular/core';
@@ -28,7 +29,8 @@ export class HostContainer {
   constructor(
     private _appRef: ApplicationRef,
     private _compFacResolver: ComponentFactoryResolver,
-    private _injector: Injector
+    private _injector: Injector,
+    private _sanitizer: Sanitizer
   ) {}
 
   configure(
@@ -42,13 +44,16 @@ export class HostContainer {
     this._content = content;
   }
 
-  createViewFromString(content: string): Text {
-    return document.createTextNode(content);
+  createViewFromString(content: string, props: any = {}): HTMLElement {
+    const contentWrapperEl = document.createElement('div');
+    contentWrapperEl.innerText = content;
+    contentWrapperEl.classList.add(...[props.class || 'toppy-text-content']);
+    return contentWrapperEl;
   }
   createViewFromTemplate(template: TemplateRef<any>, ctx: any = {}): EmbeddedViewRef<any> {
     console.log(ctx);
     const data = ctx.id ? new CurrentOverlay(this.toppyRef(ctx.id)) : {};
-    return template.createEmbeddedView({$implicit: data } );
+    return template.createEmbeddedView({ $implicit: data });
   }
   createViewFromComponent(component, props: any = {}): ViewRef {
     this._compFac = this._compFacResolver.resolveComponentFactory(component);
@@ -83,10 +88,10 @@ export class HostContainer {
         break;
       case 'STRING':
         const el = document.createElement('div');
-        el.innerHTML = this._content;
+        el.innerHTML = this._sanitizer.sanitize(1, this._content);
         return el as any;
       default:
-        return document.createTextNode(this._content) as any;
+        return this.createViewFromString(this._content, this._contentProps);
     }
     return viewEl;
   }
@@ -117,6 +122,6 @@ export class HostContainer {
   }
 
   getNewInstance() {
-    return new HostContainer(this._appRef, this._compFacResolver, this._injector);
+    return new HostContainer(this._appRef, this._compFacResolver, this._injector, this._sanitizer);
   }
 }

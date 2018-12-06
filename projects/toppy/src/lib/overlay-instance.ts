@@ -42,12 +42,16 @@ export class OverlayInstance implements OnDestroy {
     this._position.updateConfig(positionConfig);
   }
 
+  updateTextContent(content) {
+    this._wrapperEl.querySelector('div').textContent = content;
+  }
+
   create() {
     this._containerEl = this._dom.createElement('div', {
       'data-overlay-id': this._overlayID,
       class: this.config.containerClass + ' ' + this._position.getClassName(),
       style: `left:0;position: fixed;top: 0;width: 100%;height: 100%;${
-        !this.config.dismissOnDocumentClick ? 'pointer-events:none' : ''
+        this.config.isHover ? 'pointer-events:none' : ''
       }`
     });
 

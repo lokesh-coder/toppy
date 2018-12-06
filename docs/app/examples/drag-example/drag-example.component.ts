@@ -1,4 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Subject } from 'rxjs';
 import { OutsidePlacement } from '../../../../projects/toppy/src/lib/models';
 import { RelativePosition, Toppy, ToppyRef } from '../../../../projects/toppy/src/public_api';
 
@@ -13,6 +14,7 @@ export class DragExampleComponent implements OnInit {
   pos4 = 0;
   @ViewChild('el') el: ElementRef;
   private _toppyRef: ToppyRef;
+  pauser = new Subject();
   constructor(private toppy: Toppy) {}
 
   ngOnInit() {
@@ -25,11 +27,10 @@ export class DragExampleComponent implements OnInit {
           autoUpdate: true
         }),
         {
-          backdrop: false,
-          dismissOnDocumentClick: false
+          isHover: true
         }
       )
-      .host('<div class="tooltip">tooltip</div>', { hasHTML: true })
+      .host('Drag me', { class: 'tooltip' })
       .create();
   }
 
@@ -75,7 +76,6 @@ export class DragExampleComponent implements OnInit {
   }
 
   dragElement() {
-    console.log('fofo');
     this.el.nativeElement.onmousedown = this.dragMouseDown.bind(this);
   }
 }

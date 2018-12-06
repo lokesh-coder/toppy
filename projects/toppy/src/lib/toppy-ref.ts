@@ -7,6 +7,7 @@ import { OverlayInstance } from './overlay-instance';
 import { getContentMeta } from './utils';
 
 export class ToppyRef {
+  updateTextContent: Subject<string> = new Subject();
   private _isOpen = false;
   private _alive: Subject<Boolean> = new Subject();
   private _listenDocumentEvents = true;
@@ -17,7 +18,13 @@ export class ToppyRef {
     private _eventBus: EventBus,
     private _config: ToppyConfig,
     public overlayID: string
-  ) {}
+  ) {
+    this.updateTextContent.subscribe(content => {
+      if (this._isOpen) {
+        this._overlay.updateTextContent(content);
+      }
+    });
+  }
 
   open() {
     if (this._isOpen) {

@@ -3,12 +3,14 @@ code {
   font-size: 0.9rem;
 }
 .tooltip {
-  background: #673ab7;
+  background: #3f51b5;
   padding: 2px 9px;
   border-radius: 2px;
   color: #fff;
   font-size: 12px;
-  text-shadow: 0px 1px 1px #3f266b;
+  text-shadow: 0px 1px 1px #263067;
+  text-align: center;
+  margin: 2px;
 }
 
 .table thead th {
@@ -25,32 +27,95 @@ app-sub-section {
   margin-bottom: 4rem;
 }
 
-h4 {
-  font-weight: 700;
-  margin-bottom: 1rem;
+h3 {
+  margin: 2rem 0;
+  font-weight: 300;
 }
-.brand h2 {
-  background: #3d3844;
-  color: #fff;
-  padding: 0 12px;
+h5 {
+  margin-top: 3rem;
+}
+
+strong {
+  font-weight: 500;
+  color: clr('dark');
 }
 
 .drag-element-holder {
-  width: calc(9rem + 2px);
+  width: calc(102px);
   border: 1px dashed #aaa;
   display: inline-block;
   position: relative;
-  height: 52px;
+  height: 100px;
   box-sizing: border-box;
+  margin-right: 1rem;
 }
 .drag-element {
-  background: #e6e8f3;
-  padding: 1rem;
   position: absolute;
-  width: 9rem;
-  height: 50px;
+  height: 100px;
   display: inline-block;
   text-align: center;
   border: 1px solid transparent;
+  cursor: -webkit-grab;
   cursor: grab;
+}
+
+.dropdown-field {
+  display: inline-block;
+  width: 200px;
+  border: 1px solid #d1d1deb8;
+  border-radius: 3px;
+  padding: 3px;
+  background: #fff;
+  box-shadow: 0px 1px 24px inset #d6d7dc63;
+  position: relative;
+  cursor: pointer;
+  img {
+    width: 30px;
+  }
+  &:hover {
+    box-shadow: 0px 1px 24px #d6d7dc63;
+  }
+  &:after {
+    content: '\e910';
+    font-family: $toppy--icons-font;
+    transform: rotate(270deg);
+    display: inline-block;
+    position: absolute;
+    right: 10px;
+    padding: 5px;
+    transition: all 0.5s ease;
+  }
+
+  &.open:after {
+    transform: rotate(90deg);
+  }
+}
+
+ul.dropdown-ist {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  width: 100%;
+  background: #fff;
+  border: 1px solid #dedee7;
+  border-radius: 3px;
+  margin-top: 2px;
+  li {
+    padding: 4px;
+    cursor: pointer;
+  }
+  li.selected {
+    background: #f8f8f9;
+    font-weight: 500;
+  }
+  li:hover {
+    background: #f8f8f9;
+    color: clr('dark');
+  }
+  li:not(:last-child) {
+    border-bottom: 1px solid #dedee7;
+  }
+  li img {
+    width: 30px;
+  }
 }
