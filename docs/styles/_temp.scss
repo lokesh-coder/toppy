@@ -119,3 +119,33 @@ ul.dropdown-ist {
     width: 30px;
   }
 }
+
+.text-selection {
+  display: inline-block;
+  padding: 1rem 2rem;
+  span {
+    font-weight: 500;
+    color: clr('dark');
+    text-decoration: underline;
+    text-decoration-style: double;
+    cursor: pointer;
+  }
+}
+
+ul.horizontal-list {
+  padding: 0;
+  margin: 0;
+  list-style: none;
+  width: 100%;
+  background: #fff;
+  border: 1px solid #dedee7;
+  border-radius: 5rem;
+  margin-top: 2px;
+  display: flex;
+  li {
+    padding: 4px;
+  }
+  li img {
+    width: 25px;
+  }
+}
