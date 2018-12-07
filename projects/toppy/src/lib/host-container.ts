@@ -10,7 +10,6 @@ import {
   TemplateRef,
   ViewRef
 } from '@angular/core';
-import { ComponentInstance } from './component-ins';
 import { CurrentOverlay } from './current-overlay';
 import { HostArgs, HostContentType } from './models';
 import { ToppyRef } from './toppy-ref';
@@ -22,7 +21,7 @@ export class HostContainer {
   private _compFac: ComponentFactory<any>;
   private _compRef: ComponentRef<any>;
   private _contentType: HostContentType;
-  private _compIns: ComponentInstance;
+  private _compIns: any;
   private _contentProps: { [key: string]: any };
   private _content: any;
   toppyRef: (id: string) => ToppyRef;
@@ -51,7 +50,6 @@ export class HostContainer {
     return contentWrapperEl;
   }
   createViewFromTemplate(template: TemplateRef<any>, ctx: any = {}): EmbeddedViewRef<any> {
-    console.log(ctx);
     const data = ctx.id ? new CurrentOverlay(this.toppyRef(ctx.id)) : {};
     return template.createEmbeddedView({ $implicit: data });
   }
@@ -68,7 +66,10 @@ export class HostContainer {
       parent: this._injector
     });
     this._compRef = this._compFac.create(dataInjector);
-    this._compIns = <ComponentInstance>new ComponentInstance(this._compRef.instance, props).getInstance();
+    Object.keys(props).forEach(key => {
+      this._compRef.instance[key] = props[key];
+    });
+    this._compIns = this._compRef.instance;
     return this._compRef.hostView;
   }
 

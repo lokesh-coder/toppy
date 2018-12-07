@@ -1,5 +1,5 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
-import format from 'date-fns/format';
+import * as format from 'date-fns/format';
 import { never, Observable, Subject, timer } from 'rxjs';
 import { map, switchMap, timeInterval } from 'rxjs/operators';
 import { OutsidePlacement } from '../../../../projects/toppy/src/lib/models';

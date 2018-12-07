@@ -1,30 +1,30 @@
 import { async, TestBed } from '@angular/core/testing';
 import { skip, take } from 'rxjs/operators';
 import { DefaultConfig } from 'toppy/lib/config';
-import { DomHelper } from '../lib/helper/dom';
-import { EventBus } from '../lib/helper/event-bus';
 import { HostContainer } from '../lib/host-container';
 import { InsidePlacement } from '../lib/models';
 import { OverlayInstance } from '../lib/overlay-instance';
 import { GlobalPosition } from '../lib/position/global-position';
+import { _on, initE, destroyEvents } from 'toppy/lib/utils';
 
 describe('== OverlayInstance ==', () => {
   let overlayIns: OverlayInstance = null;
-  let eventBus: EventBus = null;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      providers: [OverlayInstance, DomHelper, HostContainer, EventBus]
+      providers: [OverlayInstance, HostContainer]
     });
     overlayIns = TestBed.get(OverlayInstance);
     overlayIns.setConfig(DefaultConfig);
-    eventBus = TestBed.get(EventBus);
   }));
 
   beforeEach(() => {
     overlayIns.configure(new GlobalPosition({ placement: InsidePlacement.CENTER }), 'abc');
+    initE();
   });
   afterEach(() => {
     overlayIns.destroy();
+
+    destroyEvents();
   });
 
   it('should be initialized', () => {
@@ -43,15 +43,15 @@ describe('== OverlayInstance ==', () => {
     overlayIns.create();
     expect(containerElements.length).toEqual(1);
   });
-  it('should emit attached event', () => {
-    eventBus
-      .watch()
+  it('should emit attached event', (done) => {
+    _on()
       .pipe(
         skip(1),
         take(1)
       )
       .subscribe(event => {
         expect(event['name']).toBe('ATTACHED');
+        done();
       });
     overlayIns.create();
   });
@@ -70,16 +70,16 @@ describe('== OverlayInstance ==', () => {
     overlayIns.destroy();
     expect(containerElements.length).toEqual(0);
   });
-  it('should emit detached event', () => {
+  it('should emit detached event', (done) => {
     overlayIns.create();
-    eventBus
-      .watch()
+    _on()
       .pipe(
-        skip(1),
-        take(1)
+        // skip(1),
+        // take(1)
       )
       .subscribe(event => {
         expect(event['name']).toBe('DETACHED');
+        done();
       });
     overlayIns.destroy();
   });

@@ -2,13 +2,12 @@ import { Component, DebugElement, Injectable, NgModule } from '@angular/core';
 import { async, ComponentFixture, fakeAsync, TestBed, tick } from '@angular/core/testing';
 import { take } from 'rxjs/operators';
 import { DefaultConfig } from 'toppy/lib/config';
-import { DomHelper } from '../lib/helper/dom';
-import { EventBus } from '../lib/helper/event-bus';
 import { HostContainer } from '../lib/host-container';
 import { InsidePlacement } from '../lib/models';
 import { OverlayInstance } from '../lib/overlay-instance';
 import { GlobalPosition } from '../lib/position/global-position';
 import { ToppyRef } from '../lib/toppy-ref';
+import { _fire, destroyEvents, initE } from 'toppy/lib/utils';
 
 @Component({
   selector: 'lib-test-component',
@@ -27,11 +26,11 @@ export class TestModule {}
 
 @Injectable()
 export class ToppyRefMock extends ToppyRef {
-  constructor(_overlay: OverlayInstance, _host: HostContainer, _messenger: EventBus) {
+  constructor(_overlay: OverlayInstance, _host: HostContainer) {
     _overlay.setConfig({ ...DefaultConfig, closeOnEsc: true });
     _overlay.configure(new GlobalPosition({ placement: InsidePlacement.CENTER }), '');
     _host.configure({ content: TestComponent, contentType: 'COMPONENT', props: {} });
-    super(_overlay, _host, _messenger, { ...DefaultConfig, closeOnEsc: true }, 'xyzabc');
+    super(_overlay, _host, { ...DefaultConfig, closeOnEsc: true }, 'xyzabc');
   }
 }
 
@@ -48,19 +47,19 @@ describe('== Toppy ref ==', () => {
           provide: ToppyRef,
           useClass: ToppyRefMock
         },
-        DomHelper,
         OverlayInstance,
         HostContainer,
-        EventBus
       ]
     }).compileComponents();
     toppyRef = TestBed.get(ToppyRef);
     fixture = TestBed.createComponent(TestComponent);
+    initE();
     debugEl = fixture.debugElement;
   }));
 
   afterEach(function() {
     fixture.destroy();
+    destroyEvents();
     document.body.removeChild(fixture.debugElement.nativeElement);
   });
 
@@ -76,7 +75,7 @@ describe('== Toppy ref ==', () => {
         expect(res).toEqual({ name: 'TEST', data: 'HELLO' });
         done();
       });
-    (toppyRef as any)._eventBus.post({ name: 'TEST', data: 'HELLO' });
+    _fire({ name: 'TEST', data: 'HELLO' });
   });
   it('should return config on calling "getConfig" method', () => {
     expect(toppyRef.getConfig()).toEqual({ ...DefaultConfig, closeOnEsc: true });

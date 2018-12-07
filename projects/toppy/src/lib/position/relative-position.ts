@@ -1,5 +1,6 @@
 import { OutsidePlacement, PositionCoOrds } from '../models';
 import { Position } from './position';
+import { _fire } from '../utils';
 
 export interface Config {
   src?: HTMLElement;
@@ -185,7 +186,7 @@ export class RelativePosition extends Position {
     this._mutationObserver = new MutationObserver(mutationsList => {
       for (const mutation of mutationsList) {
         if (mutation.type === 'attributes') {
-          this.eventBus.post({ name: 'NEW_DYN_POS', data: null });
+          _fire({ name: 'NEW_DYN_POS', data: null });
         }
       }
     });

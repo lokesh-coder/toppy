@@ -1,12 +1,11 @@
 import { Injectable, OnDestroy, TemplateRef } from '@angular/core';
 import { DefaultConfig } from './config';
-import { EventBus } from './helper/event-bus';
 import { HostContainer } from './host-container';
 import { ComponentType, ToppyConfig } from './models';
 import { OverlayInstance } from './overlay-instance';
 import { Position } from './position/position';
 import { ToppyRef } from './toppy-ref';
-import { getContentMeta } from './utils';
+import { getContentMeta, destroyEvents } from './utils';
 
 @Injectable({
   providedIn: 'root'
@@ -19,7 +18,6 @@ export class Toppy implements OnDestroy {
   private _overlayFreshInstance: OverlayInstance;
 
   constructor(
-    private _eventBus: EventBus,
     private _overlayIns: OverlayInstance,
     private _hostContainer: HostContainer
   ) {}
@@ -48,7 +46,6 @@ export class Toppy implements OnDestroy {
     Toppy.toppyRefs[this._overlayID] = new ToppyRef(
       this._overlayFreshInstance,
       this._hostContainerFreshInstance,
-      this._eventBus,
       this._config,
       this._overlayID
     );
@@ -65,7 +62,7 @@ export class Toppy implements OnDestroy {
 
   ngOnDestroy() {
     Toppy.toppyRefs = {};
-    this._eventBus.destroy();
+    destroyEvents();
   }
 
   private _generateID(): string {

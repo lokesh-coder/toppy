@@ -32,7 +32,7 @@ describe('== Utils ==', () => {
   describe('on calling "getContentMeta" function', () => {
     it('should return as string type', () => {
       const result = getContentMeta('hello');
-      expect(result).toEqual({ content: 'hello' } as any);
+      expect(result).toEqual({ content: 'hello', props: {} } as any);
     });
     it('should return html type', () => {
       const result = getContentMeta('<div>Hello</div>', { hasHTML: true });

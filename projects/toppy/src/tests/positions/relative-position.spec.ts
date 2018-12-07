@@ -1,8 +1,8 @@
 /// <reference types="karma-viewport" />
 
-import { EventBus } from '../../lib/helper/event-bus';
 import { OutsidePlacement } from '../../lib/models';
 import { RelativePosition } from '../../lib/position';
+import { _on, destroyEvents, initE } from 'toppy/lib/utils';
 
 describe('== Relative position ==', () => {
   let targetElement: HTMLElement;
@@ -19,11 +19,13 @@ describe('== Relative position ==', () => {
     const textnode2 = document.createTextNode('Im host');
     hostElement.appendChild(textnode2);
     document.getElementsByTagName('body')[0].appendChild(hostElement);
+    initE();
     viewport.set(1000, 480);
   });
   afterEach(() => {
     document.getElementsByTagName('body')[0].removeChild(targetElement);
     document.getElementsByTagName('body')[0].removeChild(hostElement);
+    destroyEvents();
     viewport.set(1000, 480);
   });
 
@@ -126,18 +128,12 @@ describe('== Relative position ==', () => {
   });
   describe('on element position change', () => {
     let relPos;
-    let eventBus;
     beforeEach(() => {
       relPos = new RelativePosition({ src: targetElement, autoUpdate: true });
-      eventBus = new EventBus();
-      relPos.setEventBus(eventBus);
     });
 
-    it('should have eventBus', () => {
-      expect(relPos.eventBus).toBeTruthy();
-    });
     it('should emit proper event', done => {
-      eventBus.watch().subscribe(res => {
+      _on().subscribe(res => {
         expect(res).toEqual({ name: 'NEW_DYN_POS', data: null });
         done();
       });

@@ -1,11 +1,11 @@
 import { Component, NgModule, TemplateRef, ViewChild } from '@angular/core';
 import { async, fakeAsync, TestBed } from '@angular/core/testing';
 import { DefaultConfig } from '../lib/config';
-import { EventBus } from '../lib/helper/event-bus';
 import { HostContainer } from '../lib/host-container';
 import { OverlayInstance } from '../lib/overlay-instance';
 import { Toppy } from '../lib/toppy';
 import { ToppyRef } from '../lib/toppy-ref';
+import { destroyEvents } from 'toppy/lib/utils';
 
 @Component({
   selector: 'lib-template-ref-test-comp',
@@ -40,7 +40,6 @@ describe('== Toppy ==', () => {
   let templateRefCompFixture;
   let templateRefComp;
   let toppyRefMock;
-  let eventBus: EventBus;
   const config = DefaultConfig;
 
   beforeEach(() => {
@@ -54,13 +53,12 @@ describe('== Toppy ==', () => {
     TestBed.configureTestingModule({
       imports: [TemplateRefTestModule],
       declarations: [],
-      providers: [Toppy, OverlayInstance, HostContainer, EventBus]
+      providers: [Toppy, OverlayInstance, HostContainer]
     }).compileComponents();
 
     templateRefCompFixture = TestBed.createComponent(TemplateRefTestComponent);
     templateRefComp = templateRefCompFixture.componentInstance;
     toppy = TestBed.get(Toppy);
-    eventBus = TestBed.get(EventBus);
     componentHostMock = TestBed.get(HostContainer);
     overlayMock = TestBed.get(OverlayInstance);
 
@@ -70,6 +68,7 @@ describe('== Toppy ==', () => {
 
   afterEach(function() {
     templateRefCompFixture.destroy();
+    destroyEvents();
     document.body.removeChild(templateRefCompFixture.debugElement.nativeElement);
   });
 
@@ -122,7 +121,7 @@ describe('== Toppy ==', () => {
     it('should set string as input content', () => {
       const content = 'Hello';
       toppy.host(content);
-      expect(hostContainer.configure).toHaveBeenCalledWith({ content });
+      expect(hostContainer.configure).toHaveBeenCalledWith({ content, props: {} });
     });
     it('should set HTML string as input content', () => {
       const content = '<b>Hello</b>';
@@ -179,7 +178,7 @@ describe('== Toppy ==', () => {
     });
     it('should call `ToppyRef.close` method if it already exists', () => {
       (toppy as any)._overlayID = 'mmm';
-      const foo = (Toppy.toppyRefs['mmm'] = new ToppyRef(overlayMock, componentHostMock, eventBus, config, 'mmm'));
+      const foo = (Toppy.toppyRefs['mmm'] = new ToppyRef(overlayMock, componentHostMock, config, 'mmm'));
       spyOn(foo, 'close');
       const instance = toppy.create();
       expect(foo.close).toHaveBeenCalled();

@@ -1,11 +1,20 @@
 import { Injectable, OnDestroy } from '@angular/core';
 import { Subject } from 'rxjs';
-import { filter, map, takeUntil } from 'rxjs/operators';
-import { DomHelper } from './helper/dom';
-import { EventBus } from './helper/event-bus';
+import { filter, map, takeUntil, tap } from 'rxjs/operators';
 import { ToppyConfig } from './models';
 import { DefaultPosition } from './position';
 import { Position } from './position/position';
+import {
+  createElement,
+  insertChildren,
+  html,
+  _fire,
+  removeElement,
+  _on,
+  addClassNameToBody,
+  removeClassNameFromBody,
+  setPositions,
+  destroyEvents} from './utils';
 
 @Injectable({
   providedIn: 'root'
@@ -21,7 +30,7 @@ export class OverlayInstance implements OnDestroy {
   private _backdropEl: HTMLElement;
   private _alive: Subject<Boolean> = new Subject();
 
-  constructor(private _eventBus: EventBus, private _dom: DomHelper) {}
+  constructor() {}
 
   setConfig(config: ToppyConfig) {
     this.config = config;
@@ -47,7 +56,7 @@ export class OverlayInstance implements OnDestroy {
   }
 
   create() {
-    this._containerEl = this._dom.createElement('div', {
+    this._containerEl = createElement('div', {
       'data-overlay-id': this._overlayID,
       class: this.config.containerClass + ' ' + this._position.getClassName(),
       style: `left:0;position: fixed;top: 0;width: 100%;height: 100%;${
@@ -55,23 +64,22 @@ export class OverlayInstance implements OnDestroy {
       }`
     });
 
-    this._wrapperEl = this._dom.createElement('div', {
+    this._wrapperEl = createElement('div', {
       class: this.config.wrapperClass,
       style: 'position: absolute;visibility:hidden;opacity:0;transition:opacity 0.2s ease;overflow: hidden;'
     });
 
     if (this.config.backdrop) {
-      this._backdropEl = this._dom.createElement('div', {
+      this._backdropEl = createElement('div', {
         class: this.config.backdropClass,
         style: 'left:0;position: fixed;top: 0;width: 100%;height: 100%;background: rgba(0, 0, 0, 0.5);'
       });
-      this._dom.insertChildren(this._containerEl, this._backdropEl);
+      insertChildren(this._containerEl, this._backdropEl);
     }
 
     this._setPosition();
-    this._position.setEventBus(this._eventBus);
-    this._dom.insertChildren(this.config.parentElement || this._dom.html.BODY, this._containerEl, this._wrapperEl);
-    this._eventBus.post({ name: 'ATTACHED', data: null });
+    insertChildren(this.config.parentElement || html.BODY, this._containerEl, this._wrapperEl);
+    _fire({ name: 'ATTACHED', data: null });
     this._onNewComputedPosition();
     this._watchPositionChange();
     return this;
@@ -79,7 +87,7 @@ export class OverlayInstance implements OnDestroy {
 
   setView(view: HTMLElement): void {
     this._viewEl = view;
-    this._dom.insertChildren(this._wrapperEl, view);
+    insertChildren(this._wrapperEl, view);
   }
 
   isHostElement(element): boolean {
@@ -91,24 +99,24 @@ export class OverlayInstance implements OnDestroy {
   }
 
   getNewInstance() {
-    return new OverlayInstance(this._eventBus, this._dom);
+    return new OverlayInstance();
   }
 
   destroy(): void {
-    this._dom.removeElement(this._containerEl);
-    this._eventBus.post({ name: 'DETACHED', data: null });
+    removeElement(this._containerEl);
+    _fire({ name: 'DETACHED', data: null });
     this._cleanup();
   }
 
   updateOverlayClassInBody() {
-    this._eventBus.watch().subscribe(event => {
+    _on().subscribe(event => {
       if (!this.config || this.config.bodyClassNameOnOpen === '' || event.data !== this._overlayID) {
         return;
       }
       if (event.name === 'OPENED_OVERLAY_INS') {
-        this._dom.addClassNameToBody(this.config.bodyClassNameOnOpen);
+        addClassNameToBody(this.config.bodyClassNameOnOpen);
       } else if (event.name === 'REMOVED_OVERLAY_INS') {
-        this._dom.removeClassNameFromBody(this.config.bodyClassNameOnOpen);
+        removeClassNameFromBody(this.config.bodyClassNameOnOpen);
       }
     });
   }
@@ -124,20 +132,22 @@ export class OverlayInstance implements OnDestroy {
 
   private _setPosition(show = false): void {
     const coords = this._position.getPositions(this._wrapperEl);
-    this._dom.setPositions(this._wrapperEl, coords);
+    setPositions(this._wrapperEl, coords);
 
     if (show) {
       this._wrapperEl.style.visibility = 'visible';
       this._wrapperEl.style.opacity = '1';
     }
-    this._eventBus.post({ name: 'POSITION_UPDATED', data: null });
+    _fire({ name: 'POSITION_UPDATED', data: null });
   }
 
   private _watchPositionChange() {
-    this._eventBus
-      .watch()
+    _on()
       .pipe(
         filter(data => data.name === 'NEW_DYN_POS'),
+        tap(a => {
+          console.log('++++', a);
+        }),
         map(d => d.data),
         takeUntil(this._alive)
       )
@@ -145,7 +155,7 @@ export class OverlayInstance implements OnDestroy {
         if (!e) {
           return this._setPosition(true);
         }
-        this._dom.setPositions(this._wrapperEl, { left: e.x, top: e.y });
+        setPositions(this._wrapperEl, { left: e.x, top: e.y });
       });
   }
   private _onNewComputedPosition(): void {

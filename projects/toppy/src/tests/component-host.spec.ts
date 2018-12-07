@@ -106,9 +106,15 @@ describe('== ComponentHost ==', () => {
     const view = componentHost.attach();
     expect(view.textContent).toBe('QWERTY');
   });
-  it('should return template view on calling "createViewFromTemplate" method', () => {
+  it('should return template view on calling "createViewFromTemplate" method - without id', () => {
     const view = componentHost.createViewFromTemplate(mainComp.tpl);
     expect(view.rootNodes[0].textContent).toBe('Template content');
+    expect(view.context.$implicit).toEqual({ });
+  });
+  it('should return template view on calling "createViewFromTemplate" method - with id', () => {
+    const view = componentHost.createViewFromTemplate(mainComp.tpl, {id: 'abc'});
+    expect(view.rootNodes[0].textContent).toBe('Template content');
+    expect(view.context.$implicit._ref).toBeTruthy();
   });
   it('should return template view on calling "attach" method', () => {
     componentHost.configure({
@@ -122,5 +128,14 @@ describe('== ComponentHost ==', () => {
     componentHost.createViewFromComponent(HostComponent, { id: 123 });
     expect(componentHost.getCompIns() instanceof HostComponent).toBeTruthy();
     expect((componentHost as any)._compIns.currentOverlay._ref instanceof ToppyRefMock).toBeTruthy();
+  });
+  it('should reset content meta on calling "reset" method', () => {
+    componentHost.configure({
+      content: 'QWERTY',
+      contentType: 'STRING'
+    });
+    expect((componentHost as any)._content).toBe('QWERTY');
+    componentHost.reset();
+    expect((componentHost as any)._content).toBe(null);
   });
 });

@@ -1,12 +1,12 @@
-### Introduction
+### Introduction 
 
-**`Step 1:`** You can install through [npm](https://www.npmjs.com/package/toppy) or [yarn](https://yarnpkg.com/en/package/toppy)
+**`Step 1:`** You can install through [npm](https://www.npmjs.com/package/toppy) or [yarn](https://yarnpkg.com/en/package/toppy) package managers
 
-```powershell
+```sh
 npm install toppy --save
 ```
 
-```powershell
+```sh
 yarn add toppy
 ```
 
