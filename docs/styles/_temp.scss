@@ -149,3 +149,16 @@ ul.horizontal-list {
     width: 25px;
   }
 }
+
+.ribbon {
+  background: clr('primary');
+  padding: 1rem;
+  display: flex;
+  align-items: center;
+  /* justify-content: space-around; */
+  width: 100%;
+  color: #fff;
+  p {
+    padding: 0 10px;
+  }
+}

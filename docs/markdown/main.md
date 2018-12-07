@@ -1,4 +1,4 @@
-### Introduction 
+### Introduction
 
 **`Step 1:`** You can install through [npm](https://www.npmjs.com/package/toppy) or [yarn](https://yarnpkg.com/en/package/toppy) package managers
 
@@ -222,6 +222,12 @@ Simple modal example shows center aligned templateRef content.
 Custom dropdown example
 
 <app-dropdown-example></app-dropdown-example>
+
+##### 5. Global Ribbon
+
+Footer ribbon example
+
+<app-ribbon-example></app-ribbon-example>
 
 ### Configuration
 

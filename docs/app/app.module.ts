@@ -12,6 +12,7 @@ import { FullscreenPositionExampleComponent } from './examples/fullscreen-positi
 import { GlobalPositionExampleComponent } from './examples/global-position-example/global-position-example.component';
 import { ModalExampleComponent } from './examples/modal-example/modal-example.component';
 import { RelativePositionExampleComponent } from './examples/relative-position-example/relative-position-example.component';
+import { RibbonExampleComponent } from './examples/ribbon-example/ribbon-example.component';
 import { SlidePositionExampleComponent } from './examples/slide-position-example/slide-position-example.component';
 import { HeroScreenComponent } from './host-components/hero-screen/hero-screen.component';
 import { SimpleListComponent } from './host-components/simple-list/simple-list.component';
@@ -42,7 +43,8 @@ import { SubSectionComponent } from './utils/sub-section/sub-section.component';
     ModalExampleComponent,
     ContentComponent,
     DynamicTextExampleComponent,
-    DropdownExampleComponent
+    DropdownExampleComponent,
+    RibbonExampleComponent
   ],
   imports: [BrowserModule, FormsModule, HttpClientModule, MarkdownModule.forRoot({ loader: HttpClient }), ToppyModule],
   providers: [],

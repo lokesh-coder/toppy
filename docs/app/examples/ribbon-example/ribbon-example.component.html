@@ -1,0 +1,16 @@
+<div class="btn btn-primary" (click)="open()"><i class="toppy-icon icon-alert-triangle"></i> Open ribbon</div>
+
+<ng-template #tpl let-toppy>
+  <div class="ribbon">
+    <div class="container">
+      <div class="col-md-8 m-auto d-flex align-items-center">
+        <p>
+          Lorem ipsum dolor sit amet consectetur adipisicing elit. Consectetur natus, esse amet nisi laboriosam omnis
+          tenetur accusantium vero at totam ducimus itaque soluta adipisci mollitia expedita dolores quaerat ratione
+          iure?
+        </p>
+        <button class="btn btn-secondary text-white" (click)="toppy.close()">Close</button>
+      </div>
+    </div>
+  </div>
+</ng-template>
