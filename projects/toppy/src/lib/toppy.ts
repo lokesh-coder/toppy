@@ -1,63 +1,73 @@
-import { Injectable, OnDestroy, TemplateRef } from '@angular/core';
+import { ApplicationRef, ComponentFactoryResolver, Injectable, Injector, OnDestroy } from '@angular/core';
 import { DefaultConfig } from './config';
-import { HostContainer } from './host-container';
-import { ComponentType, ToppyConfig } from './models';
-import { OverlayInstance } from './overlay-instance';
+import { HostContentValue, InsidePlacement, ToppyConfig } from './models';
+import { GlobalPosition } from './position';
 import { Position } from './position/position';
-import { ToppyRef } from './toppy-ref';
-import { getContentMeta, destroyEvents } from './utils';
+import { ToppyControl } from './toppy-control';
+import { destroyEvents, getContentMeta } from './utils';
 
 @Injectable({
   providedIn: 'root'
 })
 export class Toppy implements OnDestroy {
-  static toppyRefs: { [key: string]: ToppyRef } = {};
-  private _overlayID: string;
-  private _config: ToppyConfig;
-  private _hostContainerFreshInstance: HostContainer;
-  private _overlayFreshInstance: OverlayInstance;
+  static toppyRefs: { [key: string]: ToppyControl } = {};
+  private tid: string;
+  private _essentials = {
+    position: null,
+    config: null,
+    content: null,
+    tid: null
+  };
 
-  constructor(
-    private _overlayIns: OverlayInstance,
-    private _hostContainer: HostContainer
-  ) {}
+  constructor(private injector: Injector) {
+    this._essentials.config = DefaultConfig;
+    this._essentials.position = new GlobalPosition({ placement: InsidePlacement.TOP });
+  }
 
-  overlay(position: Position, config: Partial<ToppyConfig> = {}): Toppy {
-    this._hostContainerFreshInstance = this._hostContainer.getNewInstance();
-    this._overlayFreshInstance = this._overlayIns.getNewInstance();
-    this._config = { ...DefaultConfig, ...config };
-    this._overlayID = this._generateID();
-    this._overlayFreshInstance.setConfig(this._config).configure(position, this._overlayID);
-    this._hostContainerFreshInstance.toppyRef = this.getToppyRef.bind(this);
+  position(position: Position) {
+    this._essentials.position = position;
     return this;
   }
 
-  host(content: string | TemplateRef<any> | ComponentType<any>, props: { [x: string]: any } = {}) {
-    const data = getContentMeta(content, props, this._overlayID);
-    this._hostContainerFreshInstance.configure(data);
+  config(config: Partial<ToppyConfig>) {
+    this._essentials.config = { ...DefaultConfig, ...config };
     return this;
   }
 
-  create(): ToppyRef {
-    if (Toppy.toppyRefs[this._overlayID]) {
-      Toppy.toppyRefs[this._overlayID].close();
-      delete Toppy.toppyRefs[this._overlayID];
+  content(data: HostContentValue, props: { [x: string]: any } = {}) {
+    this.tid = this._essentials.tid = this._generateID();
+    this._essentials.content = getContentMeta(data, { ...props, id: this.tid });
+    return this;
+  }
+
+  execute() {
+    if (!this._essentials.content) {
+      this.content('hello');
     }
-    Toppy.toppyRefs[this._overlayID] = new ToppyRef(
-      this._overlayFreshInstance,
-      this._hostContainerFreshInstance,
-      this._config,
-      this._overlayID
+    const injector = Injector.create(
+      [
+        {
+          provide: ToppyControl,
+          deps: [ApplicationRef, ComponentFactoryResolver, Injector]
+        }
+      ],
+      this.injector
     );
-    return Toppy.toppyRefs[this._overlayID];
+    const tc = injector.get(ToppyControl);
+    if (Toppy.toppyRefs[this.tid]) {
+      Toppy.toppyRefs[this.tid].close();
+      delete Toppy.toppyRefs[this.tid];
+    }
+    Toppy.toppyRefs[this.tid] = Object.assign(tc, this._essentials);
+    return tc;
   }
 
-  delete(overlyID) {
-    delete Toppy.toppyRefs[overlyID];
+  delete(tid) {
+    delete Toppy.toppyRefs[tid];
   }
 
-  getToppyRef(id) {
-    return Toppy.toppyRefs[id];
+  getToppyRef(tid) {
+    return Toppy.toppyRefs[tid];
   }
 
   ngOnDestroy() {

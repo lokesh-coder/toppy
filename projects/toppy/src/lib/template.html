@@ -1,0 +1,15 @@
+<div class="t-backdrop" *ngIf="config.backdrop"></div>
+<div class="t-wrapper" [ngClass]="config.wrapperClass" #wrapperEl>
+  <ng-container [ngSwitch]="content.type">
+    <ng-container *ngSwitchCase="'s'">
+      <div [class]="content.props.class">{{ content.data }}</div>
+    </ng-container>
+    <ng-container *ngSwitchCase="'h'"> <div [innerHTML]="content.data"></div> </ng-container>
+    <ng-container *ngSwitchCase="'t'">
+      <ng-container *ngTemplateOutlet="content.data; context: { $implicit: content.props }"></ng-container>
+    </ng-container>
+    <ng-container *ngSwitchCase="'c'">
+      <ng-container *ngComponentOutlet="content.data; injector: createInj()"></ng-container>
+    </ng-container>
+  </ng-container>
+</div>

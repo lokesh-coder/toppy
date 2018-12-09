@@ -1,0 +1,28 @@
+:host {
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  &.no-pointers {
+    pointer-events: all;
+  }
+  .t-backdrop {
+    left: 0;
+    position: fixed;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(0, 0, 0, 0.5);
+    // pointer-events: none;
+  }
+  > div.t-wrapper {
+    position: absolute;
+    visibility: hidden;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    overflow: hidden;
+    pointer-events: all;
+  }
+}

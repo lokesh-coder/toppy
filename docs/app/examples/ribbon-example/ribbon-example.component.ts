@@ -1,6 +1,6 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { InsidePlacement } from '../../../../projects/toppy/src/lib/models';
-import { GlobalPosition, Toppy, ToppyRef } from '../../../../projects/toppy/src/public_api';
+import { GlobalPosition, Toppy, ToppyControl } from '../../../../projects/toppy/src/public_api';
 
 @Component({
   selector: 'app-ribbon-example',
@@ -8,29 +8,29 @@ import { GlobalPosition, Toppy, ToppyRef } from '../../../../projects/toppy/src/
   styleUrls: ['./ribbon-example.component.scss']
 })
 export class RibbonExampleComponent implements OnInit {
-  private _toppyRef: ToppyRef;
+  private _toppyControl: ToppyControl;
   @ViewChild('tpl', { read: TemplateRef }) tpl: TemplateRef<any>;
   constructor(private toppy: Toppy) {}
 
   ngOnInit() {
-    this._toppyRef = this.toppy
-      .overlay(
+    this._toppyControl = this.toppy
+      .position(
         new GlobalPosition({
           placement: InsidePlacement.BOTTOM,
           hostWidth: '100%',
           hostHeight: 'auto'
-        }),
-        {
-          dismissOnDocumentClick: false
-        }
+        })
       )
-      .host(this.tpl)
-      .create();
+      .config({
+        dismissOnDocumentClick: false
+      })
+      .content(this.tpl)
+      .execute();
   }
   open() {
-    this._toppyRef.open();
+    this._toppyControl.open();
   }
   close() {
-    this._toppyRef.close();
+    this._toppyControl.close();
   }
 }

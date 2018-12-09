@@ -1,6 +1,6 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { OutsidePlacement } from '../../../../projects/toppy/src/lib/models';
-import { RelativePosition, Toppy, ToppyRef } from '../../../../projects/toppy/src/public_api';
+import { RelativePosition, Toppy, ToppyControl } from '../../../../projects/toppy/src/public_api';
 
 @Component({
   selector: 'app-dropdown-example',
@@ -10,8 +10,8 @@ import { RelativePosition, Toppy, ToppyRef } from '../../../../projects/toppy/sr
 export class DropdownExampleComponent implements OnInit {
   @ViewChild('el') el: ElementRef;
   @ViewChild('el2') el2: ElementRef;
-  private _toppyRef: ToppyRef;
-  private _toppyRef2: ToppyRef;
+  private _toppyControl: ToppyControl;
+  private _toppyControl2: ToppyControl;
   @ViewChild('tpl', { read: TemplateRef }) tpl: TemplateRef<any>;
   @ViewChild('tpl2', { read: TemplateRef }) tpl2: TemplateRef<any>;
   items = [
@@ -35,55 +35,54 @@ export class DropdownExampleComponent implements OnInit {
   }
 
   ngOnInit() {
-    this._toppyRef = this.toppy
-      .overlay(
+    this._toppyControl = this.toppy
+      .position(
         new RelativePosition({
           placement: OutsidePlacement.BOTTOM,
           src: this.el.nativeElement,
           hostWidth: '100%',
           autoUpdate: true
-        }),
-        {
-          isHover: false,
-          docClickCallback: () => {
-            this.isOpen = false;
-          }
-        }
+        })
       )
-      .host(this.tpl)
-      .create();
+      .config({
+        docClickCallback: () => {
+          this.isOpen = false;
+        }
+      })
+      .content(this.tpl)
+      .execute();
 
-    this._toppyRef2 = this.toppy
-      .overlay(
+    this._toppyControl2 = this.toppy
+      .position(
         new RelativePosition({
           placement: OutsidePlacement.TOP,
           src: this.el2.nativeElement,
           hostWidth: 'auto',
           autoUpdate: true
-        }),
-        {
-          docClickCallback: () => {
-            this.isOpen = false;
-          }
-        }
+        })
       )
-      .host(this.tpl2)
-      .create();
+      .config({
+        docClickCallback: () => {
+          this.isOpen = false;
+        }
+      })
+      .content(this.tpl2)
+      .execute();
   }
 
   open() {
     this.isOpen = true;
-    this._toppyRef.open();
+    this._toppyControl.open();
   }
   open2() {
-    this._toppyRef2.open();
+    this._toppyControl2.open();
   }
   close() {
     this.isOpen = false;
-    this._toppyRef.close();
+    this._toppyControl.close();
   }
   close2() {
-    this._toppyRef2.close();
+    this._toppyControl2.close();
   }
   select(item) {
     this.selectedData = item;

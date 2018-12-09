@@ -1,5 +1,5 @@
 import { Component, OnInit, TemplateRef, ViewChild } from '@angular/core';
-import { GlobalPosition, InsidePlacement, Toppy, ToppyRef } from 'toppy';
+import { GlobalPosition, InsidePlacement, Toppy, ToppyControl } from 'toppy';
 
 @Component({
   selector: 'app-modal-example',
@@ -7,47 +7,47 @@ import { GlobalPosition, InsidePlacement, Toppy, ToppyRef } from 'toppy';
   styleUrls: ['./modal-example.component.scss']
 })
 export class ModalExampleComponent implements OnInit {
-  _toppyRef: ToppyRef;
-  _toppyRef2: ToppyRef;
+  _toppyControl: ToppyControl;
+  _toppyControl2: ToppyControl;
   @ViewChild('modalTpl', { read: TemplateRef }) modalTpl: TemplateRef<any>;
 
   constructor(private toppy: Toppy) {}
 
   ngOnInit() {
-    this._toppyRef = this.toppy
-      .overlay(
+    this._toppyControl = this.toppy
+      .position(
         new GlobalPosition({
           placement: InsidePlacement.CENTER,
           hostWidth: '40%',
           hostHeight: 'auto'
-        }),
-        {
-          backdrop: true,
-          dismissOnDocumentClick: false,
-          closeOnEsc: true
-        }
+        })
       )
-      .host(this.modalTpl)
-      .create();
+      .config({
+        backdrop: true,
+        dismissOnDocumentClick: false,
+        closeOnEsc: true
+      })
+      .content(this.modalTpl)
+      .execute();
 
-    this._toppyRef2 = this.toppy
-      .overlay(
+    this._toppyControl2 = this.toppy
+      .position(
         new GlobalPosition({
           placement: InsidePlacement.CENTER,
           hostWidth: '25%',
           hostHeight: 'auto'
-        }),
-        {
-          closeOnEsc: true
-        }
+        })
       )
-      .host('<img src="./assets/svg/giraffe.svg"/>', { hasHTML: true })
-      .create();
+      .config({
+        closeOnEsc: true
+      })
+      .content('<img src="./assets/svg/giraffe.svg"/>', { hasHTML: true })
+      .execute();
   }
   open() {
-    this._toppyRef.open();
+    this._toppyControl.open();
   }
   openImage() {
-    this._toppyRef2.open();
+    this._toppyControl2.open();
   }
 }

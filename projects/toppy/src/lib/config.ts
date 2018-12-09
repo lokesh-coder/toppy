@@ -2,16 +2,15 @@ import { ToppyConfig } from './models';
 
 export const DefaultConfig: ToppyConfig = {
   backdrop: false,
-  containerClass: 'toppy-container',
-  wrapperClass: 'toppy-wrapper',
-  backdropClass: 'toppy-backdrop',
-  dismissOnDocumentClick: true,
+  containerClass: 't-container',
+  wrapperClass: 't-wrapper',
+  backdropClass: 't-backdrop',
+  dismissOnDocumentClick: false,
   parentElement: null,
   watchDocClick: true,
   watchWindowResize: true,
-  bodyClassNameOnOpen: '',
+  bodyClassNameOnOpen: 't-open',
   closeOnEsc: false,
-  isHover: false,
   windowResizeCallback: () => {},
   docClickCallback: () => {}
 };

@@ -62,7 +62,6 @@ export interface ToppyConfig {
   dismissOnDocumentClick: boolean;
   bodyClassNameOnOpen: string;
   closeOnEsc: boolean;
-  isHover: boolean;
   parentElement: HTMLElement | null;
   windowResizeCallback: () => void;
   docClickCallback: () => void;
@@ -74,14 +73,21 @@ export interface ComponentType<T> {
 
 export interface ToppyEvent {
   name: string;
-  data: any;
+  data?: any;
 }
 
 export type HostContentValue = TemplateRef<any> | string | ComponentType<any>;
 
-export type HostContentType = 'STRING' | 'HTMLSTRING' | 'TEMPLATEREF' | 'COMPONENT';
+export const enum ContentType {
+  STRING = 's',
+  HTML = 'h',
+  TEMPLATE = 't',
+  COMPONENT = 'c'
+}
+
+export type ContentProps = { [x: string]: string } | any;
 export interface HostArgs {
-  contentType?: HostContentType;
-  content: HostContentValue;
-  props?: { [key: string]: any };
+  type?: ContentType;
+  data: HostContentValue;
+  props?: ContentProps;
 }

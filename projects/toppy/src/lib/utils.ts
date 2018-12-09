@@ -1,80 +1,40 @@
 import { TemplateRef } from '@angular/core';
-import { ComponentType, HostArgs, ToppyEvent, ContainerSize } from './models';
-import { Subject, Observable } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
+import { ComponentType, ContentType, HostArgs, ToppyEvent } from './models';
 
 export function getContentMeta(
-  content: string | TemplateRef<any> | ComponentType<any>,
-  props: { [x: string]: any } = {},
-  overlayID = ''
-) {
-  let data: HostArgs;
+  data: string | TemplateRef<any> | ComponentType<any>,
+  props: { [x: string]: any } = {}
+): HostArgs {
+  let type: ContentType = ContentType.COMPONENT;
 
-  if (typeof content === 'string' && props['hasHTML']) {
-    data = { content, contentType: 'STRING', props };
-  } else if (typeof content === 'string') {
-    data = { content, props };
-  } else if (content instanceof TemplateRef) {
-    data = { content, contentType: 'TEMPLATEREF', props: { id: overlayID } };
-  } else {
-    data = {
-      content,
-      props: { ...props, id: overlayID },
-      contentType: 'COMPONENT'
-    };
+  if (typeof data === 'string' && props['hasHTML']) {
+    type = ContentType.HTML;
+  } else if (typeof data === 'string') {
+    type = ContentType.STRING;
+  } else if (data instanceof TemplateRef) {
+    type = ContentType.TEMPLATE;
   }
-  return data;
+  return {
+    data,
+    type,
+    props
+  };
 }
-
 
 /* html dom utils */
-
-export const html = {
-  BODY: document.getElementsByTagName('body')[0]
-};
-
-export function createElement(elementName: string, attr = {}): HTMLElement {
-  const element = document.createElement(elementName);
-  Object.keys(attr).forEach(name => element.setAttribute(name, attr[name]));
-  return element;
-}
-
-export function insertChildren(parentElement: HTMLElement, ...childElements: HTMLElement[]): HTMLElement {
-  let prevParent = parentElement;
-  childElements.forEach(elem => {
-    prevParent = prevParent.appendChild(elem);
-  });
-  return prevParent;
-}
-
-export function setHtml(parentElement: HTMLElement, childElement: any): HTMLElement {
-  parentElement.innerHTML = childElement;
-  return parentElement;
-}
-
-export function setPositions(element: HTMLElement, positions: object) {
-  Object.keys(positions).forEach(prop => {
-    element.style[prop] = typeof positions[prop] === 'number' ? `${positions[prop]}px` : positions[prop];
-  });
-}
-
-export function applySize(element: HTMLElement, size: ContainerSize) {
-  const { width, height } = size;
-  Object.keys(size).forEach(attr => {
-    return (element.style[attr] = size[attr]);
-  });
-}
-
-export function removeElement(element: HTMLElement) {
-  if (element && element.parentNode) {
-    element.parentNode.removeChild(element);
-  }
-}
 
 export function addClassNameToBody(className: string) {
   document.querySelector('body').classList.add(className);
 }
 export function removeClassNameFromBody(className: string) {
   document.querySelector('body').classList.remove(className);
+}
+
+export function toCss(styleObj) {
+  return Object.keys(styleObj)
+    .map(x => (typeof styleObj[x] === 'number' ? `${x}:${styleObj[x]}px` : `${x}:${styleObj[x]}`))
+    .join(';');
 }
 
 /* events */
@@ -96,4 +56,3 @@ export function destroyEvents(): void {
 export function initE(): void {
   _e = new Subject();
 }
-

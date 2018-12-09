@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
-import { OutsidePlacement, RelativePosition, Toppy, ToppyRef } from 'toppy';
+import { OutsidePlacement, RelativePosition, Toppy } from 'toppy';
+import { ToppyControl } from '../../../../projects/toppy/src/lib/toppy-control';
 
 @Component({
   selector: 'app-relative-position-example',
@@ -28,55 +29,50 @@ export class RelativePositionExampleComponent implements OnInit {
     { name: 'Top right', value: OutsidePlacement.TOP_RIGHT }
   ];
   selectedPlacement = this.placements[0].value;
-  private _toppyRef: ToppyRef;
+  private _toppyControl: ToppyControl;
   destroy$ = new Subject();
   constructor(private toppy: Toppy) {}
 
   ngOnInit() {
-    this._toppyRef = this.toppy
-      .overlay(
+    this._toppyControl = this.toppy
+      .position(
         new RelativePosition({
           placement: this.selectedPlacement,
           src: this.targetEl.nativeElement,
           hostWidth: 'auto',
           autoUpdate: true
-        }),
-        {
-          backdrop: false,
-          dismissOnDocumentClick: false,
-          isHover: true
-        }
+        })
       )
-      .host(this.content)
-      // .textContent('lokesh__')
-      // .htmlContent(`Hello <b>Lokesh</b>!`)
-      .create();
-    // this._toppyRef
-    //   .events()
-    //   .pipe(takeUntil(this.destroy$))
-    //   .subscribe(a => {
-    //     console.log('events=>', a);
-    //   });
+      // .config({
+      //   backdrop: false,
+      //   dismissOnDocumentClick: false,
+      //   isHover: true
+      // })
+      .content(this.content)
+      .execute();
   }
 
   ngAfterViewInit() {}
 
   onOptionChange() {
     // this.destroy$.next('');
-    this._toppyRef.updatePosition({
+    this._toppyControl.updatePosition({
       placement: this.selectedPlacement
     });
   }
   onMouseOver() {
     // console.log('aaaa');
-    // console.log('relative config', this._toppyRef.getConfig());
-    this._toppyRef.open();
+    // console.log('relative config', this._toppyControl.getConfig());
+    this._toppyControl.open();
+    setTimeout(() => {
+      // this._toppyControl.updateTextContent.next('yoyoybaby');
+    }, 100);
   }
   onMouseLeave() {
     // console.log('leave');
     // this.destroy$.next('');
-    // if (this._toppyRef) {
-    this._toppyRef.close();
+    // if (this._toppyControl) {
+    this._toppyControl.close();
     // }
   }
 }
