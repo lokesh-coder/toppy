@@ -28,7 +28,7 @@ export class DragExampleComponent implements OnInit {
         })
       )
       .content('Drag me', { class: 'tooltip' })
-      .execute();
+      .create();
   }
 
   ngAfterViewInit() {

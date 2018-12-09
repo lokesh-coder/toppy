@@ -19,7 +19,7 @@ export class FullscreenPositionExampleComponent implements OnInit {
         closeOnEsc: true
       })
       .content(HeroScreenComponent)
-      .execute();
+      .create();
   }
 
   open() {

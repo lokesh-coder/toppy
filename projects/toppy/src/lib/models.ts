@@ -76,18 +76,17 @@ export interface ToppyEvent {
   data?: any;
 }
 
-export type HostContentValue = TemplateRef<any> | string | ComponentType<any>;
-
 export const enum ContentType {
   STRING = 's',
   HTML = 'h',
   TEMPLATE = 't',
   COMPONENT = 'c'
 }
+export type ContentData = string | TemplateRef<any> | ComponentType<any>;
+export type ContentProps = { [x: string]: any } | any;
 
-export type ContentProps = { [x: string]: string } | any;
-export interface HostArgs {
+export interface Content {
   type?: ContentType;
-  data: HostContentValue;
+  data: ContentData;
   props?: ContentProps;
 }

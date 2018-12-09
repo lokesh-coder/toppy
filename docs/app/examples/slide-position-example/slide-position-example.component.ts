@@ -28,7 +28,7 @@ export class SlidePositionExampleComponent implements OnInit {
         dismissOnDocumentClick: true
       })
       .content(SimpleListComponent)
-      .execute();
+      .create();
     this._toppyControl.open();
   }
 

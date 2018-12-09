@@ -50,7 +50,7 @@ export class DropdownExampleComponent implements OnInit {
         }
       })
       .content(this.tpl)
-      .execute();
+      .create();
 
     this._toppyControl2 = this.toppy
       .position(
@@ -67,7 +67,7 @@ export class DropdownExampleComponent implements OnInit {
         }
       })
       .content(this.tpl2)
-      .execute();
+      .create();
   }
 
   open() {

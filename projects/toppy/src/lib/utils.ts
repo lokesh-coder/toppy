@@ -1,34 +1,27 @@
 import { TemplateRef } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
-import { ComponentType, ContentType, HostArgs, ToppyEvent } from './models';
+import { Content, ContentData, ContentProps, ContentType, ToppyEvent } from './models';
 
-export function getContentMeta(
-  data: string | TemplateRef<any> | ComponentType<any>,
-  props: { [x: string]: any } = {}
-): HostArgs {
+export function getContent(data: ContentData, props: ContentProps = {}): Content {
   let type: ContentType = ContentType.COMPONENT;
 
-  if (typeof data === 'string' && props['hasHTML']) {
-    type = ContentType.HTML;
-  } else if (typeof data === 'string') {
-    type = ContentType.STRING;
-  } else if (data instanceof TemplateRef) {
-    type = ContentType.TEMPLATE;
-  }
-  return {
-    data,
-    type,
-    props
-  };
+  if (typeof data === 'string' && props['hasHTML']) type = ContentType.HTML;
+  else if (typeof data === 'string') type = ContentType.STRING;
+  else if (data instanceof TemplateRef) type = ContentType.TEMPLATE;
+
+  return { data, type, props };
+}
+
+export function createId() {
+  return Math.random()
+    .toString(36)
+    .substr(2, 5);
 }
 
 /* html dom utils */
 
-export function addClassNameToBody(className: string) {
-  document.querySelector('body').classList.add(className);
-}
-export function removeClassNameFromBody(className: string) {
-  document.querySelector('body').classList.remove(className);
+export function cssClass(method: 'add' | 'remove', className: string, target: string = 'body') {
+  document.querySelector(target).classList.add(className);
 }
 
 export function toCss(styleObj) {
@@ -49,7 +42,7 @@ export function _on(): Observable<any> {
   return _e.asObservable();
 }
 
-export function destroyEvents(): void {
+export function _off(): void {
   _e.complete();
 }
 

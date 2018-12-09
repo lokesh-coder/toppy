@@ -49,7 +49,7 @@ export class RelativePositionExampleComponent implements OnInit {
       //   isHover: true
       // })
       .content(this.content)
-      .execute();
+      .create();
   }
 
   ngAfterViewInit() {}

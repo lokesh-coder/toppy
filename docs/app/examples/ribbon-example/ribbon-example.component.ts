@@ -25,7 +25,7 @@ export class RibbonExampleComponent implements OnInit {
         dismissOnDocumentClick: false
       })
       .content(this.tpl)
-      .execute();
+      .create();
   }
   open() {
     this._toppyControl.open();

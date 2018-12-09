@@ -28,7 +28,7 @@ export class ModalExampleComponent implements OnInit {
         closeOnEsc: true
       })
       .content(this.modalTpl)
-      .execute();
+      .create();
 
     this._toppyControl2 = this.toppy
       .position(
@@ -42,7 +42,7 @@ export class ModalExampleComponent implements OnInit {
         closeOnEsc: true
       })
       .content('<img src="./assets/svg/giraffe.svg"/>', { hasHTML: true })
-      .execute();
+      .create();
   }
   open() {
     this._toppyControl.open();

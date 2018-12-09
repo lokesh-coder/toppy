@@ -51,7 +51,7 @@ export class GlobalPositionExampleComponent implements OnInit {
         bodyClassNameOnOpen: 'global-toastr'
       })
       .content(SimpleModalComponent)
-      .execute();
+      .create();
   }
 
   open() {

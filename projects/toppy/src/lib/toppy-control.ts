@@ -8,15 +8,15 @@ import {
 } from '@angular/core';
 import { animationFrameScheduler, fromEvent, merge as mergeObs, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, observeOn, skipWhile, takeUntil, tap } from 'rxjs/operators';
-import { HostArgs, ToppyConfig } from './models';
+import { Content, ToppyConfig } from './models';
 import { Position } from './position/position';
 import { ToppyComponent } from './toppy.component';
-import { getContentMeta, _fire } from './utils';
+import { getContent, _fire } from './utils';
 
 export class ToppyControl {
   position: Position;
   config: ToppyConfig;
-  content: HostArgs;
+  content: Content;
   tid: string;
   comp: ToppyComponent;
   private _viewEl: HTMLElement;
@@ -111,7 +111,7 @@ export class ToppyControl {
   }
 
   updateHost(content, props = {}) {
-    this.content = getContentMeta(content, { ...this.content.props, ...props });
+    this.content = getContent(content, { ...this.content.props, ...props });
     return this;
   }
 

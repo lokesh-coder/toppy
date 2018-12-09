@@ -13,9 +13,9 @@ import {
 import { Subject } from 'rxjs';
 import { filter, map, takeUntil } from 'rxjs/operators';
 import { CurrentOverlay } from './current-overlay';
-import { ContentType, HostArgs, ToppyConfig } from './models';
+import { Content, ContentType, ToppyConfig } from './models';
 import { Position } from './position/position';
-import { addClassNameToBody, removeClassNameFromBody, toCss, _fire, _on } from './utils';
+import { cssClass, toCss, _fire, _on } from './utils';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -25,7 +25,7 @@ import { addClassNameToBody, removeClassNameFromBody, toCss, _fire, _on } from '
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
-  content: HostArgs = {
+  content: Content = {
     type: ContentType.STRING,
     data: '',
     props: {}
@@ -49,7 +49,7 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
     if (this.config.dismissOnDocumentClick) {
       this.className += ' no-pointers';
     }
-    addClassNameToBody(this.config.bodyClassNameOnOpen);
+    cssClass('add', this.config.bodyClassNameOnOpen);
     this._applyCoords();
   }
 
@@ -79,7 +79,7 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy() {
-    removeClassNameFromBody(this.config.bodyClassNameOnOpen);
+    cssClass('remove', this.config.bodyClassNameOnOpen);
     _fire({ name: 'DETACHED', data: null });
     this._alive.next(false);
   }

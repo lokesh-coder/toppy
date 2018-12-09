@@ -43,7 +43,7 @@ export class DynamicTextExampleComponent implements OnInit {
         })
       )
       .content(this.formatedTime(), { class: 'tooltip' })
-      .execute();
+      .create();
   }
 
   onMouseOver() {
