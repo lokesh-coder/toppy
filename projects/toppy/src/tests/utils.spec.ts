@@ -29,7 +29,7 @@ describe('== Utils ==', () => {
     document.body.removeChild(fixture.debugElement.nativeElement);
   });
 
-  describe('on calling "getContentMeta" function', () => {
+  describe('on calling "getContent" function', () => {
     it('should return as string type', () => {
       const result = getContent('hello');
       expect(result).toEqual({ content: 'hello', props: {} } as any);

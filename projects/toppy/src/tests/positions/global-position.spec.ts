@@ -2,7 +2,6 @@
 
 import { InsidePlacement } from '../../lib/models';
 import { GlobalPosition } from '../../lib/position';
-import { destroyEvents } from 'toppy/lib/utils';
 
 describe('== Global position ==', () => {
   let targetElement: HTMLElement;
@@ -29,7 +28,6 @@ describe('== Global position ==', () => {
   afterEach(() => {
     document.getElementsByTagName('body')[0].removeChild(targetElement);
     document.getElementsByTagName('body')[0].removeChild(hostElement);
-    destroyEvents();
     viewport.set(1000, 480);
   });
 

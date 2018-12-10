@@ -41,9 +41,8 @@ export class Toppy implements OnDestroy {
   }
 
   create(): ToppyControl {
-    if (!this._inputs.content) {
-      this.content('hello');
-    }
+    if (!this._inputs.content) this.content('hello');
+
     this._inputs.position.init(this._tid);
     const injector = newInjector(
       {

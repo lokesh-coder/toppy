@@ -2,7 +2,7 @@
 
 import { OutsidePlacement } from '../../lib/models';
 import { RelativePosition } from '../../lib/position';
-import { _on, destroyEvents, initE } from 'toppy/lib/utils';
+import { Bus } from 'toppy/lib/utils';
 
 describe('== Relative position ==', () => {
   let targetElement: HTMLElement;
@@ -19,13 +19,11 @@ describe('== Relative position ==', () => {
     const textnode2 = document.createTextNode('Im host');
     hostElement.appendChild(textnode2);
     document.getElementsByTagName('body')[0].appendChild(hostElement);
-    initE();
     viewport.set(1000, 480);
   });
   afterEach(() => {
     document.getElementsByTagName('body')[0].removeChild(targetElement);
     document.getElementsByTagName('body')[0].removeChild(hostElement);
-    destroyEvents();
     viewport.set(1000, 480);
   });
 
@@ -47,20 +45,7 @@ describe('== Relative position ==', () => {
     const relPos = new RelativePosition({});
     expect(relPos.getClassName()).toBe('relative-position');
   });
-  it('should return offset size of element', () => {
-    const relPos = new RelativePosition({});
-    expect((relPos as any).getSize(targetElement)).toEqual({
-      x: targetElement.offsetWidth,
-      y: targetElement.offsetHeight
-    });
-  });
-  it('should reset position props of element', () => {
-    const relPos = new RelativePosition({});
-    targetElement.style.top = '10px';
-    expect(targetElement.style.top).toBe('10px');
-    (relPos as any).resetCoOrds(targetElement);
-    expect(targetElement.style.top).toBe('');
-  });
+
   describe('should update position based on "autoUpdate"', () => {
     it('when autoUpdate is true', () => {
       const relPos = new RelativePosition({
@@ -130,11 +115,12 @@ describe('== Relative position ==', () => {
     let relPos;
     beforeEach(() => {
       relPos = new RelativePosition({ src: targetElement, autoUpdate: true });
+      relPos.init('abc');
     });
 
     it('should emit proper event', done => {
-      _on().subscribe(res => {
-        expect(res).toEqual({ name: 'NEW_DYN_POS', data: null });
+      Bus.listen('abc', 'NEW_DYN_POS').subscribe(res => {
+        expect(res).toEqual(null);
         done();
       });
       targetElement.style.left = '0px';

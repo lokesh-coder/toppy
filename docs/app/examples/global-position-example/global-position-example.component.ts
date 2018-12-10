@@ -56,7 +56,8 @@ export class GlobalPositionExampleComponent implements OnInit {
 
   open() {
     const content = this.placements.find(a => a.value === this.selectedPlacement).name;
-    this._toppyControl.updateHost(content).open();
+    this._toppyControl.updateHost(content);
+    this._toppyControl.open();
   }
 
   onOptionChange() {
