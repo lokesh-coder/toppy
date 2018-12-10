@@ -1,6 +1,6 @@
 import { OutsidePlacement, PositionCoOrds } from '../models';
+import { Bus } from '../utils';
 import { Position } from './position';
-import { _fire } from '../utils';
 
 export interface Config {
   src?: HTMLElement;
@@ -18,13 +18,14 @@ export class RelativePosition extends Position {
     hostWidth: '100%',
     hostHeight: '100%'
   };
-  _mutationObserver: MutationObserver;
+  _obs: MutationObserver;
   constructor(config: Config) {
     super();
     this._config = { ...this._config, ...config };
-    if (this._config.autoUpdate) {
-      this._watchElementPositionChange();
-    }
+  }
+
+  init(tid: string): void {
+    if (this._config.autoUpdate) this.listenDrag(tid);
   }
 
   getPositions(hostElement: HTMLElement): PositionCoOrds {
@@ -46,12 +47,6 @@ export class RelativePosition extends Position {
     }
     const props = this.calculatePos(this._config.placement, s, h);
     return { ...this.round(props), width: this._config.hostWidth, height: this._config.hostHeight };
-  }
-
-  private getSize(el): { x: number; y: number } {
-    const { offsetWidth, offsetHeight } = el;
-    const [x, y] = [offsetWidth, offsetHeight];
-    return { x, y };
   }
 
   private getCoords(elem: HTMLElement): PositionCoOrds {
@@ -77,16 +72,6 @@ export class RelativePosition extends Position {
       bottom: box.bottom,
       width: box.width
     };
-  }
-
-  private resetCoOrds(element: HTMLElement) {
-    // element.style.width = '';
-    // element.style.height = '';
-    element.style.top = '';
-    element.style.bottom = '';
-    element.style.left = '';
-    element.style.right = '';
-    return element;
   }
 
   private calc(placement: OutsidePlacement, src, host) {
@@ -129,7 +114,6 @@ export class RelativePosition extends Position {
 
   private getProps(pos, s, h) {
     return this.calc(pos, s, h);
-    // return this[`calculate_${pos}`](s, h);
   }
 
   private calculatePos(pos, s, h, c = true) {
@@ -173,29 +157,20 @@ export class RelativePosition extends Position {
   }
 
   private round(props) {
-    Object.keys(props).forEach(x => {
-      props[x] = Math.round(props[x]);
-    });
+    Object.keys(props).forEach(x => (props[x] = Math.round(props[x])));
     return props;
   }
 
-  private _watchElementPositionChange() {
-    if (this._mutationObserver) {
-      this._mutationObserver.disconnect();
-    }
-    this._mutationObserver = new MutationObserver(mutationsList => {
+  private listenDrag(tid: string) {
+    if (this._obs) this._obs.disconnect();
+    this._obs = new MutationObserver(mutationsList => {
       for (const mutation of mutationsList) {
-        if (mutation.type === 'attributes') {
-          _fire({ name: 'NEW_DYN_POS', data: null });
-        }
+        if (mutation.type === 'attributes') Bus.send(tid, 'NEW_DYN_POS');
       }
     });
 
-    this._mutationObserver.observe(this._config.src, {
-      attributes: true,
-      childList: false,
-      subtree: false,
-      attributeOldValue: true,
+    this._obs.observe(this._config.src, {
+      // attributes: true,
       attributeFilter: ['style']
     });
   }

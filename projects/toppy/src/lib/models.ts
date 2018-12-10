@@ -72,6 +72,7 @@ export interface ComponentType<T> {
 }
 
 export interface ToppyEvent {
+  from: string;
   name: string;
   data?: any;
 }

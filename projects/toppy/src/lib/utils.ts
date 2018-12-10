@@ -1,5 +1,6 @@
-import { TemplateRef } from '@angular/core';
+import { Injector, StaticProvider, TemplateRef } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
+import { filter, map } from 'rxjs/operators';
 import { Content, ContentData, ContentProps, ContentType, ToppyEvent } from './models';
 
 export function getContent(data: ContentData, props: ContentProps = {}): Content {
@@ -18,6 +19,10 @@ export function createId() {
     .substr(2, 5);
 }
 
+export function newInjector(provider: StaticProvider, parent: Injector) {
+  return Injector.create({ providers: [provider], parent });
+}
+
 /* html dom utils */
 
 export function cssClass(method: 'add' | 'remove', className: string, target: string = 'body') {
@@ -32,20 +37,19 @@ export function toCss(styleObj) {
 
 /* events */
 
-let _e: Subject<any> = new Subject();
-
-export function _fire(e: ToppyEvent): void {
-  _e.next(e);
+class BusClass {
+  private _e: Subject<ToppyEvent> = new Subject();
+  send(from: string, name: string, data: any = null) {
+    this._e.next({ from, name, data });
+  }
+  listen(from, name): Observable<any> {
+    return this._e.asObservable().pipe(
+      filter(e => e.from === from && e.name === name),
+      map(e => e.data)
+    );
+  }
+  stop(): void {
+    this._e.complete();
+  }
 }
-
-export function _on(): Observable<any> {
-  return _e.asObservable();
-}
-
-export function _off(): void {
-  _e.complete();
-}
-
-export function initE(): void {
-  _e = new Subject();
-}
+export const Bus = new BusClass();

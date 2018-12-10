@@ -4,7 +4,7 @@ import { ContentData, ContentProps, InsidePlacement, ToppyConfig } from './model
 import { GlobalPosition } from './position';
 import { Position } from './position/position';
 import { ToppyControl } from './toppy-control';
-import { createId, getContent, _off } from './utils';
+import { Bus, createId, getContent, newInjector } from './utils';
 
 @Injectable({
   providedIn: 'root'
@@ -44,13 +44,12 @@ export class Toppy implements OnDestroy {
     if (!this._inputs.content) {
       this.content('hello');
     }
-    const injector = Injector.create(
-      [
-        {
-          provide: ToppyControl,
-          deps: [ApplicationRef, ComponentFactoryResolver, Injector]
-        }
-      ],
+    this._inputs.position.init(this._tid);
+    const injector = newInjector(
+      {
+        provide: ToppyControl,
+        deps: [ApplicationRef, ComponentFactoryResolver, Injector]
+      },
       this.injector
     );
     const tc = injector.get(ToppyControl);
@@ -67,6 +66,6 @@ export class Toppy implements OnDestroy {
 
   ngOnDestroy() {
     Toppy.controls = {};
-    _off();
+    Bus.stop();
   }
 }

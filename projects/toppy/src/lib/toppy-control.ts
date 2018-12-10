@@ -11,7 +11,7 @@ import { debounceTime, distinctUntilChanged, filter, map, observeOn, skipWhile, 
 import { Content, ToppyConfig } from './models';
 import { Position } from './position/position';
 import { ToppyComponent } from './toppy.component';
-import { getContent, _fire } from './utils';
+import { Bus, getContent } from './utils';
 
 export class ToppyControl {
   position: Position;
@@ -23,7 +23,7 @@ export class ToppyControl {
   private _isOpen = false;
   private _listenBrowserEvents = true;
   private _compFac: ComponentFactory<ToppyComponent>;
-  private _alive: Subject<Boolean> = new Subject();
+  private _alive: Subject<1> = new Subject();
   updateTextContent: Subject<string> = new Subject();
   hostView: ViewRef;
   compRef: ComponentRef<ToppyComponent>;
@@ -33,39 +33,35 @@ export class ToppyControl {
     private injector: Injector
   ) {
     this.updateTextContent.subscribe(content => {
-      if (this._isOpen) {
-        this.comp.updateTextContent(content);
-      }
+      if (this._isOpen) this.comp.updateTextContent(content);
     });
   }
 
-  open() {
-    if (this._isOpen) {
-      return;
-    }
+  open(): void {
+    if (this._isOpen) return;
+
     this._attach();
     if (this._viewEl && this._listenBrowserEvents) {
-      mergeObs(this.onDocumentClick(), this.onWindowResize(), this.onEscClick()).subscribe(_ => {
-        console.log('d', _);
-      });
+      mergeObs(this.onDocumentClick(), this.onWindowResize(), this.onEscClick()).subscribe();
     }
-    setTimeout(_ => {
-      this.comp.triggerPosChange.next(true);
-    }, 1);
-    _fire({ name: 'OPENED_OVERLAY_INS', data: this.tid });
+
+    setTimeout(() => this.comp.triggerPosChange.next(true), 1);
+    Bus.send(this.tid, 'OPENED_OVERLAY_INS');
     this._isOpen = true;
-    return this;
   }
-  close() {
+
+  close(): void {
     this._dettach();
-    _fire({ name: 'REMOVED_OVERLAY_INS', data: this.tid });
-    this._alive.next(true);
+    Bus.send(this.tid, 'REMOVED_OVERLAY_INS');
+    this._alive.next(1);
     this._isOpen = false;
   }
-  toggle() {
+
+  toggle(): void {
     return this._isOpen ? this.close() : this.open();
   }
-  onEscClick() {
+
+  onEscClick(): Observable<any> {
     return fromEvent(document.getElementsByTagName('body'), 'keydown').pipe(
       takeUntil(this._alive),
       skipWhile(() => !this.config.closeOnEsc),
@@ -81,9 +77,11 @@ export class ToppyControl {
       takeUntil(this._alive),
       map((e: any) => e.target),
       skipWhile(() => !this.config.dismissOnDocumentClick),
-      filter(this.isNotHostElement.bind(this)),
-      tap(_ => this.config.docClickCallback.call(null)),
-      tap(() => this.close())
+      filter(this._isNotHostElement.bind(this)),
+      tap(() => {
+        this.config.docClickCallback.call(null);
+        this.close();
+      })
     );
   }
 
@@ -102,25 +100,24 @@ export class ToppyControl {
     );
   }
 
-  changePosition(newPosition) {
+  changePosition(newPosition): void {
     this.position = newPosition;
   }
 
-  updatePosition(positionConfig) {
+  updatePosition(positionConfig): void {
     this.position.updateConfig(positionConfig);
   }
 
-  updateHost(content, props = {}) {
+  updateHost(content, props = {}): void {
     this.content = getContent(content, { ...this.content.props, ...props });
-    return this;
   }
 
-  private isNotHostElement(el): boolean {
+  private _isNotHostElement(el): boolean {
     const wrapperEl = this._viewEl.querySelector('.t-wrapper');
     return el !== wrapperEl && !wrapperEl.contains(el);
   }
 
-  private _attach() {
+  private _attach(): void {
     this._compFac = this.compResolver.resolveComponentFactory(ToppyComponent);
     this.compRef = this._compFac.create(this.injector);
     this.comp = this.compRef.instance;
@@ -130,14 +127,12 @@ export class ToppyControl {
     this.hostView = this.compRef.hostView;
     this.appRef.attachView(this.hostView);
     this._viewEl = (this.hostView as any).rootNodes[0];
-    document.getElementsByTagName('body')[0].appendChild(this._viewEl);
-    return this._viewEl;
+    document.querySelector('body').appendChild(this._viewEl);
   }
 
-  private _dettach() {
-    if (!this.hostView) {
-      return;
-    }
+  private _dettach(): void {
+    if (!this.hostView) return;
+
     this.appRef.detachView(this.hostView);
     this.compRef.destroy();
     this.hostView = this._viewEl = this.comp = null;

@@ -11,11 +11,11 @@ import {
   ViewChild
 } from '@angular/core';
 import { Subject } from 'rxjs';
-import { filter, map, takeUntil } from 'rxjs/operators';
+import { takeUntil } from 'rxjs/operators';
 import { CurrentOverlay } from './current-overlay';
 import { Content, ContentType, ToppyConfig } from './models';
 import { Position } from './position/position';
-import { cssClass, toCss, _fire, _on } from './utils';
+import { Bus, cssClass, newInjector, toCss } from './utils';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -59,16 +59,14 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   createInj() {
-    return Injector.create({
-      providers: [
-        {
-          provide: CurrentOverlay,
-          useFactory: () => new CurrentOverlay(this.content.props.close),
-          deps: []
-        }
-      ],
-      parent: this._inj
-    });
+    return newInjector(
+      {
+        provide: CurrentOverlay,
+        useFactory: () => new CurrentOverlay(this.content.props.close),
+        deps: []
+      },
+      this._inj
+    );
   }
 
   updateTextContent(newData) {
@@ -80,24 +78,17 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
 
   ngOnDestroy() {
     cssClass('remove', this.config.bodyClassNameOnOpen);
-    _fire({ name: 'DETACHED', data: null });
+    Bus.send(this.tid, 'DETACHED');
     this._alive.next(false);
   }
 
   private _watchPositionChange() {
-    _on()
-      .pipe(
-        filter(data => data.name === 'NEW_DYN_POS'),
-        map(d => d.data),
-        takeUntil(this._alive)
-      )
+    Bus.listen(this.tid, 'NEW_DYN_POS')
+      .pipe(takeUntil(this._alive))
       .subscribe(e => {
-        if (!e) {
-          return this._setPosition(true);
-        }
-        const el = this.wrapperEl.nativeElement;
+        if (!e) return this._setPosition(true);
         const coords = { left: e.x, top: e.y };
-        el.style = toCss(coords);
+        this.wrapperEl.nativeElement.style = toCss(coords);
       });
   }
 
@@ -108,7 +99,7 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
       coords = { ...coords, visibility: 'visible', opacity: '1' };
     }
     el.style = toCss(coords);
-    _fire({ name: 'T_POSUPDATE' });
+    Bus.send(this.tid, 'T_POSUPDATE');
   }
 
   private _applyCoords(): void {
