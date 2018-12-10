@@ -43,7 +43,7 @@ export class ToppyControl {
     this._attach();
     if (this._viewEl && this._listenBrowserEvents) {
       mergeObs(this.onDocumentClick(), this.onWindowResize(), this.onEscClick()).subscribe();
-      setTimeout(() => this.comp.triggerPosChange.next(true), 1);
+      setTimeout(() => this.comp && this.comp.triggerPosChange.next(true), 1);
     }
 
     Bus.send(this.tid, 'OPENED_OVERLAY_INS');
@@ -118,12 +118,17 @@ export class ToppyControl {
   }
 
   private _attach(): void {
+    /* create component */
     this._compFac = this.compResolver.resolveComponentFactory(ToppyComponent);
     this.compRef = this._compFac.create(this.injector);
     this.comp = this.compRef.instance;
+
+    /* assign props */
     const { position, content, config, tid } = this;
     content.props.close = this.close.bind(this);
     Object.assign(this.comp, { position, content, config, tid });
+
+    /* attach view */
     this.hostView = this.compRef.hostView;
     this.appRef.attachView(this.hostView);
     this._viewEl = (this.hostView as any).rootNodes[0];

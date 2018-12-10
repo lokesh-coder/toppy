@@ -1,5 +1,6 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { ContentType } from '../lib/models';
 import { getContent } from '../lib/utils';
 
 @Component({
@@ -32,27 +33,35 @@ describe('== Utils ==', () => {
   describe('on calling "getContent" function', () => {
     it('should return as string type', () => {
       const result = getContent('hello');
-      expect(result).toEqual({ content: 'hello', props: {} } as any);
+      expect(result).toEqual({ data: 'hello', props: {}, type: ContentType.STRING });
     });
     it('should return html type', () => {
       const result = getContent('<div>Hello</div>', { hasHTML: true });
-      expect(result).toEqual({ content: '<div>Hello</div>', props: { hasHTML: true }, contentType: 'STRING' } as any);
+      expect(result).toEqual({
+        data: '<div>Hello</div>',
+        props: { hasHTML: true },
+        type: ContentType.HTML
+      });
     });
     it('should return component type', () => {
       const result = getContent(fixture as any);
-      expect(result).toEqual({ content: fixture, props: { id: '' }, contentType: 'COMPONENT' } as any);
+      expect(result).toEqual({ data: fixture, props: {}, type: ContentType.COMPONENT });
     });
     it('should return component type with props', () => {
       const result = getContent(fixture as any, { name: 'john' });
-      expect(result).toEqual({ content: fixture, props: { name: 'john', id: '' }, contentType: 'COMPONENT' } as any);
+      expect(result).toEqual({
+        data: fixture,
+        props: { name: 'john' },
+        type: ContentType.COMPONENT
+      });
     });
     it('should return component type with overlay id', () => {
       const result = getContent(fixture as any, { id: 'XYZ' });
-      expect(result).toEqual({ content: fixture, props: { id: 'XYZ' }, contentType: 'COMPONENT' } as any);
+      expect(result).toEqual({ data: fixture, props: { id: 'XYZ' }, type: ContentType.COMPONENT });
     });
     it('should return template type', () => {
       const result = getContent(component.tpl, { id: 'ABC' });
-      expect(result).toEqual({ content: component.tpl, contentType: 'TEMPLATEREF', props: { id: 'ABC' } } as any);
+      expect(result).toEqual({ data: component.tpl, type: ContentType.TEMPLATE, props: { id: 'ABC' } });
     });
   });
 });

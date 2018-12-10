@@ -1,8 +1,9 @@
 /// <reference types="karma-viewport" />
 
+import { take } from 'rxjs/operators';
+import { Bus } from 'toppy/lib/utils';
 import { OutsidePlacement } from '../../lib/models';
 import { RelativePosition } from '../../lib/position';
-import { Bus } from 'toppy/lib/utils';
 
 describe('== Relative position ==', () => {
   let targetElement: HTMLElement;
@@ -119,10 +120,12 @@ describe('== Relative position ==', () => {
     });
 
     it('should emit proper event', done => {
-      Bus.listen('abc', 'NEW_DYN_POS').subscribe(res => {
-        expect(res).toEqual(null);
-        done();
-      });
+      Bus.listen('abc', 'NEW_DYN_POS')
+        .pipe(take(1))
+        .subscribe(res => {
+          expect(res).toEqual(null);
+          done();
+        });
       targetElement.style.left = '0px';
     });
   });

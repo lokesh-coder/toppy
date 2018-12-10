@@ -1,11 +1,13 @@
-import { Component, DebugElement, NgModule, ApplicationRef, Injector, ComponentFactoryResolver } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ApplicationRef, Component, ComponentFactoryResolver, DebugElement, Injector, NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { take } from 'rxjs/operators';
+import { DefaultConfig } from 'toppy/lib/config';
+import { ContentType, InsidePlacement } from 'toppy/lib/models';
+import { Bus } from 'toppy/lib/utils';
+import { GlobalPosition } from '../lib/position';
 import { ToppyControl } from '../lib/toppy-control';
 import { ToppyComponent } from '../lib/toppy.component';
-import { CommonModule } from '@angular/common';
-import { ContentType } from 'toppy/lib/models';
-import { Bus } from 'toppy/lib/utils';
-import { DefaultConfig } from 'toppy/lib/config';
 
 @Component({
   selector: 'lib-test-component',
@@ -16,7 +18,7 @@ export class TestComponent {
 }
 
 @NgModule({
-  imports: [ CommonModule],
+  imports: [CommonModule],
   declarations: [TestComponent, ToppyComponent],
   entryComponents: [TestComponent, ToppyComponent],
   exports: [TestComponent, ToppyComponent]
@@ -31,7 +33,9 @@ describe('== ToppyControl ==', () => {
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [TestModule, CommonModule],
-      providers: [{provide: ToppyControl, useClass: ToppyControl, deps: [ApplicationRef, ComponentFactoryResolver, Injector]}]
+      providers: [
+        { provide: ToppyControl, useClass: ToppyControl, deps: [ApplicationRef, ComponentFactoryResolver, Injector] }
+      ]
     }).compileComponents();
 
     toppyControl = TestBed.get(ToppyControl);
@@ -51,21 +55,33 @@ describe('== ToppyControl ==', () => {
     beforeEach(() => {
       toppyControl.tid = 'abc';
       toppyControl.config = DefaultConfig;
-      toppyControl.content = {data: 'hello', props: {id: 'abc'}, type: ContentType.STRING};
+      toppyControl.content = { data: 'hello', props: { id: 'abc' }, type: ContentType.STRING };
     });
     afterEach(() => {
-      // toppyControl.close();
+      toppyControl.close();
     });
     it('should set isOpen to true', () => {
       toppyControl.open();
       expect(toppyControl['_isOpen']).toBeTruthy();
     });
-    it('should emit event', (done) => {
-      Bus.listen('abc', 'OPENED_OVERLAY_INS').subscribe((data) => {
-        expect(data).toEqual(null);
-        done();
-      });
+    it('should emit event', done => {
+      Bus.listen('abc', 'OPENED_OVERLAY_INS')
+        .pipe(take(1))
+        .subscribe(data => {
+          expect(data).toEqual(null);
+          done();
+        });
       toppyControl.open();
+    });
+    it('should subscribe to "onDocumentClick"', () => {
+      toppyControl.content = { data: 'hello', props: {}, type: ContentType.STRING };
+      toppyControl.config = { ...DefaultConfig, dismissOnDocumentClick: true };
+      toppyControl.position = new GlobalPosition({ placement: InsidePlacement.TOP });
+      toppyControl.open();
+      fixture.autoDetectChanges();
+      const el: any = document.querySelector(`.${toppyControl.config.containerClass}`);
+      el.click();
+      expect(toppyControl['_isOpen']).toBeFalsy();
     });
   });
   describe('when calling "close" method', () => {

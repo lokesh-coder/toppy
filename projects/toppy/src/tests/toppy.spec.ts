@@ -59,6 +59,9 @@ describe('== Toppy ==', () => {
     appRef = TestBed.get(ApplicationRef);
     compFact = TestBed.get(ComponentFactoryResolver);
     inj = TestBed.get(Injector);
+    spyOn(toppy, 'ngOnDestroy').and.callFake(() => {
+      Toppy.controls = {};
+    });
   }));
 
   afterEach(function() {
