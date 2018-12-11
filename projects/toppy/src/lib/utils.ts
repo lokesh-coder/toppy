@@ -25,8 +25,8 @@ export function newInjector(provider: StaticProvider, parent: Injector) {
 
 /* html dom utils */
 
-export function cssClass(method: 'add' | 'remove', className: string, target: string = 'body') {
-  document.querySelector(target).classList.add(className);
+export function cssClass(method: 'add' | 'remove', cls: string[], target: string = 'body') {
+  document.querySelector(target).classList[method](...cls);
 }
 
 export function toCss(styleObj) {
