@@ -64,6 +64,10 @@ export class Toppy implements OnDestroy {
   }
 
   ngOnDestroy() {
+    // tslint:disable-next-line:forin
+    for (const key in Toppy.controls) {
+      Toppy.controls[key].close();
+    }
     Toppy.controls = {};
     Bus.stop();
   }

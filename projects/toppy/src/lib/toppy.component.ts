@@ -1,4 +1,4 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Injector, OnDestroy, OnInit } from '@angular/core';
+import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Injector, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
 import { merge, Observable, Subject } from 'rxjs';
 import { startWith, takeUntil, tap } from 'rxjs/operators';
 import { CurrentOverlay } from './current-overlay';
@@ -10,8 +10,8 @@ import { Bus, cssClass, newInjector, toCss } from './utils';
   // tslint:disable-next-line:component-selector
   selector: 'toppy',
   templateUrl: './template.html',
-  styleUrls: ['./styles.scss']
-  // changeDetection: ChangeDetectionStrategy.OnPush
+  styleUrls: ['./styles.scss'],
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
   content: Content = {

@@ -14,56 +14,59 @@ import { ToppyComponent } from './toppy.component';
 import { Bus, getContent } from './utils';
 
 export class ToppyControl {
+
+  private viewEl: HTMLElement;
+  private isOpen = false;
+  private listenBrowserEvents = true;
+  private compFac: ComponentFactory<ToppyComponent>;
+  private die: Subject<1> = new Subject();
+
   position: Position;
   config: ToppyConfig;
   content: Content;
   tid: string;
   comp: ToppyComponent;
-  private _viewEl: HTMLElement;
-  private _isOpen = false;
-  private _listenBrowserEvents = true;
-  private _compFac: ComponentFactory<ToppyComponent>;
-  private _alive: Subject<1> = new Subject();
   updateTextContent: Subject<string> = new Subject();
   hostView: ViewRef;
   compRef: ComponentRef<ToppyComponent>;
+
   constructor(
     private appRef: ApplicationRef,
     private compResolver: ComponentFactoryResolver,
     private injector: Injector
   ) {
     this.updateTextContent.subscribe(content => {
-      if (this._isOpen) this.comp.updateTextContent(content);
+      if (this.isOpen) this.comp.updateTextContent(content);
     });
   }
 
   open(): void {
-    if (this._isOpen) return;
+    if (this.isOpen) return;
 
     this._attach();
-    if (this._viewEl && this._listenBrowserEvents) {
+    if (this.viewEl && this.listenBrowserEvents) {
       mergeObs(this.onDocumentClick(), this.onWindowResize(), this.onEscClick()).subscribe();
       setTimeout(() => this.comp && this.comp.triggerPosChange.next(1), 1);
     }
 
     Bus.send(this.tid, 'OPENED_OVERLAY_INS');
-    this._isOpen = true;
+    this.isOpen = true;
   }
 
   close(): void {
     this._dettach();
+    this.die.next(1);
     Bus.send(this.tid, 'REMOVED_OVERLAY_INS');
-    this._alive.next(1);
-    this._isOpen = false;
+    this.isOpen = false;
   }
 
   toggle(): void {
-    return this._isOpen ? this.close() : this.open();
+    return this.isOpen ? this.close() : this.open();
   }
 
   onEscClick(): Observable<any> {
     return fromEvent(document.getElementsByTagName('body'), 'keydown').pipe(
-      takeUntil(this._alive),
+      takeUntil(this.die),
       skipWhile(() => !this.config.closeOnEsc),
       filter((e: any) => (e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27) && e.target.nodeName === 'BODY'),
       tap(e => e.preventDefault()),
@@ -73,8 +76,8 @@ export class ToppyControl {
   }
 
   onDocumentClick(): Observable<any> {
-    return fromEvent(this._viewEl, 'click').pipe(
-      takeUntil(this._alive),
+    return fromEvent(this.viewEl, 'click').pipe(
+      takeUntil(this.die),
       map((e: any) => e.target),
       skipWhile(() => !this.config.dismissOnDocumentClick),
       filter(this._isNotHostElement.bind(this)),
@@ -89,12 +92,14 @@ export class ToppyControl {
     const onResize = fromEvent(window, 'resize');
     const onScroll = fromEvent(window, 'scroll', { passive: true });
     return mergeObs(onResize, onScroll).pipe(
-      takeUntil(this._alive),
+
+      takeUntil(this.die),
       debounceTime(5),
       observeOn(animationFrameScheduler),
       distinctUntilChanged(),
       tap(() => {
-        this.comp.triggerPosChange.next(1);
+        // tslint:disable-next-line:no-unused-expression
+        this.comp && this.comp.triggerPosChange.next(1);
         this.config.windowResizeCallback();
       })
     );
@@ -113,14 +118,14 @@ export class ToppyControl {
   }
 
   private _isNotHostElement(el): boolean {
-    const wrapperEl = this._viewEl.querySelector('.t-wrapper');
+    const wrapperEl = this.viewEl.querySelector('.t-wrapper');
     return el !== wrapperEl && !wrapperEl.contains(el);
   }
 
   private _attach(): void {
     /* create component */
-    this._compFac = this.compResolver.resolveComponentFactory(ToppyComponent);
-    this.compRef = this._compFac.create(this.injector);
+    this.compFac = this.compResolver.resolveComponentFactory(ToppyComponent);
+    this.compRef = this.compFac.create(this.injector);
     this.comp = this.compRef.instance;
 
     /* assign props */
@@ -131,8 +136,8 @@ export class ToppyControl {
     /* attach view */
     this.hostView = this.compRef.hostView;
     this.appRef.attachView(this.hostView);
-    this._viewEl = (this.hostView as any).rootNodes[0];
-    document.querySelector('body').appendChild(this._viewEl);
+    this.viewEl = (this.hostView as any).rootNodes[0];
+    document.querySelector('body').appendChild(this.viewEl);
   }
 
   private _dettach(): void {
@@ -140,6 +145,6 @@ export class ToppyControl {
 
     this.appRef.detachView(this.hostView);
     this.compRef.destroy();
-    this.hostView = this._viewEl = this.comp = null;
+    this.hostView = this.viewEl = this.comp = null;
   }
 }
