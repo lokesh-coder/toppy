@@ -1,13 +1,4 @@
-import {
-  ApplicationRef,
-  Component,
-  ComponentFactoryResolver,
-  ElementRef,
-  Injector,
-  NgModule,
-  TemplateRef,
-  ViewChild
-} from '@angular/core';
+import { ApplicationRef, Component, ComponentFactoryResolver, ElementRef, Injector, NgModule, TemplateRef, ViewChild } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DefaultConfig } from '../lib/config';
 import { ContentType } from '../lib/models';

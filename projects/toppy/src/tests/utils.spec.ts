@@ -45,23 +45,23 @@ describe('== Utils ==', () => {
     });
     it('should return component type', () => {
       const result = getContent(fixture as any);
-      expect(result).toEqual({ data: fixture, props: {}, type: ContentType.COMPONENT });
+      expect(result as any).toEqual({ data: fixture, props: {}, type: ContentType.COMPONENT });
     });
     it('should return component type with props', () => {
-      const result = getContent(fixture as any, { name: 'john' });
+      const result: any = getContent(fixture as any, { name: 'john' });
       expect(result).toEqual({
         data: fixture,
         props: { name: 'john' },
         type: ContentType.COMPONENT
-      });
+      } as any);
     });
     it('should return component type with overlay id', () => {
       const result = getContent(fixture as any, { id: 'XYZ' });
-      expect(result).toEqual({ data: fixture, props: { id: 'XYZ' }, type: ContentType.COMPONENT });
+      expect(result as any).toEqual({ data: fixture, props: { id: 'XYZ' }, type: ContentType.COMPONENT });
     });
     it('should return template type', () => {
       const result = getContent(component.tpl, { id: 'ABC' });
-      expect(result).toEqual({ data: component.tpl, type: ContentType.TEMPLATE, props: { id: 'ABC' } });
+      expect(result as any).toEqual({ data: component.tpl, type: ContentType.TEMPLATE, props: { id: 'ABC' } });
     });
   });
 });

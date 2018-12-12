@@ -43,7 +43,7 @@ export class ToppyControl {
     this._attach();
     if (this._viewEl && this._listenBrowserEvents) {
       mergeObs(this.onDocumentClick(), this.onWindowResize(), this.onEscClick()).subscribe();
-      setTimeout(() => this.comp && this.comp.triggerPosChange.next(true), 1);
+      setTimeout(() => this.comp && this.comp.triggerPosChange.next(1), 1);
     }
 
     Bus.send(this.tid, 'OPENED_OVERLAY_INS');
@@ -94,7 +94,7 @@ export class ToppyControl {
       observeOn(animationFrameScheduler),
       distinctUntilChanged(),
       tap(() => {
-        this.comp.triggerPosChange.next(true);
+        this.comp.triggerPosChange.next(1);
         this.config.windowResizeCallback();
       })
     );
