@@ -27,13 +27,13 @@
     "url": "https://github.com/lokesh-coder"
   },
   "scripts": {
-    "archive:app": "node ./bin/archive.js",
+    "archive:app": "node ./scripts/archive.js",
     "build:app": "ng build --prod",
     "build:lib": "ng build toppy",
     "e2e": "ng e2e",
     "lint": "ng lint",
     "ng": "ng",
-    "postpublish": "node ./bin/gh-pages.js",
+    "postpublish": "node ./scripts/gh-pages.js",
     "release": "semantic-release",
     "start": "ng serve",
     "test": "npm run test:lib",

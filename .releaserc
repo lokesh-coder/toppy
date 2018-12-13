@@ -4,7 +4,7 @@
     [
       "@semantic-release/exec",
       {
-        "prepareCmd": "npm run archive:app -- ${nextRelease.version} && chmod a+x ./bin/version.sh && ./bin/version.sh ${nextRelease.version} && cp -r ./README.md ./dist/toppy && npx json -I -f package.json -e 'this.version=\"${nextRelease.version}\"'",
+        "prepareCmd": "npm run archive:app -- ${nextRelease.version} && chmod a+x ./scripts/version.sh && ./scripts/version.sh ${nextRelease.version} && cp -r ./README.md ./dist/toppy && npx json -I -f package.json -e 'this.version=\"${nextRelease.version}\"'",
         "successCmd": "npm run postpublish -- ${nextRelease.version}"
       }
     ],
