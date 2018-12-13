@@ -35,13 +35,13 @@ export class Toppy implements OnDestroy {
   }
 
   content(data: ContentData, props: ContentProps = {}): Toppy {
-    this._tid = this._inputs.tid = createId();
-    this._inputs.content = getContent(data, { ...props, id: this._tid });
+    this._inputs.content = getContent(data, props);
     return this;
   }
 
-  create(): ToppyControl {
+  create(key: string = null): ToppyControl {
     if (!this._inputs.content) this.content('hello');
+    this._tid = this._inputs.tid = key || createId();
 
     this._inputs.position.init(this._tid);
     const injector = newInjector(
