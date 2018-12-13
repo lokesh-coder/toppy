@@ -1,9 +1,9 @@
 import { Component, TemplateRef, ViewChild } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { ContentType } from '../lib/models';
-import { getContent, Bus } from '../lib/utils';
 import { Subject } from 'rxjs';
 import { takeUntil } from 'rxjs/operators';
+import { ContentType } from '../lib/models';
+import { Bus, getContent } from '../lib/utils';
 
 @Component({
   selector: 'lib-test-component',
@@ -16,7 +16,7 @@ export class TestComponent {
   @ViewChild('tpl', { read: TemplateRef }) tpl: TemplateRef<any>;
 }
 
-describe('== Utils ==', () => {
+describe('@ Utils', () => {
   let component: TestComponent = null;
   let fixture: ComponentFixture<TestComponent> = null;
   beforeEach(async(() => {
@@ -81,31 +81,41 @@ describe('== Utils ==', () => {
     afterAll(() => {
       Bus['_e'] = new Subject();
     });
-    it('should send event on calling `sent` method', (done) => {
-      Bus.listen('abc', 'WELCOME').pipe(takeUntil(die)).subscribe(data => {
-        expect(data).toEqual({ test: true });
-        done();
-      });
-      Bus.send('abc', 'WELCOME', {test: true});
+    it('should send event on calling `sent` method', done => {
+      Bus.listen('abc', 'WELCOME')
+        .pipe(takeUntil(die))
+        .subscribe(data => {
+          expect(data).toEqual({ test: true });
+          done();
+        });
+      Bus.send('abc', 'WELCOME', { test: true });
     });
-    it('should send multiple event on calling many `sent` method', (done) => {
+    it('should send multiple event on calling many `sent` method', done => {
       const spy = jasmine.createSpy('spy').and.callThrough();
-      Bus.listen('xyz', 'HELLO').pipe(takeUntil(die)).subscribe(() => {
-        spy();
-        done();
-      });
+      Bus.listen('xyz', 'HELLO')
+        .pipe(takeUntil(die))
+        .subscribe(() => {
+          spy();
+          done();
+        });
       Bus.send('xyz', 'HELLO', `qwerty`);
       Bus.send('xyz', 'HELLO', `home`);
       Bus.send('xyz', 'HELLO', `Bakery`);
       expect(spy.calls.count()).toEqual(3);
     });
-    it('should complete the emission on calling `stop` method', (done) => {
+    it('should complete the emission on calling `stop` method', done => {
       const spy = jasmine.createSpy('spy').and.callThrough();
-      Bus.listen('xyz', 'HELLO').pipe(takeUntil(die)).subscribe(data => {
-        spy();
-      }, null, () => {
-        done();
-      });
+      Bus.listen('xyz', 'HELLO')
+        .pipe(takeUntil(die))
+        .subscribe(
+          data => {
+            spy();
+          },
+          null,
+          () => {
+            done();
+          }
+        );
       Bus.send('xyz', 'HELLO', `qwerty`);
       Bus.send('xyz', 'HELLO', `home`);
       Bus.stop();

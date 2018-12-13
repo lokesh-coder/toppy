@@ -3,7 +3,7 @@
 import { InsidePlacement } from '../../lib/models';
 import { GlobalPosition } from '../../lib/position';
 
-describe('== Global position ==', () => {
+describe('@ GlobalPosition', () => {
   let targetElement: HTMLElement;
   let hostElement: HTMLElement;
   let ww;
@@ -37,7 +37,7 @@ describe('== Global position ==', () => {
   it('should get updated config', () => {
     const gloPos = new GlobalPosition({});
     gloPos.updateConfig({ offset: 2 });
-    expect((gloPos as any)._config).toEqual({
+    expect(gloPos['config']).toEqual({
       placement: InsidePlacement.CENTER,
       hostWidth: 100,
       hostHeight: 100,
@@ -49,7 +49,7 @@ describe('== Global position ==', () => {
     expect(gloPos.getClassName()).toBe('global-position');
   });
 
-  describe('should return correct position coords of host element', () => {
+  describe('#getPositions', () => {
     let srcCoords;
     beforeEach(() => {
       srcCoords = targetElement.getBoundingClientRect();
@@ -121,7 +121,7 @@ describe('== Global position ==', () => {
       });
     });
   });
-  describe('should get correction position for', () => {
+  describe('#calc', () => {
     const targetElCoords = {
       width: (window as any).innerWidth,
       height: (window as any).innerHeight
@@ -139,7 +139,7 @@ describe('== Global position ==', () => {
           placement: data.placement,
           offset: 2
         });
-        const pos = (gloPos as any)._calc(data.placement, targetElCoords, hostElCoords);
+        const pos = (gloPos as any).calc(data.placement, targetElCoords, hostElCoords);
         expect(pos).toEqual(data.expected);
       });
     });

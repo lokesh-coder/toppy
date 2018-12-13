@@ -1,4 +1,13 @@
-import { ApplicationRef, Component, ComponentFactoryResolver, ElementRef, Injector, NgModule, TemplateRef, ViewChild } from '@angular/core';
+import {
+  ApplicationRef,
+  Component,
+  ComponentFactoryResolver,
+  ElementRef,
+  Injector,
+  NgModule,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DefaultConfig } from '../lib/config';
 import { ContentType } from '../lib/models';
@@ -22,17 +31,15 @@ export class TemplateRefTestComponent {
 @Component({
   template: 'Hi'
 })
-export class TestComponent {
-}
+export class TestComponent {}
 
 @NgModule({
   declarations: [TestComponent, TemplateRefTestComponent],
   entryComponents: [TestComponent]
 })
-export class TemplateRefTestModule {
-}
+export class TemplateRefTestModule {}
 
-describe('== Toppy ==', () => {
+describe('@ Toppy', () => {
   let toppy: Toppy = null;
   let templateRefCompFixture: ComponentFixture<TemplateRefTestComponent>;
   let templateRefComp: TemplateRefTestComponent;
@@ -52,7 +59,7 @@ describe('== Toppy ==', () => {
     appRef = TestBed.get(ApplicationRef);
     compFact = TestBed.get(ComponentFactoryResolver);
     inj = TestBed.get(Injector);
-    spyOn(toppy, 'ngOnDestroy').and.callFake(() => {
+    spyOn(toppy, 'destroy').and.callFake(() => {
       // tslint:disable-next-line:forin
       for (const key in Toppy.controls) {
         Toppy.controls[key].close();
@@ -76,7 +83,7 @@ describe('== Toppy ==', () => {
       ctrl = toppy.create();
     });
     afterEach(() => {
-      toppy.ngOnDestroy();
+      toppy.destroy();
     });
     it('should return "ToppyControl"', () => {
       expect(ctrl instanceof ToppyControl).toBeTruthy();
@@ -103,32 +110,32 @@ describe('== Toppy ==', () => {
         .config({ backdropClass: 't-custom-backdrop' })
         .content('random text')
         .create();
-      tid = (toppy as any)._tid;
+      tid = toppy['tid'];
     });
     afterEach(() => {
-      toppy.ngOnDestroy();
+      toppy.destroy();
     });
     it('should set custom config in "Toppy"', () => {
-      expect((toppy as any)._inputs.config).toEqual({ ...DefaultConfig, backdropClass: 't-custom-backdrop' });
+      expect((toppy as any).inputs.config).toEqual({ ...DefaultConfig, backdropClass: 't-custom-backdrop' });
     });
     it('should set custom config in "ToppyControl"', () => {
       expect(toppy.getCtrl(tid).config).toEqual({ ...DefaultConfig, backdropClass: 't-custom-backdrop' });
     });
     it('should set custom position in "Toppy"', () => {
-      expect((toppy as any)._inputs.position instanceof RelativePosition).toBeTruthy();
+      expect((toppy as any).inputs.position instanceof RelativePosition).toBeTruthy();
     });
     it('should set custom position in "ToppyControl"', () => {
       expect(toppy.getCtrl(tid).position instanceof RelativePosition).toBeTruthy();
     });
     it('should set custom content in "Toppy"', () => {
-      expect((toppy as any)._inputs.content).toEqual({
+      expect((toppy as any).inputs.content).toEqual({
         type: ContentType.STRING,
         data: 'random text',
         props: {}
       });
     });
     it('should set custom content in "ToppyControl"', () => {
-      expect(toppy.getCtrl(tid).content).toEqual({ type: ContentType.STRING, data: 'random text', props: { } });
+      expect(toppy.getCtrl(tid).content).toEqual({ type: ContentType.STRING, data: 'random text', props: {} });
     });
   });
   describe('#content', () => {
@@ -140,81 +147,82 @@ describe('== Toppy ==', () => {
         .config({ backdropClass: 't-custom-backdrop' });
     });
     afterEach(() => {
-      toppy.ngOnDestroy();
+      toppy.destroy();
     });
-    /* string */
-    it('text content without props', () => {
-      t.content('hello').create();
-      tid = (toppy as any)._tid;
-      expect(toppy.getCtrl(tid).content).toEqual({ type: ContentType.STRING, data: 'hello', props: { } });
-    });
-    it('text content with props', () => {
-      t.content('hello', { class: 'abc' }).create();
-      tid = (toppy as any)._tid;
-      expect(toppy.getCtrl(tid).content).toEqual({
-        type: ContentType.STRING,
-        data: 'hello',
-        props: { class: 'abc' }
+    describe('should return content type as STRING', () => {
+      it('when without props', () => {
+        t.content('hello').create();
+        tid = toppy['tid'];
+        expect(toppy.getCtrl(tid).content).toEqual({ type: ContentType.STRING, data: 'hello', props: {} });
+      });
+      it('when with props', () => {
+        t.content('hello', { class: 'abc' }).create();
+        tid = toppy['tid'];
+        expect(toppy.getCtrl(tid).content).toEqual({
+          type: ContentType.STRING,
+          data: 'hello',
+          props: { class: 'abc' }
+        });
       });
     });
-
-    /* html */
-    it('html content without props', () => {
-      t.content('<span>hello</span>').create();
-      tid = (toppy as any)._tid;
-      expect(toppy.getCtrl(tid).content).toEqual({
-        type: ContentType.STRING,
-        data: '<span>hello</span>',
-        props: {}
+    describe('should return content type as HTML', () => {
+      it('when without props', () => {
+        t.content('<span>hello</span>').create();
+        tid = toppy['tid'];
+        expect(toppy.getCtrl(tid).content).toEqual({
+          type: ContentType.STRING,
+          data: '<span>hello</span>',
+          props: {}
+        });
+      });
+      it('when with props', () => {
+        t.content('<span>hello</span>', { hasHTML: true }).create();
+        tid = toppy['tid'];
+        expect(toppy.getCtrl(tid).content).toEqual({
+          type: ContentType.HTML,
+          data: '<span>hello</span>',
+          props: { hasHTML: true }
+        });
       });
     });
-    it('html content with props', () => {
-      t.content('<span>hello</span>', { hasHTML: true }).create();
-      tid = (toppy as any)._tid;
-      expect(toppy.getCtrl(tid).content).toEqual({
-        type: ContentType.HTML,
-        data: '<span>hello</span>',
-        props: { hasHTML: true }
+    describe('should return content type as TEMPLATE', () => {
+      it('when without props', () => {
+        t.content(templateRefComp.tpl).create();
+        tid = toppy['tid'];
+        expect(toppy.getCtrl(tid).content).toEqual({
+          type: ContentType.TEMPLATE,
+          data: templateRefComp.tpl,
+          props: {}
+        });
+      });
+      it('when with props', () => {
+        t.content(templateRefComp.tpl, { name: 'Johny' }).create();
+        tid = toppy['tid'];
+        expect(toppy.getCtrl(tid).content).toEqual({
+          type: ContentType.TEMPLATE,
+          data: templateRefComp.tpl,
+          props: { name: 'Johny' }
+        });
       });
     });
-
-    /* template */
-    it('template content without props', () => {
-      t.content(templateRefComp.tpl).create();
-      tid = (toppy as any)._tid;
-      expect(toppy.getCtrl(tid).content).toEqual({
-        type: ContentType.TEMPLATE,
-        data: templateRefComp.tpl,
-        props: {}
+    describe('should return content type as COMPONENT', () => {
+      it('when without props', () => {
+        t.content(TestComponent).create();
+        tid = toppy['tid'];
+        expect(toppy.getCtrl(tid).content).toEqual({
+          type: ContentType.COMPONENT,
+          data: TestComponent,
+          props: {}
+        });
       });
-    });
-    it('template content with props', () => {
-      t.content(templateRefComp.tpl, { name: 'Johny' }).create();
-      tid = (toppy as any)._tid;
-      expect(toppy.getCtrl(tid).content).toEqual({
-        type: ContentType.TEMPLATE,
-        data: templateRefComp.tpl,
-        props: { name: 'Johny' }
-      });
-    });
-
-    /* component */
-    it('component content without props', () => {
-      t.content(TestComponent).create();
-      tid = (toppy as any)._tid;
-      expect(toppy.getCtrl(tid).content).toEqual({
-        type: ContentType.COMPONENT,
-        data: TestComponent,
-        props: {}
-      });
-    });
-    it('component content with props', () => {
-      t.content(TestComponent, { name: 'Johny' }).create();
-      tid = (toppy as any)._tid;
-      expect(toppy.getCtrl(tid).content).toEqual({
-        type: ContentType.COMPONENT,
-        data: TestComponent,
-        props: { name: 'Johny' }
+      it('when with props', () => {
+        t.content(TestComponent, { name: 'Johny' }).create();
+        tid = toppy['tid'];
+        expect(toppy.getCtrl(tid).content).toEqual({
+          type: ContentType.COMPONENT,
+          data: TestComponent,
+          props: { name: 'Johny' }
+        });
       });
     });
   });
@@ -224,15 +232,15 @@ describe('== Toppy ==', () => {
     let firstTid, secondTid;
     beforeEach(() => {
       ctrl1 = toppy.create();
-      firstTid = (toppy as any)._tid;
+      firstTid = toppy['tid'];
 
       t = toppy.content('abc');
       (t as any).tid = firstTid;
       t.create();
-      secondTid = (toppy as any)._tid;
+      secondTid = toppy['tid'];
     });
     afterEach(() => {
-      toppy.ngOnDestroy();
+      toppy.destroy();
     });
     it('should create new instance if the tid already exists', () => {
       expect(Object.keys(Toppy.controls)).toEqual([firstTid, secondTid]);
@@ -244,17 +252,15 @@ describe('== Toppy ==', () => {
       expect(Object.keys(Toppy.controls).length).toEqual(5);
     });
   });
-  describe('#ngOnDestroy', () => {
-
+  describe('#destroy', () => {
     it('should remove all controls', () => {
       toppy.create();
       toppy.create();
       toppy.create();
       toppy.create();
 
-      toppy.ngOnDestroy();
+      toppy.destroy();
       expect(Object.keys(Toppy.controls).length).toEqual(0);
     });
-
   });
 });

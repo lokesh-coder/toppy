@@ -8,13 +8,12 @@ import {
 } from '@angular/core';
 import { animationFrameScheduler, fromEvent, merge as mergeObs, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, observeOn, skipWhile, takeUntil, tap } from 'rxjs/operators';
-import { Content, ToppyConfig, ContentProps, ContentData } from './models';
+import { Content, ContentData, ContentProps, ToppyConfig } from './models';
 import { Position } from './position/position';
 import { ToppyComponent } from './toppy.component';
 import { Bus, getContent } from './utils';
 
 export class ToppyControl {
-
   private viewEl: HTMLElement;
   private isOpen = false;
   private listenBrowserEvents = true;
@@ -43,20 +42,20 @@ export class ToppyControl {
   open(): void {
     if (this.isOpen) return;
 
-    this._attach();
+    this.attach();
     if (this.viewEl && this.listenBrowserEvents) {
       mergeObs(this.onDocumentClick(), this.onWindowResize(), this.onEscClick()).subscribe();
       setTimeout(() => this.comp && this.comp.triggerPosChange.next(1), 1);
     }
 
-    Bus.send(this.tid, 'OPENED_OVERLAY_INS');
+    Bus.send(this.tid, 't_open');
     this.isOpen = true;
   }
 
   close(): void {
-    this._dettach();
+    this.dettach();
     this.die.next(1);
-    Bus.send(this.tid, 'REMOVED_OVERLAY_INS');
+    Bus.send(this.tid, 't_close');
     this.isOpen = false;
   }
 
@@ -76,11 +75,11 @@ export class ToppyControl {
   }
 
   onDocumentClick(): Observable<any> {
-    return fromEvent(document.getElementsByTagName('body'), 'click').pipe(
+    return fromEvent(this.viewEl, 'click').pipe(
       takeUntil(this.die),
       map((e: any) => e.target),
       skipWhile(() => !this.config.dismissOnDocumentClick),
-      filter(this._isNotHostElement.bind(this)),
+      filter(this.isNotHostElement.bind(this)),
       tap(() => {
         this.config.docClickCallback.call(null);
         this.close();
@@ -92,7 +91,6 @@ export class ToppyControl {
     const onResize = fromEvent(window, 'resize');
     const onScroll = fromEvent(window, 'scroll', { passive: true });
     return mergeObs(onResize, onScroll).pipe(
-
       takeUntil(this.die),
       debounceTime(5),
       observeOn(animationFrameScheduler),
@@ -117,12 +115,12 @@ export class ToppyControl {
     this.content = getContent(content, { ...this.content.props, ...props });
   }
 
-  private _isNotHostElement(el): boolean {
+  private isNotHostElement(el): boolean {
     const wrapperEl = this.viewEl.querySelector('.t-wrapper');
     return el !== wrapperEl && !wrapperEl.contains(el);
   }
 
-  private _attach(): void {
+  private attach(): void {
     /* create component */
     this.compFac = this.compResolver.resolveComponentFactory(ToppyComponent);
     this.compRef = this.compFac.create(this.injector);
@@ -140,7 +138,7 @@ export class ToppyControl {
     document.querySelector('body').appendChild(this.viewEl);
   }
 
-  private _dettach(): void {
+  private dettach(): void {
     if (!this.hostView) return;
 
     this.appRef.detachView(this.hostView);

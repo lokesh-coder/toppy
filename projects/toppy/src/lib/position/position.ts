@@ -1,5 +1,5 @@
 export abstract class Position {
-  protected _config = {};
+  protected config = {};
   abstract getPositions(host: HTMLElement): any;
   getClassName(): string {
     return this.constructor.name.replace('Position', '-position').toLocaleLowerCase();
@@ -8,6 +8,6 @@ export abstract class Position {
   init(tid: string) {}
 
   updateConfig(config) {
-    this._config = { ...this._config, ...config };
+    this.config = { ...this.config, ...config };
   }
 }

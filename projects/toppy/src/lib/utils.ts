@@ -31,7 +31,7 @@ export function cssClass(method: 'add' | 'remove', cls: string[], target: string
 
 export function toCss(styleObj) {
   return Object.keys(styleObj)
-    .map(x => (typeof styleObj[x] === 'number' ? `${x}:${styleObj[x]}px` : `${x}:${styleObj[x]}`))
+    .map(x => `${x}:${styleObj[x]}${typeof styleObj[x] === 'number' ? 'px' : ''}`)
     .join(';');
 }
 
@@ -39,10 +39,10 @@ export function toCss(styleObj) {
 
 class BusClass {
   private _e: Subject<ToppyEvent> = new Subject();
-  send(from: string, name: string, data: any = null) {
+  send(from: string, name: string, data: any = null): void {
     this._e.next({ from, name, data });
   }
-  listen(from, name): Observable<any> {
+  listen(from: string, name: string): Observable<any> {
     return this._e.asObservable().pipe(
       filter(e => e.from === from && e.name === name),
       map(e => e.data)

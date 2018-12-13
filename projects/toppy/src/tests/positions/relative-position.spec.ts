@@ -5,7 +5,7 @@ import { Bus } from 'toppy/lib/utils';
 import { OutsidePlacement } from '../../lib/models';
 import { RelativePosition } from '../../lib/position';
 
-describe('== Relative position ==', () => {
+describe('@ RelativePosition', () => {
   let targetElement: HTMLElement;
   let hostElement: HTMLElement;
   beforeEach(() => {
@@ -34,7 +34,7 @@ describe('== Relative position ==', () => {
   it('should get updated config', () => {
     const relPos = new RelativePosition({});
     relPos.updateConfig({ autoUpdate: true });
-    expect((relPos as any)._config).toEqual({
+    expect(relPos['config']).toEqual({
       src: null,
       placement: OutsidePlacement.TOP,
       autoUpdate: true,
@@ -47,8 +47,8 @@ describe('== Relative position ==', () => {
     expect(relPos.getClassName()).toBe('relative-position');
   });
 
-  describe('should update position based on "autoUpdate"', () => {
-    it('when autoUpdate is true', () => {
+  describe('#autoUpdate', () => {
+    it('should switch if it is true', () => {
       const relPos = new RelativePosition({
         src: targetElement,
         placement: OutsidePlacement.TOP,
@@ -65,7 +65,7 @@ describe('== Relative position ==', () => {
         top: srcCoords.top + srcCoords.height
       });
     });
-    it('when autoUpdate is false', () => {
+    it('should not switch if it is false', () => {
       const relPos = new RelativePosition({
         src: targetElement,
         placement: OutsidePlacement.TOP,
@@ -83,7 +83,7 @@ describe('== Relative position ==', () => {
       });
     });
   });
-  describe('should return correct position coords of host element', () => {
+  describe('#getPositions', () => {
     let srcCoords;
     beforeEach(() => {
       srcCoords = targetElement.getBoundingClientRect();
@@ -112,15 +112,15 @@ describe('== Relative position ==', () => {
       });
     });
   });
-  describe('on element position change', () => {
+  describe('#listenDrag', () => {
     let relPos;
     beforeEach(() => {
       relPos = new RelativePosition({ src: targetElement, autoUpdate: true });
       relPos.init('abc');
     });
 
-    it('should emit proper event', done => {
-      Bus.listen('abc', 'NEW_DYN_POS')
+    it('should emit proper event when drag', done => {
+      Bus.listen('abc', 't_dynpos')
         .pipe(take(1))
         .subscribe(res => {
           expect(res).toEqual(null);
@@ -129,7 +129,7 @@ describe('== Relative position ==', () => {
       targetElement.style.left = '0px';
     });
   });
-  describe('should get correction position for', () => {
+  describe('#calc', () => {
     const targetElCoords = {
       bottom: 76,
       height: 18,

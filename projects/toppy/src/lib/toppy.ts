@@ -1,6 +1,6 @@
-import { ApplicationRef, ComponentFactoryResolver, Injectable, Injector, OnDestroy } from '@angular/core';
+import { ApplicationRef, ComponentFactoryResolver, Injectable, Injector } from '@angular/core';
 import { DefaultConfig } from './config';
-import { ContentData, ContentProps, InsidePlacement, ToppyConfig } from './models';
+import { ContentData, ContentProps, ContentType, Inputs, InsidePlacement, ToppyConfig } from './models';
 import { GlobalPosition } from './position';
 import { Position } from './position/position';
 import { ToppyControl } from './toppy-control';
@@ -9,41 +9,38 @@ import { Bus, createId, getContent, newInjector } from './utils';
 @Injectable({
   providedIn: 'root'
 })
-export class Toppy implements OnDestroy {
+export class Toppy {
   static controls: { [key: string]: ToppyControl } = {};
-  private _tid: string;
-  private _inputs = {
+  private tid: string;
+  private inputs: Inputs = {
     position: null,
-    config: null,
-    content: null,
+    config: DefaultConfig,
+    content: { type: ContentType.STRING, data: 'hello', props: {} },
     tid: null
   };
 
   constructor(private injector: Injector) {
-    this._inputs.config = DefaultConfig;
-    this._inputs.position = new GlobalPosition({ placement: InsidePlacement.TOP });
+    this.inputs.position = new GlobalPosition({ placement: InsidePlacement.TOP });
   }
 
   position(position: Position): Toppy {
-    this._inputs.position = position;
+    this.inputs.position = position;
     return this;
   }
 
   config(config: Partial<ToppyConfig>): Toppy {
-    this._inputs.config = { ...DefaultConfig, ...config };
+    this.inputs.config = { ...DefaultConfig, ...config };
     return this;
   }
 
   content(data: ContentData, props: ContentProps = {}): Toppy {
-    this._inputs.content = getContent(data, props);
+    this.inputs.content = getContent(data, props);
     return this;
   }
 
   create(key: string = null): ToppyControl {
-    if (!this._inputs.content) this.content('hello');
-    this._tid = this._inputs.tid = key || createId();
+    this.tid = this.inputs.tid = key || createId();
 
-    this._inputs.position.init(this._tid);
     const injector = newInjector(
       {
         provide: ToppyControl,
@@ -52,10 +49,11 @@ export class Toppy implements OnDestroy {
       this.injector
     );
     const tc = injector.get(ToppyControl);
-    if (Toppy.controls[this._tid]) {
-      this._tid = createId();
+    if (Toppy.controls[this.tid]) {
+      this.tid = createId();
     }
-    Toppy.controls[this._tid] = Object.assign(tc, this._inputs);
+    this.inputs.position.init(this.tid);
+    Toppy.controls[this.tid] = Object.assign(tc, this.inputs);
     return tc;
   }
 
@@ -63,7 +61,7 @@ export class Toppy implements OnDestroy {
     return Toppy.controls[tid];
   }
 
-  ngOnDestroy() {
+  destroy() {
     // tslint:disable-next-line:forin
     for (const key in Toppy.controls) {
       Toppy.controls[key].close();

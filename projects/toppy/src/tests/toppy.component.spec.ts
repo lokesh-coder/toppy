@@ -1,4 +1,4 @@
-import { DebugElement, Component } from '@angular/core';
+import { Component, DebugElement } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { skip, take } from 'rxjs/operators';
@@ -8,16 +8,15 @@ import { ContentType } from '../lib/models';
 import { ToppyComponent } from '../lib/toppy.component';
 import { Bus } from '../lib/utils';
 
-
 @Component({
   selector: 'test-comp',
   template: 'hello'
 })
 export class TestComponent {
-  constructor(private co: CurrentOverlay ) {}
+  constructor(private co: CurrentOverlay) {}
 }
 
-describe('== ToppyComponent ==', () => {
+describe('@ ToppyComponent', () => {
   let fixture: ComponentFixture<ToppyComponent>;
   let debugEl: DebugElement;
   let toppyComp: ToppyComponent;
@@ -82,7 +81,7 @@ describe('== ToppyComponent ==', () => {
       fixture.detectChanges();
       toppyComp.triggerPosChange.complete();
       spyOn(toppyComp as any, 'setPos');
-      Bus.send('abc', 'NEW_DYN_POS', null);
+      Bus.send('abc', 't_dynpos', null);
       toppyComp.ngAfterViewInit();
       expect(toppyComp['setPos']).toHaveBeenCalled();
     });
@@ -90,7 +89,7 @@ describe('== ToppyComponent ==', () => {
       fixture.detectChanges();
       toppyComp.triggerPosChange.complete();
       toppyComp.ngAfterViewInit();
-      Bus.send('abc', 'NEW_DYN_POS', { x: 10, y: 12 });
+      Bus.send('abc', 't_dynpos', { x: 10, y: 12 });
       expect(el.querySelector('.t-wrapper').getAttribute('style')).toEqual('left: 10px; top: 12px;');
     });
   });
@@ -141,16 +140,16 @@ describe('== ToppyComponent ==', () => {
       spyOn(toppyComp as any, 'setPos');
       toppyComp.ngAfterViewInit();
       toppyComp.triggerPosChange.next(1);
-      Bus.send('abc', 'NEW_DYN_POS');
+      Bus.send('abc', 't_dynpos');
       expect(toppyComp['setPos']).toHaveBeenCalledTimes(3);
       fixture.destroy();
       toppyComp.triggerPosChange.next(1);
-      Bus.send('abc', 'NEW_DYN_POS');
+      Bus.send('abc', 't_dynpos');
       expect(toppyComp['setPos']).toHaveBeenCalledTimes(3);
     });
-    it('should fire DETACHED event', () => {
+    it('should fire t_detach event', () => {
       const spy = jasmine.createSpy().and.callThrough();
-      Bus.listen('abc', 'DETACHED')
+      Bus.listen('abc', 't_detach')
         .pipe(take(1))
         .subscribe(() => {
           spy();
@@ -187,7 +186,7 @@ describe('== ToppyComponent ==', () => {
           expect(el.querySelector('.t-wrapper').getAttribute('style')).toEqual('left: 99px; top: 22px;');
           done();
         });
-      Bus.send('abc', 'NEW_DYN_POS', { x: 99, y: 22 });
+      Bus.send('abc', 't_dynpos', { x: 99, y: 22 });
     });
   });
 

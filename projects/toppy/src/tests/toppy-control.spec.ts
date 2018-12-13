@@ -1,15 +1,14 @@
 import { CommonModule } from '@angular/common';
 import { ApplicationRef, Component, ComponentFactoryResolver, DebugElement, Injector, NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { Subject, Subscription } from 'rxjs';
 import { take, takeUntil } from 'rxjs/operators';
 import { DefaultConfig } from 'toppy/lib/config';
 import { ContentType, InsidePlacement } from 'toppy/lib/models';
 import { Bus } from 'toppy/lib/utils';
-import { GlobalPosition, DefaultPosition } from '../lib/position';
+import { DefaultPosition, GlobalPosition } from '../lib/position';
 import { ToppyControl } from '../lib/toppy-control';
 import { ToppyComponent } from '../lib/toppy.component';
-import { merge, of, Subject, Observable, Subscription } from 'rxjs';
-import { createElement } from '@angular/core/src/view/element';
 
 @Component({
   selector: 'lib-test-component',
@@ -27,7 +26,7 @@ export class TestComponent {
 })
 export class TestModule {}
 
-describe('== ToppyControl ==', () => {
+describe('@ ToppyControl', () => {
   let toppyControl: ToppyControl = null;
   let debugEl: DebugElement = null;
   let fixture: ComponentFixture<TestComponent> = null;
@@ -63,18 +62,18 @@ describe('== ToppyControl ==', () => {
       toppyControl.close();
     });
     it('should return nothing if isOpen is true', () => {
-      spyOn(toppyControl as any, '_attach').and.callThrough();
+      spyOn(toppyControl as any, 'attach').and.callThrough();
       toppyControl.open();
       toppyControl.open();
       toppyControl.open();
-      expect(toppyControl['_attach']).toHaveBeenCalledTimes(1);
+      expect(toppyControl['attach']).toHaveBeenCalledTimes(1);
     });
     it('should set isOpen to true', () => {
       toppyControl.open();
       expect(toppyControl['isOpen']).toBeTruthy();
     });
     it('should emit event', done => {
-      Bus.listen('abc', 'OPENED_OVERLAY_INS')
+      Bus.listen('abc', 't_open')
         .pipe(take(1))
         .subscribe(data => {
           expect(data).toEqual(null);
@@ -98,24 +97,25 @@ describe('== ToppyControl ==', () => {
       toppyControl.position = new GlobalPosition({ placement: InsidePlacement.TOP });
       toppyControl.open();
       fixture.autoDetectChanges();
-      document.querySelector('body').dispatchEvent(new KeyboardEvent('keydown', {'key': 'Escape'}));
+      document.querySelector('body').dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
       expect(toppyControl['isOpen']).toBeFalsy();
     });
-    it('should subscribe to "onWindowResize"', (done) => {
-
+    it('should subscribe to "onWindowResize"', done => {
       const spy = jasmine.createSpy('foobar').and.callFake(() => {});
       toppyControl.content = { data: 'hello', props: {}, type: ContentType.STRING };
-      toppyControl.config = {...DefaultConfig, windowResizeCallback: () => {
-        spy();
-        expect(spy).toHaveBeenCalledTimes(1);
-        done();
-      }};
+      toppyControl.config = {
+        ...DefaultConfig,
+        windowResizeCallback: () => {
+          spy();
+          expect(spy).toHaveBeenCalledTimes(1);
+          done();
+        }
+      };
       toppyControl.position = new GlobalPosition({ placement: InsidePlacement.TOP });
       toppyControl.open();
 
       fixture.autoDetectChanges();
       window.dispatchEvent(new Event('resize'));
-
     });
   });
   describe('#close', () => {
@@ -137,16 +137,16 @@ describe('== ToppyControl ==', () => {
     it('should unsubscribe all events', () => {
       const sub = new Subject();
       const spy = jasmine.createSpy('spy').and.callThrough();
-      sub.pipe(takeUntil(toppyControl['die'])).subscribe(_ =>  spy());
+      sub.pipe(takeUntil(toppyControl['die'])).subscribe(_ => spy());
       toppyControl.open();
       sub.next(1);
       toppyControl.close();
       sub.next(1);
       expect(spy.calls.count()).toEqual(1);
     });
-    it('should emit close event', (done) => {
+    it('should emit close event', done => {
       const spy = jasmine.createSpy('spy').and.callThrough();
-      Bus.listen('abc', 'REMOVED_OVERLAY_INS').subscribe(_ => {
+      Bus.listen('abc', 't_close').subscribe(_ => {
         spy();
         done();
       });
@@ -215,13 +215,13 @@ describe('== ToppyControl ==', () => {
       toppyControl.close();
     });
     it('should update the position config', () => {
-      toppyControl.updatePosition({placement: InsidePlacement.CENTER});
-      expect(toppyControl.position['_config']['placement']).toEqual(InsidePlacement.CENTER);
+      toppyControl.updatePosition({ placement: InsidePlacement.CENTER });
+      expect(toppyControl.position['config']['placement']).toEqual(InsidePlacement.CENTER);
     });
   });
   describe('#updateHost', () => {
     beforeEach(() => {
-      toppyControl.content = { data: 'One', props: { }, type: ContentType.STRING };
+      toppyControl.content = { data: 'One', props: {}, type: ContentType.STRING };
     });
     afterEach(() => {
       toppyControl.close();
@@ -240,16 +240,19 @@ describe('== ToppyControl ==', () => {
     });
     afterEach(() => {
       sub.unsubscribe();
+      document.querySelector('toppy').remove();
     });
-    it('should subscribe when document is clicked', (done) => {
+    it('should subscribe when document is clicked', done => {
       fixture.autoDetectChanges();
-      spyOn(toppyControl as any, '_isNotHostElement').and.returnValue(true);
+      toppyControl['viewEl'] = document.createElement('toppy');
+      document.querySelector(`body`).appendChild(toppyControl['viewEl']);
+      spyOn(toppyControl as any, 'isNotHostElement').and.returnValue(true);
       spyOn(toppyControl as any, 'close').and.returnValue(true);
       sub = toppyControl.onDocumentClick().subscribe(data => {
         expect(data).toBeTruthy();
         done();
       });
-      const el: any = document.querySelector(`body`);
+      const el: any = document.querySelector(`toppy`);
       el.click();
     });
   });
@@ -266,26 +269,26 @@ describe('== ToppyControl ==', () => {
     afterEach(() => {
       sub.unsubscribe();
     });
-    it('should subscribe when escape button is clicked if key is `Escape`', (done) => {
+    it('should subscribe when escape button is clicked if key is `Escape`', done => {
       sub = toppyControl.onEscClick().subscribe(data => {
         expect(data).toBeTruthy();
         done();
       });
-      document.querySelector('body').dispatchEvent(new KeyboardEvent('keydown', {'key': 'Escape'}));
+      document.querySelector('body').dispatchEvent(new KeyboardEvent('keydown', { key: 'Escape' }));
     });
-    it('should subscribe when escape button is clicked if keyCode is `27`', (done) => {
+    it('should subscribe when escape button is clicked if keyCode is `27`', done => {
       sub = toppyControl.onEscClick().subscribe(data => {
         expect(data).toBeTruthy();
         done();
       });
-      document.querySelector('body').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 27} as any));
+      document.querySelector('body').dispatchEvent(new KeyboardEvent('keydown', { keyCode: 27 } as any));
     });
-    it('should subscribe when escape button is clicked if key is `Esc`', (done) => {
+    it('should subscribe when escape button is clicked if key is `Esc`', done => {
       sub = toppyControl.onEscClick().subscribe(data => {
         expect(data).toBeTruthy();
         done();
       });
-      document.querySelector('body').dispatchEvent(new KeyboardEvent('keydown', {'key': 'Esc'}));
+      document.querySelector('body').dispatchEvent(new KeyboardEvent('keydown', { key: 'Esc' }));
     });
   });
   describe('#onWindowResize', () => {
@@ -294,7 +297,7 @@ describe('== ToppyControl ==', () => {
       sub.unsubscribe();
     });
 
-    it('should subscribe when window is resized', (done) => {
+    it('should subscribe when window is resized', done => {
       toppyControl.config = { ...DefaultConfig, windowResizeCallback: () => {} };
       sub = toppyControl.onWindowResize().subscribe(data => {
         expect(data).toBeTruthy();

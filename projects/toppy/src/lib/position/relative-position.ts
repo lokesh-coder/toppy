@@ -11,42 +11,42 @@ export interface Config {
 }
 
 export class RelativePosition extends Position {
-  protected _config: Config = {
+  protected config: Config = {
     src: null,
     placement: OutsidePlacement.TOP,
     autoUpdate: false,
     hostWidth: '100%',
     hostHeight: '100%'
   };
-  _obs: MutationObserver;
+  obs: MutationObserver;
   constructor(config: Config) {
     super();
-    this._config = { ...this._config, ...config };
+    this.config = { ...this.config, ...config };
   }
 
   init(tid: string): void {
-    if (this._config.autoUpdate) this.listenDrag(tid);
+    if (this.config.autoUpdate) this.listenDrag(tid);
   }
 
   getPositions(hostElement: HTMLElement): PositionCoOrds {
-    const s = this.getCoords(this._config.src);
+    const s = this.getCoords(this.config.src);
     const h = this.getCoords(hostElement);
 
-    if (this._config.hostWidth === '100%') {
-      this._config.hostWidth = s.width;
+    if (this.config.hostWidth === '100%') {
+      this.config.hostWidth = s.width;
     }
 
-    if (this._config.hostHeight === '100%') {
-      this._config.hostHeight = 'auto';
+    if (this.config.hostHeight === '100%') {
+      this.config.hostHeight = 'auto';
     }
-    if (typeof this._config.hostHeight === 'number') {
-      h.height = this._config.hostHeight;
+    if (typeof this.config.hostHeight === 'number') {
+      h.height = this.config.hostHeight;
     }
-    if (typeof this._config.hostWidth === 'number') {
-      h.width = this._config.hostWidth;
+    if (typeof this.config.hostWidth === 'number') {
+      h.width = this.config.hostWidth;
     }
-    const props = this.calculatePos(this._config.placement, s, h);
-    return { ...this.round(props), width: this._config.hostWidth, height: this._config.hostHeight };
+    const props = this.calculatePos(this.config.placement, s, h);
+    return { ...this.round(props), width: this.config.hostWidth, height: this.config.hostHeight };
   }
 
   private getCoords(elem: HTMLElement): PositionCoOrds {
@@ -121,7 +121,7 @@ export class RelativePosition extends Position {
     if (!c) {
       return props;
     }
-    if (this._config.autoUpdate && this.isOverflowed({ ...props, width: h.width, height: h.height })) {
+    if (this.config.autoUpdate && this.isOverflowed({ ...props, width: h.width, height: h.height })) {
       return this.calculatePos(this.nextPosition(pos), s, h, false);
     }
 
@@ -162,14 +162,14 @@ export class RelativePosition extends Position {
   }
 
   private listenDrag(tid: string) {
-    if (this._obs) this._obs.disconnect();
-    this._obs = new MutationObserver(mutationsList => {
+    if (this.obs) this.obs.disconnect();
+    this.obs = new MutationObserver(mutationsList => {
       for (const mutation of mutationsList) {
-        if (mutation.type === 'attributes') Bus.send(tid, 'NEW_DYN_POS');
+        if (mutation.type === 'attributes') Bus.send(tid, 't_dynpos');
       }
     });
 
-    this._obs.observe(this._config.src, {
+    this.obs.observe(this.config.src, {
       // attributes: true,
       attributeFilter: ['style']
     });

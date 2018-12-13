@@ -9,10 +9,10 @@ export interface Config {
 }
 export class GlobalPosition extends Position {
   private size;
-  protected _config: Config = { placement: InsidePlacement.CENTER, hostWidth: 100, hostHeight: 100, offset: 0 };
+  protected config: Config = { placement: InsidePlacement.CENTER, hostWidth: 100, hostHeight: 100, offset: 0 };
   constructor(config: Config) {
     super();
-    this._config = { ...this._config, ...config };
+    this.config = { ...this.config, ...config };
   }
   getPositions(hostElement?: HTMLElement) {
     const host = hostElement.getBoundingClientRect() as any;
@@ -21,23 +21,24 @@ export class GlobalPosition extends Position {
       height: (window as any).innerHeight
     };
 
-    if (typeof this._config.hostHeight === 'number') {
-      host.height = this._config.hostHeight = Math.abs(this._config.hostHeight);
+    // todo: refactor
+    if (typeof this.config.hostHeight === 'number') {
+      host.height = this.config.hostHeight = Math.abs(this.config.hostHeight);
     }
-    if (typeof this._config.hostWidth === 'number') {
-      host.width = this._config.hostWidth = Math.abs(this._config.hostWidth);
+    if (typeof this.config.hostWidth === 'number') {
+      host.width = this.config.hostWidth = Math.abs(this.config.hostWidth);
     }
-    if (typeof this._config.hostWidth === 'string' && this._config.hostWidth.endsWith('%')) {
-      this._config.hostWidth = this._getPercentageToCssPx(src.width, this._config.hostWidth);
+    if (typeof this.config.hostWidth === 'string' && this.config.hostWidth.endsWith('%')) {
+      this.config.hostWidth = this.getPercentageToCssPx(src.width, this.config.hostWidth);
     }
-    if (typeof this._config.hostHeight === 'string' && this._config.hostHeight.endsWith('%')) {
-      this._config.hostHeight = this._getPercentageToCssPx(src.height, this._config.hostHeight);
+    if (typeof this.config.hostHeight === 'string' && this.config.hostHeight.endsWith('%')) {
+      this.config.hostHeight = this.getPercentageToCssPx(src.height, this.config.hostHeight);
     }
 
-    const props = this._calc(this._config.placement, src, host);
-    return { ...props, width: this._config.hostWidth, height: this._config.hostHeight, position: 'fixed' };
+    const props = this.calc(this.config.placement, src, host);
+    return { ...props, width: this.config.hostWidth, height: this.config.hostHeight, position: 'fixed' };
   }
-  private _getPercentageToCssPx(max, percentage: string) {
+  private getPercentageToCssPx(max, percentage: string) {
     let number = Number(percentage.slice(0, -1));
     if (number > 100) {
       number = 100;
@@ -45,15 +46,15 @@ export class GlobalPosition extends Position {
     return `calc(${max}px - ${100 - number}%)`;
   }
 
-  private _calc(placement: InsidePlacement, src, host) {
+  private calc(placement: InsidePlacement, src, host) {
     const [main, sub] = placement.split('');
     const p: any = {};
 
     if (main === 't') {
-      p.top = this._config.offset;
+      p.top = this.config.offset;
     }
     if (main === 'b') {
-      p.bottom = this._config.offset;
+      p.bottom = this.config.offset;
     }
     if ((main === 'l' || main === 'r' || main === 'c') && !sub) {
       p.top = (src.height - host.height) / 2;
@@ -63,10 +64,10 @@ export class GlobalPosition extends Position {
       p.left = (src.width - host.width) / 2;
     }
     if ((main === 'l' && !sub) || sub === 'l') {
-      p.left = this._config.offset;
+      p.left = this.config.offset;
     }
     if ((main === 'r' && !sub) || sub === 'r') {
-      p.right = this._config.offset;
+      p.right = this.config.offset;
     }
 
     return p;

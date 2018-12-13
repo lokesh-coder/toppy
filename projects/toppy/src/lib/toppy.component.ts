@@ -1,4 +1,13 @@
-import { AfterViewInit, ChangeDetectorRef, Component, ElementRef, Injector, OnDestroy, OnInit, ChangeDetectionStrategy } from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
+  Component,
+  ElementRef,
+  Injector,
+  OnDestroy,
+  OnInit
+} from '@angular/core';
 import { merge, Observable, Subject } from 'rxjs';
 import { startWith, takeUntil, tap } from 'rxjs/operators';
 import { CurrentOverlay } from './current-overlay';
@@ -58,21 +67,21 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
     );
   }
 
-  updateTextContent(data: string) {
+  updateTextContent(data: string): void {
     if (this.content.type === ContentType.STRING) {
       this.content.data = data;
       this.cd.detectChanges();
     }
   }
 
-  ngOnDestroy() {
+  ngOnDestroy(): void {
     cssClass('remove', [this.config.bodyClassNameOnOpen]);
     this.die.next(1);
-    Bus.send(this.tid, 'DETACHED');
+    Bus.send(this.tid, 't_detach');
   }
 
   private listenPos(): Observable<any> {
-    return merge(this.triggerPosChange.pipe(startWith(1)), Bus.listen(this.tid, 'NEW_DYN_POS')).pipe(
+    return merge(this.triggerPosChange.pipe(startWith(1)), Bus.listen(this.tid, 't_dynpos')).pipe(
       takeUntil(this.die),
       tap(e => {
         if (!e || !e.x) return this.setPos();

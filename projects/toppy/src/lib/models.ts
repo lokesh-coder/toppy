@@ -1,4 +1,5 @@
 import { TemplateRef } from '@angular/core';
+import { Position } from './position/position';
 
 export interface PositionCoOrds {
   top?: number;
@@ -90,4 +91,11 @@ export interface Content {
   type?: ContentType;
   data: ContentData;
   props?: ContentProps;
+}
+
+export interface Inputs {
+  position: Position | null;
+  config: ToppyConfig;
+  content: Content;
+  tid: string;
 }
