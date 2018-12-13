@@ -38,7 +38,7 @@ export class DynamicTextExampleComponent implements OnInit {
         new RelativePosition({
           placement: OutsidePlacement.RIGHT_TOP,
           src: this.el.nativeElement,
-          hostWidth: 'auto',
+          width: 'auto',
           autoUpdate: true
         })
       )

@@ -33,7 +33,7 @@ describe('@ ToppyComponent', () => {
 
   beforeEach(() => {
     toppyComp.tid = 'abc';
-    toppyComp.config = { ...DefaultConfig, bodyClassNameOnOpen: 'zzz' };
+    toppyComp.config = { ...DefaultConfig, bodyClass: 'zzz' };
     toppyComp.position = { getClassName: () => 'relative', getPositions: c => ({ left: 45, top: 79 }) } as any;
   });
 
@@ -51,14 +51,14 @@ describe('@ ToppyComponent', () => {
     });
     it('should add default classes', () => {
       fixture.detectChanges();
-      expect(el.classList.value).toBe('t-container relative');
+      expect(el.classList.value).toBe('t-container t-overlay relative');
     });
     it('should add class for docClick', () => {
-      toppyComp.config.dismissOnDocumentClick = true;
+      toppyComp.config.closeOnDocClick = true;
       fixture.detectChanges();
-      expect(el.classList.value).toBe('t-container relative no-pointers');
+      expect(el.classList.value).toBe('t-container t-overlay relative no-pointers');
     });
-    it('should add class for bodyClassNameOnOpen', () => {
+    it('should add class for bodyClass', () => {
       fixture.detectChanges();
       expect(document.querySelector('body').classList.value).toEqual('zzz');
     });
@@ -130,7 +130,7 @@ describe('@ ToppyComponent', () => {
 
   describe('#ngOnDestroy', () => {
     it('should remove class name from body', () => {
-      toppyComp.config.bodyClassNameOnOpen = 'Bunny';
+      toppyComp.config.bodyClass = 'Bunny';
       fixture.detectChanges();
       expect(document.querySelector('body').classList.value).toEqual('Bunny');
       fixture.destroy();

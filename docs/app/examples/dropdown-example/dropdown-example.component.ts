@@ -40,24 +40,25 @@ export class DropdownExampleComponent implements OnInit {
         new RelativePosition({
           placement: OutsidePlacement.BOTTOM,
           src: this.el.nativeElement,
-          hostWidth: '100%',
+          width: '100%',
           autoUpdate: true
         })
       )
       .config({
+        closeOnDocClick: true,
         docClickCallback: () => {
           this.isOpen = false;
         }
       })
       .content(this.tpl)
-      .create();
+      .create('sonia');
 
     this._toppyControl2 = this.toppy
       .position(
         new RelativePosition({
           placement: OutsidePlacement.TOP,
           src: this.el2.nativeElement,
-          hostWidth: 'auto',
+          width: 'auto',
           autoUpdate: true
         })
       )

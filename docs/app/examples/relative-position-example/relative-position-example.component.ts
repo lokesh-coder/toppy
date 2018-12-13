@@ -39,7 +39,7 @@ export class RelativePositionExampleComponent implements OnInit {
         new RelativePosition({
           placement: this.selectedPlacement,
           src: this.targetEl.nativeElement,
-          hostWidth: 'auto',
+          width: 'auto',
           autoUpdate: true
         })
       )

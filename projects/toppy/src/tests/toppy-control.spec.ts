@@ -83,7 +83,7 @@ describe('@ ToppyControl', () => {
     });
     it('should subscribe to "onDocumentClick"', () => {
       toppyControl.content = { data: 'hello', props: {}, type: ContentType.STRING };
-      toppyControl.config = { ...DefaultConfig, dismissOnDocumentClick: true };
+      toppyControl.config = { ...DefaultConfig, closeOnDocClick: true };
       toppyControl.position = new GlobalPosition({ placement: InsidePlacement.TOP });
       toppyControl.open();
       fixture.autoDetectChanges();
@@ -219,7 +219,7 @@ describe('@ ToppyControl', () => {
       expect(toppyControl.position['config']['placement']).toEqual(InsidePlacement.CENTER);
     });
   });
-  describe('#updateHost', () => {
+  describe('#updateContent', () => {
     beforeEach(() => {
       toppyControl.content = { data: 'One', props: {}, type: ContentType.STRING };
     });
@@ -227,7 +227,7 @@ describe('@ ToppyControl', () => {
       toppyControl.close();
     });
     it('should update the content', () => {
-      toppyControl.updateHost('Two');
+      toppyControl.updateContent('Two');
       expect(toppyControl.content.type).toEqual(ContentType.STRING);
     });
   });
@@ -235,7 +235,7 @@ describe('@ ToppyControl', () => {
     let sub: Subscription;
     beforeEach(() => {
       toppyControl.content = { data: 'hello', props: {}, type: ContentType.STRING };
-      toppyControl.config = { ...DefaultConfig, dismissOnDocumentClick: true };
+      toppyControl.config = { ...DefaultConfig, closeOnDocClick: true };
       toppyControl.position = new GlobalPosition({ placement: InsidePlacement.TOP });
     });
     afterEach(() => {

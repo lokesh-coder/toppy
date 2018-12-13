@@ -38,8 +38,8 @@ describe('@ RelativePosition', () => {
       src: null,
       placement: OutsidePlacement.TOP,
       autoUpdate: true,
-      hostWidth: '100%',
-      hostHeight: '100%'
+      width: '100%',
+      height: '100%'
     });
   });
   it('should return correct class name', () => {
@@ -52,7 +52,7 @@ describe('@ RelativePosition', () => {
       const relPos = new RelativePosition({
         src: targetElement,
         placement: OutsidePlacement.TOP,
-        hostHeight: 500,
+        height: 500,
         autoUpdate: true
       });
       const srcCoords = targetElement.getBoundingClientRect();
@@ -69,7 +69,7 @@ describe('@ RelativePosition', () => {
       const relPos = new RelativePosition({
         src: targetElement,
         placement: OutsidePlacement.TOP,
-        hostHeight: 500,
+        height: 500,
         autoUpdate: false
       });
       const srcCoords = targetElement.getBoundingClientRect();
@@ -90,8 +90,8 @@ describe('@ RelativePosition', () => {
     });
     it('when exact width and height is provided', () => {
       const relPos = new RelativePosition({
-        hostWidth: 4,
-        hostHeight: 10,
+        width: 4,
+        height: 10,
         src: targetElement,
         placement: OutsidePlacement.TOP
       });
@@ -147,8 +147,8 @@ describe('@ RelativePosition', () => {
       it(data.name, () => {
         const relPos = new RelativePosition({
           src: targetElement,
-          hostWidth: hostElCoords.width,
-          hostHeight: hostElCoords.height,
+          width: hostElCoords.width,
+          height: hostElCoords.height,
           placement: data.placement
         });
         const pos = (relPos as any).calc(data.placement, targetElCoords, hostElCoords);

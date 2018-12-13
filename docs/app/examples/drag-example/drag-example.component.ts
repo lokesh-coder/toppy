@@ -23,7 +23,7 @@ export class DragExampleComponent implements OnInit {
         new RelativePosition({
           placement: OutsidePlacement.TOP,
           src: this.el.nativeElement,
-          hostWidth: 'auto',
+          width: 'auto',
           autoUpdate: true
         })
       )

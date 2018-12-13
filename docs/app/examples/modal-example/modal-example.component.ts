@@ -18,13 +18,13 @@ export class ModalExampleComponent implements OnInit {
       .position(
         new GlobalPosition({
           placement: InsidePlacement.CENTER,
-          hostWidth: '40%',
-          hostHeight: 'auto'
+          width: '40%',
+          height: 'auto'
         })
       )
       .config({
         backdrop: true,
-        dismissOnDocumentClick: false,
+        closeOnDocClick: false,
         closeOnEsc: true
       })
       .content(this.modalTpl)
@@ -34,8 +34,8 @@ export class ModalExampleComponent implements OnInit {
       .position(
         new GlobalPosition({
           placement: InsidePlacement.CENTER,
-          hostWidth: '25%',
-          hostHeight: 'auto'
+          width: '25%',
+          height: 'auto'
         })
       )
       .config({

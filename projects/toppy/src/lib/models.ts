@@ -58,12 +58,10 @@ export interface ToppyConfig {
   containerClass: string;
   wrapperClass: string;
   backdropClass: string;
-  watchWindowResize: boolean;
-  watchDocClick: boolean;
-  dismissOnDocumentClick: boolean;
-  bodyClassNameOnOpen: string;
+  listenWindowEvents: boolean;
+  closeOnDocClick: boolean;
+  bodyClass: string;
   closeOnEsc: boolean;
-  parentElement: HTMLElement | null;
   windowResizeCallback: () => void;
   docClickCallback: () => void;
 }

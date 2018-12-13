@@ -4,12 +4,11 @@ import { Position } from './position';
 export interface Config {
   placement?: InsidePlacement;
   offset?: number;
-  hostWidth?: string | number;
-  hostHeight?: string | number;
+  width?: string | number;
+  height?: string | number;
 }
 export class GlobalPosition extends Position {
-  private size;
-  protected config: Config = { placement: InsidePlacement.CENTER, hostWidth: 100, hostHeight: 100, offset: 0 };
+  protected config: Config = { placement: InsidePlacement.CENTER, width: 100, height: 100, offset: 0 };
   constructor(config: Config) {
     super();
     this.config = { ...this.config, ...config };
@@ -22,23 +21,23 @@ export class GlobalPosition extends Position {
     };
 
     // todo: refactor
-    if (typeof this.config.hostHeight === 'number') {
-      host.height = this.config.hostHeight = Math.abs(this.config.hostHeight);
+    if (typeof this.config.height === 'number') {
+      host.height = this.config.height = Math.abs(this.config.height);
     }
-    if (typeof this.config.hostWidth === 'number') {
-      host.width = this.config.hostWidth = Math.abs(this.config.hostWidth);
+    if (typeof this.config.width === 'number') {
+      host.width = this.config.width = Math.abs(this.config.width);
     }
-    if (typeof this.config.hostWidth === 'string' && this.config.hostWidth.endsWith('%')) {
-      this.config.hostWidth = this.getPercentageToCssPx(src.width, this.config.hostWidth);
+    if (typeof this.config.width === 'string' && this.config.width.endsWith('%')) {
+      this.config.width = this.getPercentageToCssPx(src.width, this.config.width);
     }
-    if (typeof this.config.hostHeight === 'string' && this.config.hostHeight.endsWith('%')) {
-      this.config.hostHeight = this.getPercentageToCssPx(src.height, this.config.hostHeight);
+    if (typeof this.config.height === 'string' && this.config.height.endsWith('%')) {
+      this.config.height = this.getPercentageToCssPx(src.height, this.config.height);
     }
 
     const props = this.calc(this.config.placement, src, host);
-    return { ...props, width: this.config.hostWidth, height: this.config.hostHeight, position: 'fixed' };
+    return { ...props, width: this.config.width, height: this.config.height, position: 'fixed' };
   }
-  private getPercentageToCssPx(max, percentage: string) {
+  private getPercentageToCssPx(max, percentage: string): string {
     let number = Number(percentage.slice(0, -1));
     if (number > 100) {
       number = 100;

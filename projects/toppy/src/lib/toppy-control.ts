@@ -14,12 +14,6 @@ import { ToppyComponent } from './toppy.component';
 import { Bus, getContent } from './utils';
 
 export class ToppyControl {
-  private viewEl: HTMLElement;
-  private isOpen = false;
-  private listenBrowserEvents = true;
-  private compFac: ComponentFactory<ToppyComponent>;
-  private die: Subject<1> = new Subject();
-
   position: Position;
   config: ToppyConfig;
   content: Content;
@@ -28,6 +22,12 @@ export class ToppyControl {
   updateTextContent: Subject<string> = new Subject();
   hostView: ViewRef;
   compRef: ComponentRef<ToppyComponent>;
+
+  private viewEl: HTMLElement;
+  private isOpen = false;
+  private listenBrowserEvents = true;
+  private compFac: ComponentFactory<ToppyComponent>;
+  private die: Subject<1> = new Subject();
 
   constructor(
     private appRef: ApplicationRef,
@@ -78,10 +78,10 @@ export class ToppyControl {
     return fromEvent(this.viewEl, 'click').pipe(
       takeUntil(this.die),
       map((e: any) => e.target),
-      skipWhile(() => !this.config.dismissOnDocumentClick),
+      skipWhile(() => !this.config.closeOnDocClick),
       filter(this.isNotHostElement.bind(this)),
       tap(() => {
-        this.config.docClickCallback.call(null);
+        this.config.docClickCallback();
         this.close();
       })
     );
@@ -91,6 +91,7 @@ export class ToppyControl {
     const onResize = fromEvent(window, 'resize');
     const onScroll = fromEvent(window, 'scroll', { passive: true });
     return mergeObs(onResize, onScroll).pipe(
+      skipWhile(() => !this.config.listenWindowEvents),
       takeUntil(this.die),
       debounceTime(5),
       observeOn(animationFrameScheduler),
@@ -107,12 +108,16 @@ export class ToppyControl {
     this.position = newPosition;
   }
 
-  updatePosition(positionConfig): void {
+  updatePosition(positionConfig: any): void {
     this.position.updateConfig(positionConfig);
   }
 
-  updateHost(content: ContentData, props: ContentProps = {}): void {
+  updateContent(content: ContentData, props: ContentProps = {}): void {
     this.content = getContent(content, { ...this.content.props, ...props });
+  }
+
+  listen(eventName: string) {
+    return Bus.listen(this.tid, eventName);
   }
 
   private isNotHostElement(el): boolean {

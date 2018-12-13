@@ -36,6 +36,7 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
   el: HTMLElement | any;
   wrapperEl: HTMLElement | any;
   triggerPosChange: Subject<1> = new Subject();
+
   private die: Subject<1> = new Subject();
 
   constructor(private inj: Injector, private cd: ChangeDetectorRef, private elRef: ElementRef) {}
@@ -43,13 +44,13 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
   ngOnInit() {
     this.el = this.elRef.nativeElement;
     this.wrapperEl = this.el.querySelector('.t-wrapper');
-    let cls = [this.config.containerClass, this.position.getClassName()];
-    if (this.config.dismissOnDocumentClick) {
+    let cls = ['t-container', this.config.containerClass, this.position.getClassName()];
+    if (this.config.closeOnDocClick) {
       cls = cls.concat(['no-pointers']);
     }
     this.el.setAttribute('data-tid', this.tid);
     cssClass('add', cls, `[data-tid='${[this.tid]}']`);
-    cssClass('add', [this.config.bodyClassNameOnOpen]);
+    cssClass('add', [this.config.bodyClass]);
   }
 
   ngAfterViewInit() {
@@ -75,7 +76,7 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   ngOnDestroy(): void {
-    cssClass('remove', [this.config.bodyClassNameOnOpen]);
+    cssClass('remove', [this.config.bodyClass]);
     this.die.next(1);
     Bus.send(this.tid, 't_detach');
   }
@@ -94,7 +95,6 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
   private setPos(): void {
     const coords = this.position.getPositions(this.wrapperEl);
     Object.assign(coords, { visibility: 'visible', opacity: '1' });
-
     this.wrapperEl.style = toCss(coords);
     Bus.send(this.tid, 't_posupdate');
   }

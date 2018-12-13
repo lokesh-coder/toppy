@@ -17,12 +17,12 @@ export class RibbonExampleComponent implements OnInit {
       .position(
         new GlobalPosition({
           placement: InsidePlacement.BOTTOM,
-          hostWidth: '100%',
-          hostHeight: 'auto'
+          width: '100%',
+          height: 'auto'
         })
       )
       .config({
-        dismissOnDocumentClick: false
+        closeOnDocClick: false
       })
       .content(this.tpl)
       .create();

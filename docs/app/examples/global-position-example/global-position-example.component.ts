@@ -38,17 +38,15 @@ export class GlobalPositionExampleComponent implements OnInit {
 
   ngOnInit() {
     this._toppyControl = this.toppy
-      .position(
-        new GlobalPosition({ placement: this.selectedPlacement, hostHeight: 'auto', hostWidth: 'auto', offset: 10 })
-      )
+      .position(new GlobalPosition({ placement: this.selectedPlacement, height: 'auto', width: 'auto', offset: 10 }))
       .config({
         docClickCallback: () => {
           console.log('doc click callback');
         },
-        dismissOnDocumentClick: true,
+        closeOnDocClick: true,
         wrapperClass: 'global-content-wrapper',
         backdrop: true,
-        bodyClassNameOnOpen: 'global-toastr'
+        bodyClass: 'global-toastr'
       })
       .content(SimpleModalComponent)
       .create();
@@ -56,7 +54,7 @@ export class GlobalPositionExampleComponent implements OnInit {
 
   open() {
     const content = this.placements.find(a => a.value === this.selectedPlacement).name;
-    this._toppyControl.updateHost(content);
+    this._toppyControl.updateContent(content);
     this._toppyControl.open();
   }
 

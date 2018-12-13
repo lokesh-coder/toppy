@@ -5,6 +5,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { MarkdownModule } from 'ngx-markdown';
 import { ToppyModule } from 'toppy';
 import { AppComponent } from './app.component';
+import { ControlExampleComponent } from './examples/control-example/control-example.component';
 import { DragExampleComponent } from './examples/drag-example/drag-example.component';
 import { DropdownExampleComponent } from './examples/dropdown-example/dropdown-example.component';
 import { DynamicTextExampleComponent } from './examples/dynamic-text-example/dynamic-text-example.component';
@@ -44,7 +45,8 @@ import { SubSectionComponent } from './utils/sub-section/sub-section.component';
     ContentComponent,
     DynamicTextExampleComponent,
     DropdownExampleComponent,
-    RibbonExampleComponent
+    RibbonExampleComponent,
+    ControlExampleComponent
   ],
   imports: [BrowserModule, FormsModule, HttpClientModule, MarkdownModule.forRoot({ loader: HttpClient }), ToppyModule],
   providers: [],

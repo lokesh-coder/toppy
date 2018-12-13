@@ -39,8 +39,8 @@ describe('@ GlobalPosition', () => {
     gloPos.updateConfig({ offset: 2 });
     expect(gloPos['config']).toEqual({
       placement: InsidePlacement.CENTER,
-      hostWidth: 100,
-      hostHeight: 100,
+      width: 100,
+      height: 100,
       offset: 2
     });
   });
@@ -56,8 +56,8 @@ describe('@ GlobalPosition', () => {
     });
     it('when exact width and height is provided in px', () => {
       const gloPos = new GlobalPosition({
-        hostWidth: 4,
-        hostHeight: 10,
+        width: 4,
+        height: 10,
         placement: InsidePlacement.TOP
       });
       expect(gloPos.getPositions(hostElement)).toEqual({
@@ -70,8 +70,8 @@ describe('@ GlobalPosition', () => {
     });
     it('when exact width and height is provided in negative px', () => {
       const gloPos = new GlobalPosition({
-        hostWidth: -4,
-        hostHeight: -10,
+        width: -4,
+        height: -10,
         placement: InsidePlacement.TOP
       });
       expect(gloPos.getPositions(hostElement)).toEqual({
@@ -84,8 +84,8 @@ describe('@ GlobalPosition', () => {
     });
     it('when exact width and height is provided in percentage', () => {
       const gloPos = new GlobalPosition({
-        hostWidth: '50%',
-        hostHeight: '50%',
+        width: '50%',
+        height: '50%',
         placement: InsidePlacement.TOP
       });
       expect(gloPos.getPositions(hostElement)).toEqual({
@@ -98,8 +98,8 @@ describe('@ GlobalPosition', () => {
     });
     it('when exact width and height is provided in higher percentage', () => {
       const gloPos = new GlobalPosition({
-        hostWidth: '150%',
-        hostHeight: '150%',
+        width: '150%',
+        height: '150%',
         placement: InsidePlacement.TOP
       });
       expect(gloPos.getPositions(hostElement)).toEqual({
@@ -134,8 +134,8 @@ describe('@ GlobalPosition', () => {
     getData().forEach(data => {
       it(data.name, () => {
         const gloPos = new GlobalPosition({
-          hostWidth: hostElCoords.width,
-          hostHeight: hostElCoords.height,
+          width: hostElCoords.width,
+          height: hostElCoords.height,
           placement: data.placement,
           offset: 2
         });

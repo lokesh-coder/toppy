@@ -25,7 +25,7 @@ export class SlidePositionExampleComponent implements OnInit {
     this._toppyControl = this.toppy
       .position(new SlidePosition({ placement: this.selectedPlacement }))
       .config({
-        dismissOnDocumentClick: true
+        closeOnDocClick: true
       })
       .content(SimpleListComponent)
       .create();

@@ -48,6 +48,7 @@ class BusClass {
       map(e => e.data)
     );
   }
+
   stop(): void {
     this._e.complete();
   }
