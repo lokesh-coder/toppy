@@ -16,19 +16,21 @@ import { ToppyControl } from '../lib/toppy-control';
 export class TemplateRefTestComponent {
   @ViewChild('el', { read: ElementRef }) el: ElementRef;
   @ViewChild('tpl', { read: TemplateRef }) tpl;
+  constructor(private toppy: Toppy) {}
 }
 
 @Component({
   template: 'Hi'
 })
-export class TestComponent {}
+export class TestComponent {
+}
 
 @NgModule({
   declarations: [TestComponent, TemplateRefTestComponent],
-  // exports: [TemplateRefTestComponent, TestComponent],
   entryComponents: [TestComponent]
 })
-export class TemplateRefTestModule {}
+export class TemplateRefTestModule {
+}
 
 describe('== Toppy ==', () => {
   let toppy: Toppy = null;
@@ -41,7 +43,7 @@ describe('== Toppy ==', () => {
     TestBed.configureTestingModule({
       imports: [TemplateRefTestModule],
       declarations: [],
-      providers: [Toppy, ApplicationRef, ComponentFactoryResolver, Injector]
+      providers: [ApplicationRef, ComponentFactoryResolver, Injector]
     }).compileComponents();
 
     templateRefCompFixture = TestBed.createComponent(TemplateRefTestComponent);
@@ -51,6 +53,10 @@ describe('== Toppy ==', () => {
     compFact = TestBed.get(ComponentFactoryResolver);
     inj = TestBed.get(Injector);
     spyOn(toppy, 'ngOnDestroy').and.callFake(() => {
+      // tslint:disable-next-line:forin
+      for (const key in Toppy.controls) {
+        Toppy.controls[key].close();
+      }
       Toppy.controls = {};
     });
   }));
@@ -58,14 +64,13 @@ describe('== Toppy ==', () => {
   afterEach(function() {
     templateRefCompFixture.destroy();
     document.querySelector('body').removeChild(templateRefCompFixture.debugElement.nativeElement);
-    // _off();
   });
 
   it('should be initialized', () => {
     expect(toppy).toBeTruthy();
   });
 
-  describe('with default settings', () => {
+  describe('#basic', () => {
     let ctrl: ToppyControl;
     beforeEach(() => {
       ctrl = toppy.create();
@@ -83,14 +88,13 @@ describe('== Toppy ==', () => {
       expect(ctrl.config).toEqual(DefaultConfig);
     });
     it('should have default text content', () => {
-      const tid = (toppy as any)._tid;
-      expect(ctrl.content).toEqual({ data: 'hello', type: ContentType.STRING, props: { id: tid } });
+      expect(ctrl.content).toEqual({ data: 'hello', type: ContentType.STRING, props: {} });
     });
     it('should add control to toppy', () => {
       expect(Object.keys(Toppy.controls).length).toEqual(1);
     });
   });
-  describe('with provided settings', () => {
+  describe('#config|#position|#content', () => {
     let ctrl: ToppyControl;
     let tid: string;
     beforeEach(() => {
@@ -120,14 +124,14 @@ describe('== Toppy ==', () => {
       expect((toppy as any)._inputs.content).toEqual({
         type: ContentType.STRING,
         data: 'random text',
-        props: { id: tid }
+        props: {}
       });
     });
     it('should set custom content in "ToppyControl"', () => {
-      expect(toppy.getCtrl(tid).content).toEqual({ type: ContentType.STRING, data: 'random text', props: { id: tid } });
+      expect(toppy.getCtrl(tid).content).toEqual({ type: ContentType.STRING, data: 'random text', props: { } });
     });
   });
-  describe('with different content type', () => {
+  describe('#content', () => {
     let t: Toppy;
     let tid: string;
     beforeEach(() => {
@@ -142,7 +146,7 @@ describe('== Toppy ==', () => {
     it('text content without props', () => {
       t.content('hello').create();
       tid = (toppy as any)._tid;
-      expect(toppy.getCtrl(tid).content).toEqual({ type: ContentType.STRING, data: 'hello', props: { id: tid } });
+      expect(toppy.getCtrl(tid).content).toEqual({ type: ContentType.STRING, data: 'hello', props: { } });
     });
     it('text content with props', () => {
       t.content('hello', { class: 'abc' }).create();
@@ -150,7 +154,7 @@ describe('== Toppy ==', () => {
       expect(toppy.getCtrl(tid).content).toEqual({
         type: ContentType.STRING,
         data: 'hello',
-        props: { id: tid, class: 'abc' }
+        props: { class: 'abc' }
       });
     });
 
@@ -161,7 +165,7 @@ describe('== Toppy ==', () => {
       expect(toppy.getCtrl(tid).content).toEqual({
         type: ContentType.STRING,
         data: '<span>hello</span>',
-        props: { id: tid }
+        props: {}
       });
     });
     it('html content with props', () => {
@@ -170,7 +174,7 @@ describe('== Toppy ==', () => {
       expect(toppy.getCtrl(tid).content).toEqual({
         type: ContentType.HTML,
         data: '<span>hello</span>',
-        props: { id: tid, hasHTML: true }
+        props: { hasHTML: true }
       });
     });
 
@@ -181,7 +185,7 @@ describe('== Toppy ==', () => {
       expect(toppy.getCtrl(tid).content).toEqual({
         type: ContentType.TEMPLATE,
         data: templateRefComp.tpl,
-        props: { id: tid }
+        props: {}
       });
     });
     it('template content with props', () => {
@@ -190,7 +194,7 @@ describe('== Toppy ==', () => {
       expect(toppy.getCtrl(tid).content).toEqual({
         type: ContentType.TEMPLATE,
         data: templateRefComp.tpl,
-        props: { id: tid, name: 'Johny' }
+        props: { name: 'Johny' }
       });
     });
 
@@ -201,7 +205,7 @@ describe('== Toppy ==', () => {
       expect(toppy.getCtrl(tid).content).toEqual({
         type: ContentType.COMPONENT,
         data: TestComponent,
-        props: { id: tid }
+        props: {}
       });
     });
     it('component content with props', () => {
@@ -210,12 +214,11 @@ describe('== Toppy ==', () => {
       expect(toppy.getCtrl(tid).content).toEqual({
         type: ContentType.COMPONENT,
         data: TestComponent,
-        props: { id: tid, name: 'Johny' }
+        props: { name: 'Johny' }
       });
     });
   });
-
-  describe('when "create" method is called', () => {
+  describe('#create', () => {
     let ctrl1: ToppyControl;
     let t: Toppy;
     let firstTid, secondTid;
@@ -240,5 +243,18 @@ describe('== Toppy ==', () => {
       toppy.create();
       expect(Object.keys(Toppy.controls).length).toEqual(5);
     });
+  });
+  describe('#ngOnDestroy', () => {
+
+    it('should remove all controls', () => {
+      toppy.create();
+      toppy.create();
+      toppy.create();
+      toppy.create();
+
+      toppy.ngOnDestroy();
+      expect(Object.keys(Toppy.controls).length).toEqual(0);
+    });
+
   });
 });

@@ -8,7 +8,7 @@ import {
 } from '@angular/core';
 import { animationFrameScheduler, fromEvent, merge as mergeObs, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, observeOn, skipWhile, takeUntil, tap } from 'rxjs/operators';
-import { Content, ToppyConfig } from './models';
+import { Content, ToppyConfig, ContentProps, ContentData } from './models';
 import { Position } from './position/position';
 import { ToppyComponent } from './toppy.component';
 import { Bus, getContent } from './utils';
@@ -76,7 +76,7 @@ export class ToppyControl {
   }
 
   onDocumentClick(): Observable<any> {
-    return fromEvent(this.viewEl, 'click').pipe(
+    return fromEvent(document.getElementsByTagName('body'), 'click').pipe(
       takeUntil(this.die),
       map((e: any) => e.target),
       skipWhile(() => !this.config.dismissOnDocumentClick),
@@ -105,7 +105,7 @@ export class ToppyControl {
     );
   }
 
-  changePosition(newPosition): void {
+  changePosition(newPosition: Position): void {
     this.position = newPosition;
   }
 
@@ -113,7 +113,7 @@ export class ToppyControl {
     this.position.updateConfig(positionConfig);
   }
 
-  updateHost(content, props = {}): void {
+  updateHost(content: ContentData, props: ContentProps = {}): void {
     this.content = getContent(content, { ...this.content.props, ...props });
   }
 

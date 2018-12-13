@@ -1,4 +1,4 @@
-import { DebugElement } from '@angular/core';
+import { DebugElement, Component } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { skip, take } from 'rxjs/operators';
@@ -8,6 +8,15 @@ import { ContentType } from '../lib/models';
 import { ToppyComponent } from '../lib/toppy.component';
 import { Bus } from '../lib/utils';
 
+
+@Component({
+  selector: 'test-comp',
+  template: 'hello'
+})
+export class TestComponent {
+  constructor(private co: CurrentOverlay ) {}
+}
+
 describe('== ToppyComponent ==', () => {
   let fixture: ComponentFixture<ToppyComponent>;
   let debugEl: DebugElement;
@@ -15,7 +24,7 @@ describe('== ToppyComponent ==', () => {
   let el: HTMLElement;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ToppyComponent]
+      declarations: [ToppyComponent, TestComponent]
     }).compileComponents();
     fixture = TestBed.createComponent(ToppyComponent);
     debugEl = fixture.debugElement;
@@ -93,6 +102,11 @@ describe('== ToppyComponent ==', () => {
     it('should have CurrentOverlay', () => {
       expect(toppyComp.createInj().get(CurrentOverlay)).toBeTruthy();
       expect(toppyComp.createInj().get(CurrentOverlay).close).toBeTruthy();
+    });
+    it('should return close function on calling `close` method', () => {
+      toppyComp.content.props.close = () => '123';
+      const co = toppyComp.createInj().get(CurrentOverlay);
+      expect(co.close()).toBe('123');
     });
   });
   describe('#updateTextContent', () => {

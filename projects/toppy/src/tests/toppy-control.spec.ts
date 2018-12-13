@@ -5,10 +5,11 @@ import { take, takeUntil } from 'rxjs/operators';
 import { DefaultConfig } from 'toppy/lib/config';
 import { ContentType, InsidePlacement } from 'toppy/lib/models';
 import { Bus } from 'toppy/lib/utils';
-import { GlobalPosition } from '../lib/position';
+import { GlobalPosition, DefaultPosition } from '../lib/position';
 import { ToppyControl } from '../lib/toppy-control';
 import { ToppyComponent } from '../lib/toppy.component';
-import { merge, of, Subject } from 'rxjs';
+import { merge, of, Subject, Observable, Subscription } from 'rxjs';
+import { createElement } from '@angular/core/src/view/element';
 
 @Component({
   selector: 'lib-test-component',
@@ -195,6 +196,111 @@ describe('== ToppyControl ==', () => {
       toppyControl.toggle();
       expect(toppyControl.open).toHaveBeenCalledTimes(0);
       expect(toppyControl.close).toHaveBeenCalledTimes(1);
+    });
+  });
+  describe('#changePosition', () => {
+    afterEach(() => {
+      toppyControl.close();
+    });
+    it('should change the position', () => {
+      toppyControl.changePosition(new DefaultPosition());
+      expect(toppyControl.position.getClassName()).toEqual('default-position');
+    });
+  });
+  describe('#updatePosition', () => {
+    beforeEach(() => {
+      toppyControl.position = new GlobalPosition({ placement: InsidePlacement.TOP });
+    });
+    afterEach(() => {
+      toppyControl.close();
+    });
+    it('should update the position config', () => {
+      toppyControl.updatePosition({placement: InsidePlacement.CENTER});
+      expect(toppyControl.position['_config']['placement']).toEqual(InsidePlacement.CENTER);
+    });
+  });
+  describe('#updateHost', () => {
+    beforeEach(() => {
+      toppyControl.content = { data: 'One', props: { }, type: ContentType.STRING };
+    });
+    afterEach(() => {
+      toppyControl.close();
+    });
+    it('should update the content', () => {
+      toppyControl.updateHost('Two');
+      expect(toppyControl.content.type).toEqual(ContentType.STRING);
+    });
+  });
+  describe('#onDocumentClick', () => {
+    let sub: Subscription;
+    beforeEach(() => {
+      toppyControl.content = { data: 'hello', props: {}, type: ContentType.STRING };
+      toppyControl.config = { ...DefaultConfig, dismissOnDocumentClick: true };
+      toppyControl.position = new GlobalPosition({ placement: InsidePlacement.TOP });
+    });
+    afterEach(() => {
+      sub.unsubscribe();
+    });
+    it('should subscribe when document is clicked', (done) => {
+      fixture.autoDetectChanges();
+      spyOn(toppyControl as any, '_isNotHostElement').and.returnValue(true);
+      spyOn(toppyControl as any, 'close').and.returnValue(true);
+      sub = toppyControl.onDocumentClick().subscribe(data => {
+        expect(data).toBeTruthy();
+        done();
+      });
+      const el: any = document.querySelector(`body`);
+      el.click();
+    });
+  });
+  describe('#onEscClick', () => {
+    let sub: Subscription;
+
+    beforeEach(() => {
+      toppyControl.content = { data: 'hello', props: {}, type: ContentType.STRING };
+      toppyControl.config = { ...DefaultConfig, closeOnEsc: true };
+      toppyControl.position = new GlobalPosition({ placement: InsidePlacement.TOP });
+      fixture.autoDetectChanges();
+      spyOn(toppyControl as any, 'close').and.returnValue(true);
+    });
+    afterEach(() => {
+      sub.unsubscribe();
+    });
+    it('should subscribe when escape button is clicked if key is `Escape`', (done) => {
+      sub = toppyControl.onEscClick().subscribe(data => {
+        expect(data).toBeTruthy();
+        done();
+      });
+      document.querySelector('body').dispatchEvent(new KeyboardEvent('keydown', {'key': 'Escape'}));
+    });
+    it('should subscribe when escape button is clicked if keyCode is `27`', (done) => {
+      sub = toppyControl.onEscClick().subscribe(data => {
+        expect(data).toBeTruthy();
+        done();
+      });
+      document.querySelector('body').dispatchEvent(new KeyboardEvent('keydown', {keyCode: 27} as any));
+    });
+    it('should subscribe when escape button is clicked if key is `Esc`', (done) => {
+      sub = toppyControl.onEscClick().subscribe(data => {
+        expect(data).toBeTruthy();
+        done();
+      });
+      document.querySelector('body').dispatchEvent(new KeyboardEvent('keydown', {'key': 'Esc'}));
+    });
+  });
+  describe('#onWindowResize', () => {
+    let sub: Subscription;
+    afterEach(() => {
+      sub.unsubscribe();
+    });
+
+    it('should subscribe when window is resized', (done) => {
+      toppyControl.config = { ...DefaultConfig, windowResizeCallback: () => {} };
+      sub = toppyControl.onWindowResize().subscribe(data => {
+        expect(data).toBeTruthy();
+        done();
+      });
+      window.dispatchEvent(new Event('resize'));
     });
   });
 });
