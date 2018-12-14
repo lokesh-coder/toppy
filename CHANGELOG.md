@@ -1,3 +1,24 @@
+# [2.0.0](https://github.com/lokesh-coder/toppy/compare/v1.3.1...v2.0.0) (2018-12-14)
+
+
+### Bug Fixes
+
+* remove unused components ([10a3fd8](https://github.com/lokesh-coder/toppy/commit/10a3fd8))
+* ss class method [skip ci] ([521c2d1](https://github.com/lokesh-coder/toppy/commit/521c2d1))
+
+
+### Features
+
+* access custom props in Component, Template and Plain text contents ([b8550c8](https://github.com/lokesh-coder/toppy/commit/b8550c8))
+* add template ref context ([e3e4ff1](https://github.com/lokesh-coder/toppy/commit/e3e4ff1)), closes [#19](https://github.com/lokesh-coder/toppy/issues/19)
+* added support for custom key to reference later ([3901878](https://github.com/lokesh-coder/toppy/commit/3901878))
+* include context data in templateref ([a865929](https://github.com/lokesh-coder/toppy/commit/a865929))
+
+
+### BREAKING CHANGES
+
+* API has been changed. `.overlay()` to `.position()` , `.host()` to `.content()` , `updateHost()` to `updateContent()` , `ToppyRef` to `ToppyControl`. Introduced `.config()`. Performance improvement.
+
 ## [1.3.1](https://github.com/lokesh-coder/toppy/compare/v1.3.0...v1.3.1) (2018-12-05)
 
 
