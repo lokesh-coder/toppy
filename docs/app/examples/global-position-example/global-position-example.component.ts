@@ -1,5 +1,5 @@
 import { Component, OnInit, ViewEncapsulation } from '@angular/core';
-import { GlobalPosition, InsidePlacement, Toppy, ToppyRef } from 'toppy';
+import { GlobalPosition, InsidePlacement, Toppy, ToppyControl } from 'toppy';
 import { SimpleModalComponent } from '../../host-components/simple-modal/simple-modal.component';
 
 @Component({
@@ -32,35 +32,34 @@ export class GlobalPositionExampleComponent implements OnInit {
     { name: 'Top right', value: InsidePlacement.TOP_RIGHT },
     { name: 'Center', value: InsidePlacement.CENTER }
   ];
-  selectedPlacement = this.placements[0].value;
-  private _toppyRef: ToppyRef;
+  selectedPlacement = this.placements[8].value;
+  private _toppyControl: ToppyControl;
   constructor(private toppy: Toppy) {}
 
   ngOnInit() {
-    this._toppyRef = this.toppy
-      .overlay(
-        new GlobalPosition({ placement: this.selectedPlacement, hostHeight: 'auto', hostWidth: 'auto', offset: 10 }),
-        {
-          docClickCallback: () => {
-            console.log('doc click callback');
-          },
-          dismissOnDocumentClick: true,
-          wrapperClass: 'global-content-wrapper',
-          backdrop: true,
-          bodyClassNameOnOpen: 'global-toastr'
-        }
-      )
-      .host(SimpleModalComponent)
+    this._toppyControl = this.toppy
+      .position(new GlobalPosition({ placement: this.selectedPlacement, height: 'auto', width: 'auto', offset: 10 }))
+      .config({
+        docClickCallback: () => {
+          console.log('doc click callback');
+        },
+        closeOnDocClick: true,
+        wrapperClass: 'global-content-wrapper',
+        backdrop: true,
+        bodyClass: 'global-toastr'
+      })
+      .content(SimpleModalComponent)
       .create();
   }
 
   open() {
     const content = this.placements.find(a => a.value === this.selectedPlacement).name;
-    this._toppyRef.updateHost(content).open();
+    this._toppyControl.updateContent(content);
+    this._toppyControl.open();
   }
 
   onOptionChange() {
-    this._toppyRef.updatePosition({
+    this._toppyControl.updatePosition({
       placement: this.selectedPlacement
     });
   }

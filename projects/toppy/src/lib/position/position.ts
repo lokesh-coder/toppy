@@ -1,18 +1,13 @@
-import { EventBus } from '../helper/event-bus';
-
-// import { PositionCoOrds } from '../models';
-
 export abstract class Position {
-  eventBus: EventBus;
-  protected _config = {};
+  protected config = {};
   abstract getPositions(host: HTMLElement): any;
   getClassName(): string {
     return this.constructor.name.replace('Position', '-position').toLocaleLowerCase();
   }
-  setEventBus(eventBus: EventBus) {
-    this.eventBus = eventBus;
-  }
+
+  init(tid: string) {}
+
   updateConfig(config) {
-    this._config = { ...this._config, ...config };
+    this.config = { ...this.config, ...config };
   }
 }

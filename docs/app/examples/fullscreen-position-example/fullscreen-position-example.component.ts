@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { FullscreenPosition, Toppy, ToppyRef } from 'toppy';
+import { FullscreenPosition, Toppy, ToppyControl } from 'toppy';
 import { HeroScreenComponent } from '../../host-components/hero-screen/hero-screen.component';
 
 @Component({
@@ -9,20 +9,21 @@ import { HeroScreenComponent } from '../../host-components/hero-screen/hero-scre
 })
 export class FullscreenPositionExampleComponent implements OnInit {
   selectedPlacement = null;
-  private _toppyRef: ToppyRef;
+  private _toppyControl: ToppyControl;
   constructor(private toppy: Toppy) {}
 
   ngOnInit() {
-    this._toppyRef = this.toppy
-      .overlay(new FullscreenPosition(), {
+    this._toppyControl = this.toppy
+      .position(new FullscreenPosition())
+      .config({
         closeOnEsc: true
       })
-      .host(HeroScreenComponent)
+      .content(HeroScreenComponent)
       .create();
   }
 
   open() {
-    this._toppyRef.open();
+    this._toppyControl.open();
   }
 
   onOptionChange() {

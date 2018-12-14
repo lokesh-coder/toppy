@@ -1,76 +1,72 @@
-import { Injectable, OnDestroy, TemplateRef } from '@angular/core';
+import { ApplicationRef, ComponentFactoryResolver, Injectable, Injector } from '@angular/core';
 import { DefaultConfig } from './config';
-import { EventBus } from './helper/event-bus';
-import { HostContainer } from './host-container';
-import { ComponentType, ToppyConfig } from './models';
-import { OverlayInstance } from './overlay-instance';
+import { ContentData, ContentProps, ContentType, Inputs, InsidePlacement, ToppyConfig } from './models';
+import { GlobalPosition } from './position';
 import { Position } from './position/position';
-import { ToppyRef } from './toppy-ref';
-import { getContentMeta } from './utils';
+import { ToppyControl } from './toppy-control';
+import { Bus, createId, getContent, newInjector } from './utils';
 
 @Injectable({
   providedIn: 'root'
 })
-export class Toppy implements OnDestroy {
-  static toppyRefs: { [key: string]: ToppyRef } = {};
-  private _overlayID: string;
-  private _config: ToppyConfig;
-  private _hostContainerFreshInstance: HostContainer;
-  private _overlayFreshInstance: OverlayInstance;
+export class Toppy {
+  static controls: { [key: string]: ToppyControl } = {};
+  private tid: string;
+  private inputs: Inputs = {
+    position: null,
+    config: DefaultConfig,
+    content: { type: ContentType.STRING, data: 'hello', props: {} },
+    tid: null
+  };
 
-  constructor(
-    private _eventBus: EventBus,
-    private _overlayIns: OverlayInstance,
-    private _hostContainer: HostContainer
-  ) {}
+  constructor(private injector: Injector) {
+    this.inputs.position = new GlobalPosition({ placement: InsidePlacement.TOP });
+  }
 
-  overlay(position: Position, config: Partial<ToppyConfig> = {}): Toppy {
-    this._hostContainerFreshInstance = this._hostContainer.getNewInstance();
-    this._overlayFreshInstance = this._overlayIns.getNewInstance();
-    this._config = { ...DefaultConfig, ...config };
-    this._overlayID = this._generateID();
-    this._overlayFreshInstance.setConfig(this._config).configure(position, this._overlayID);
-    this._hostContainerFreshInstance.toppyRef = this.getToppyRef.bind(this);
+  position(position: Position): Toppy {
+    this.inputs.position = position;
     return this;
   }
 
-  host(content: string | TemplateRef<any> | ComponentType<any>, props: { [x: string]: any } = {}) {
-    const data = getContentMeta(content, props, this._overlayID);
-    this._hostContainerFreshInstance.configure(data);
+  config(config: Partial<ToppyConfig>): Toppy {
+    this.inputs.config = { ...DefaultConfig, ...config };
     return this;
   }
 
-  create(): ToppyRef {
-    if (Toppy.toppyRefs[this._overlayID]) {
-      Toppy.toppyRefs[this._overlayID].close();
-      delete Toppy.toppyRefs[this._overlayID];
-    }
-    Toppy.toppyRefs[this._overlayID] = new ToppyRef(
-      this._overlayFreshInstance,
-      this._hostContainerFreshInstance,
-      this._eventBus,
-      this._config,
-      this._overlayID
+  content(data: ContentData, props: ContentProps = {}): Toppy {
+    this.inputs.content = getContent(data, props);
+    return this;
+  }
+
+  create(key: string = null): ToppyControl {
+    this.tid = this.inputs.tid = key || createId();
+
+    const injector = newInjector(
+      {
+        provide: ToppyControl,
+        deps: [ApplicationRef, ComponentFactoryResolver, Injector]
+      },
+      this.injector
     );
-    return Toppy.toppyRefs[this._overlayID];
+    const tc = injector.get(ToppyControl);
+    if (Toppy.controls[this.tid]) {
+      this.tid = createId();
+    }
+    this.inputs.position.init(this.tid);
+    Toppy.controls[this.tid] = Object.assign(tc, this.inputs);
+    return tc;
   }
 
-  delete(overlyID) {
-    delete Toppy.toppyRefs[overlyID];
+  getCtrl(tid): ToppyControl {
+    return Toppy.controls[tid];
   }
 
-  getToppyRef(id) {
-    return Toppy.toppyRefs[id];
-  }
-
-  ngOnDestroy() {
-    Toppy.toppyRefs = {};
-    this._eventBus.destroy();
-  }
-
-  private _generateID(): string {
-    return Math.random()
-      .toString(36)
-      .substr(2, 5);
+  destroy() {
+    // tslint:disable-next-line:forin
+    for (const key in Toppy.controls) {
+      Toppy.controls[key].close();
+    }
+    Toppy.controls = {};
+    Bus.stop();
   }
 }

@@ -1,41 +1,26 @@
-$toppy--base-font-size: 14px;
+$toppy--base-font-size: 13px;
 $toppy--base-font-size-xl: 16px;
 $toppy--app-name: 'TOPPY';
 $toppy--debug: false;
-$toppy--font-family: acumin-pro, 'Inconsolata', 'Rubik', 'Inter UI', 'Nunito Sans';
-$toppy--font-family-monospace: 'Roboto Mono', 'Courier New', 'Lucida Console', Monaco, Courier, monospace;
-$toppy--current-theme: 'DEFAULT';
-$toppy--themes: (
-  'default': 'DEFAULT',
-  'dark': 'DARK'
-);
-$toppy--colors-basic: (
-  'bg': #fff,
-  'bg2': #f3f3f7a6,
-  'bg3': #fefefe,
-  'text': #4b4b5a,
-  'heading': #35335a,
-  'border': #ebebf3,
-  'para': #b1b0be,
-  'dark': #000,
-  'shadow': #dddde9
-);
+$toppy--font-family: 'Rubik', acumin-pro, 'Inconsolata', 'Inter UI', 'Nunito Sans';
+$toppy--font-family-headings: 'acumin-pro';
+$toppy--font-family-monospace: 'Roboto mono', 'calling-code', 'Courier New', 'Lucida Console', Monaco, Courier,
+  monospace;
 
-$toppy--colors-theme: (
-  'primary': #5a5a8c,
+$toppy--colors: (
+  'bg': #fafafa,
+  'text': #88889a,
+  'heading': #9590d4,
+  'border': #e9edff,
+  'dark': #585c6d,
+  'shadow': #dddde9,
+  'primary': #7d61af,
   'secondary': #ef8fb7,
   'success': #3fc782,
   'warning': #f78f1e,
   'danger': #e3505a,
-  'dark': #000,
   'info': #03a9f4
 );
-$toppy--colors: (
-  'basic': $toppy--colors-basic,
-  'theme': $toppy--colors-theme
-);
-
-$toppy--client-color: #fec500;
 
 $toppy--font-sizes: (
   'sm': 0.9rem,
@@ -49,14 +34,7 @@ $toppy--font-sizes: (
   'h5': 1.25rem,
   'h6': 1rem
 );
-$toppy-folder-image-size: 15rem;
-$toppy-folder-illus: (
-  'bg': #ddd,
-  'front': #fff,
-  'back': #fff,
-  'file': $toppy--client-color,
-  'file-shadow': darken($toppy--client-color, 10%)
-);
+
 $toppy--border-rad: 3px;
 $toppy--icons-font: 'toppy';
 $toppy--icon-font-path: './icons';

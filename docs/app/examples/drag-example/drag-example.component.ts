@@ -1,6 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
+import { Subject } from 'rxjs';
 import { OutsidePlacement } from '../../../../projects/toppy/src/lib/models';
-import { RelativePosition, Toppy, ToppyRef } from '../../../../projects/toppy/src/public_api';
+import { RelativePosition, Toppy, ToppyControl } from '../../../../projects/toppy/src/public_api';
 
 @Component({
   selector: 'app-drag-example',
@@ -12,24 +13,21 @@ export class DragExampleComponent implements OnInit {
   pos3 = 0;
   pos4 = 0;
   @ViewChild('el') el: ElementRef;
-  private _toppyRef: ToppyRef;
+  private _toppyControl: ToppyControl;
+  pauser = new Subject();
   constructor(private toppy: Toppy) {}
 
   ngOnInit() {
-    this._toppyRef = this.toppy
-      .overlay(
+    this._toppyControl = this.toppy
+      .position(
         new RelativePosition({
           placement: OutsidePlacement.TOP,
           src: this.el.nativeElement,
-          hostWidth: 'auto',
+          width: 'auto',
           autoUpdate: true
-        }),
-        {
-          backdrop: false,
-          dismissOnDocumentClick: false
-        }
+        })
       )
-      .host('<div class="tooltip">tooltip</div>', { hasHTML: true })
+      .content('Drag me', { class: 'tooltip' })
       .create();
   }
 
@@ -41,10 +39,10 @@ export class DragExampleComponent implements OnInit {
     this.el.nativeElement.style.top = '0px';
   }
   onMouseOver() {
-    this._toppyRef.open();
+    this._toppyControl.open();
   }
   onMouseLeave() {
-    this._toppyRef.close();
+    this._toppyControl.close();
   }
   dragMouseDown(e) {
     e = e || window.event;
@@ -75,7 +73,6 @@ export class DragExampleComponent implements OnInit {
   }
 
   dragElement() {
-    console.log('fofo');
     this.el.nativeElement.onmousedown = this.dragMouseDown.bind(this);
   }
 }

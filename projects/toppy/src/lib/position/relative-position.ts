@@ -1,72 +1,56 @@
 import { OutsidePlacement, PositionCoOrds } from '../models';
+import { Bus } from '../utils';
 import { Position } from './position';
 
 export interface Config {
   src?: HTMLElement;
   placement?: OutsidePlacement;
   autoUpdate?: boolean;
-  hostWidth?: string | number;
-  hostHeight?: string | number;
+  width?: string | number;
+  height?: string | number;
 }
 
 export class RelativePosition extends Position {
-  protected _config: Config = {
+  protected config: Config = {
     src: null,
     placement: OutsidePlacement.TOP,
     autoUpdate: false,
-    hostWidth: '100%',
-    hostHeight: '100%'
+    width: '100%',
+    height: '100%'
   };
-  _mutationObserver: MutationObserver;
+  obs: MutationObserver;
   constructor(config: Config) {
     super();
-    this._config = { ...this._config, ...config };
-    if (this._config.autoUpdate) {
-      this._watchElementPositionChange();
-    }
+    this.config = { ...this.config, ...config };
+  }
+
+  init(tid: string): void {
+    if (this.config.autoUpdate) this.listenDrag(tid);
   }
 
   getPositions(hostElement: HTMLElement): PositionCoOrds {
-    const s = this.getCoords(this._config.src);
+    const s = this.getCoords(this.config.src);
     const h = this.getCoords(hostElement);
 
-    if (this._config.hostWidth === '100%') {
-      this._config.hostWidth = s.width;
+    if (this.config.width === '100%') {
+      this.config.width = s.width;
     }
 
-    if (this._config.hostHeight === '100%') {
-      this._config.hostHeight = 'auto';
+    if (this.config.height === '100%') {
+      this.config.height = 'auto';
     }
-    if (typeof this._config.hostHeight === 'number') {
-      h.height = this._config.hostHeight;
+    if (typeof this.config.height === 'number') {
+      h.height = this.config.height;
     }
-    if (typeof this._config.hostWidth === 'number') {
-      h.width = this._config.hostWidth;
+    if (typeof this.config.width === 'number') {
+      h.width = this.config.width;
     }
-    const props = this.calculatePos(this._config.placement, s, h);
-    return { ...this.round(props), width: this._config.hostWidth, height: this._config.hostHeight };
-  }
-
-  private getSize(el): { x: number; y: number } {
-    const { offsetWidth, offsetHeight } = el;
-    const [x, y] = [offsetWidth, offsetHeight];
-    return { x, y };
+    const props = this.calculatePos(this.config.placement, s, h);
+    return { ...this.round(props), width: this.config.width, height: this.config.height };
   }
 
   private getCoords(elem: HTMLElement): PositionCoOrds {
     const box: any = elem.getBoundingClientRect();
-
-    const body = document.body;
-    const docEl = document.documentElement;
-
-    const scrollTop = window.pageYOffset || docEl.scrollTop || body.scrollTop;
-    const scrollLeft = window.pageXOffset || docEl.scrollLeft || body.scrollLeft;
-
-    const clientTop = docEl.clientTop || body.clientTop || 0;
-    const clientLeft = docEl.clientLeft || body.clientLeft || 0;
-
-    const top = box.top + scrollTop - clientTop;
-    const left = box.left + scrollLeft - clientLeft;
 
     return {
       top: Math.round(box.top),
@@ -78,17 +62,7 @@ export class RelativePosition extends Position {
     };
   }
 
-  private resetCoOrds(element: HTMLElement) {
-    // element.style.width = '';
-    // element.style.height = '';
-    element.style.top = '';
-    element.style.bottom = '';
-    element.style.left = '';
-    element.style.right = '';
-    return element;
-  }
-
-  private calc(placement: OutsidePlacement, src, host) {
+  private calc(placement: OutsidePlacement, src, host): object {
     const [main, sub] = placement.split('');
     const p = { left: 0, top: 0 };
     if ((main === 't' || main === 'b') && !sub) {
@@ -126,31 +100,30 @@ export class RelativePosition extends Position {
     return p;
   }
 
-  private getProps(pos, s, h) {
+  private getProps(pos, s, h): object {
     return this.calc(pos, s, h);
-    // return this[`calculate_${pos}`](s, h);
   }
 
-  private calculatePos(pos, s, h, c = true) {
+  private calculatePos(pos, s, h, c = true): object {
     const props = this.getProps(pos, s, h);
     if (!c) {
       return props;
     }
-    if (this._config.autoUpdate && this.isOverflowed({ ...props, width: h.width, height: h.height })) {
+    if (this.config.autoUpdate && this.isOverflowed({ ...props, width: h.width, height: h.height })) {
       return this.calculatePos(this.nextPosition(pos), s, h, false);
     }
 
     return props;
   }
 
-  private isOverflowed(props) {
+  private isOverflowed(props: { [x: string]: any }): boolean {
     const { innerHeight, innerWidth } = window;
     props.bottom = props.top + props.height;
     props.right = props.left + props.width;
     return props.bottom > innerHeight || props.top <= 0 || props.left <= 0 || props.right > innerWidth;
   }
 
-  private nextPosition(current) {
+  private nextPosition(current): OutsidePlacement {
     const placements = [
       OutsidePlacement.TOP,
       OutsidePlacement.BOTTOM,
@@ -171,30 +144,20 @@ export class RelativePosition extends Position {
     return even ? placements[index + 1] : placements[index - 1];
   }
 
-  private round(props) {
-    Object.keys(props).forEach(x => {
-      props[x] = Math.round(props[x]);
-    });
+  private round(props: object): object {
+    Object.keys(props).forEach(x => (props[x] = Math.round(props[x])));
     return props;
   }
 
-  private _watchElementPositionChange() {
-    if (this._mutationObserver) {
-      this._mutationObserver.disconnect();
-    }
-    this._mutationObserver = new MutationObserver(mutationsList => {
+  private listenDrag(tid: string): void {
+    if (this.obs) this.obs.disconnect();
+    this.obs = new MutationObserver(mutationsList => {
       for (const mutation of mutationsList) {
-        if (mutation.type === 'attributes') {
-          this.eventBus.post({ name: 'NEW_DYN_POS', data: null });
-        }
+        if (mutation.type === 'attributes') Bus.send(tid, 't_dynpos');
       }
     });
 
-    this._mutationObserver.observe(this._config.src, {
-      attributes: true,
-      childList: false,
-      subtree: false,
-      attributeOldValue: true,
+    this.obs.observe(this.config.src, {
       attributeFilter: ['style']
     });
   }

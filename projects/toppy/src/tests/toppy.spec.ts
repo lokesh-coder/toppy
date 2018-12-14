@@ -1,21 +1,31 @@
-import { Component, NgModule, TemplateRef, ViewChild } from '@angular/core';
-import { async, fakeAsync, TestBed } from '@angular/core/testing';
+import {
+  ApplicationRef,
+  Component,
+  ComponentFactoryResolver,
+  ElementRef,
+  Injector,
+  NgModule,
+  TemplateRef,
+  ViewChild
+} from '@angular/core';
+import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { DefaultConfig } from '../lib/config';
-import { EventBus } from '../lib/helper/event-bus';
-import { HostContainer } from '../lib/host-container';
-import { OverlayInstance } from '../lib/overlay-instance';
+import { ContentType } from '../lib/models';
+import { GlobalPosition, RelativePosition } from '../lib/position';
 import { Toppy } from '../lib/toppy';
-import { ToppyRef } from '../lib/toppy-ref';
+import { ToppyControl } from '../lib/toppy-control';
 
 @Component({
   selector: 'lib-template-ref-test-comp',
   template: `
-    <span>some content</span>
+    <span #el>some content</span>
     <ng-template #tpl>I am template</ng-template>
   `
 })
 export class TemplateRefTestComponent {
+  @ViewChild('el', { read: ElementRef }) el: ElementRef;
   @ViewChild('tpl', { read: TemplateRef }) tpl;
+  constructor(private toppy: Toppy) {}
 }
 
 @Component({
@@ -25,163 +35,232 @@ export class TestComponent {}
 
 @NgModule({
   declarations: [TestComponent, TemplateRefTestComponent],
-  exports: [TemplateRefTestComponent, TestComponent],
   entryComponents: [TestComponent]
 })
 export class TemplateRefTestModule {}
 
-describe('== Toppy ==', () => {
+describe('@ Toppy', () => {
   let toppy: Toppy = null;
-  let overlaySpy;
-  let overlayMock;
-  let componentHostSpy;
-  let componentHostMock;
-  let utilsMock;
-  let templateRefCompFixture;
-  let templateRefComp;
-  let toppyRefMock;
-  let eventBus: EventBus;
+  let templateRefCompFixture: ComponentFixture<TemplateRefTestComponent>;
+  let templateRefComp: TemplateRefTestComponent;
+  let appRef, compFact, inj;
   const config = DefaultConfig;
-
-  beforeEach(() => {
-    utilsMock = {
-      ID: 'xyz'
-    };
-    toppyRefMock = jasmine.createSpyObj('ToppyRef', ['close']);
-  });
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [TemplateRefTestModule],
       declarations: [],
-      providers: [Toppy, OverlayInstance, HostContainer, EventBus]
+      providers: [ApplicationRef, ComponentFactoryResolver, Injector]
     }).compileComponents();
 
     templateRefCompFixture = TestBed.createComponent(TemplateRefTestComponent);
     templateRefComp = templateRefCompFixture.componentInstance;
     toppy = TestBed.get(Toppy);
-    eventBus = TestBed.get(EventBus);
-    componentHostMock = TestBed.get(HostContainer);
-    overlayMock = TestBed.get(OverlayInstance);
-
-    componentHostSpy = jasmine.createSpyObj('HostContainer', ['configure']);
-    overlaySpy = jasmine.createSpyObj('overlayMock', ['configure']);
+    appRef = TestBed.get(ApplicationRef);
+    compFact = TestBed.get(ComponentFactoryResolver);
+    inj = TestBed.get(Injector);
+    spyOn(toppy, 'destroy').and.callFake(() => {
+      // tslint:disable-next-line:forin
+      for (const key in Toppy.controls) {
+        Toppy.controls[key].close();
+      }
+      Toppy.controls = {};
+    });
   }));
 
   afterEach(function() {
     templateRefCompFixture.destroy();
-    document.body.removeChild(templateRefCompFixture.debugElement.nativeElement);
+    document.querySelector('body').removeChild(templateRefCompFixture.debugElement.nativeElement);
   });
 
-  afterEach(() => {
-    toppy.ngOnDestroy();
-  });
   it('should be initialized', () => {
     expect(toppy).toBeTruthy();
   });
-  it('should have empty toppy references on load', () => {
-    expect(Object.keys(Toppy.toppyRefs).length).toEqual(0);
-  });
-  it('should delete toppyRef on calling "delete" method', () => {
-    (toppy as any)._overlayID = 'abc123';
-    toppy.create();
-    expect(toppy.getToppyRef('abc123').overlayID).toBe('abc123');
-    toppy.delete('abc123');
-    expect(toppy.getToppyRef('abc123')).toBeUndefined();
-  });
-  describe('on calling "generateID" method', () => {
-    it('should generate random ID of 5 characters', () => {
-      expect((toppy as any)._generateID().length).toBe(5);
-    });
-  });
-  describe('on calling "overlay" method', () => {
-    it('should return same instance', () => {
-      const instance = toppy.overlay(null);
-      expect(instance instanceof Toppy).toBeTruthy();
-      expect((instance as any)._overlayID).toBeDefined();
-    });
-  });
-  describe('on calling "host" method', () => {
-    let hostContainer;
+
+  describe('#basic', () => {
+    let ctrl: ToppyControl;
     beforeEach(() => {
-      toppy.overlay(null);
-      hostContainer = (toppy as any)._hostContainerFreshInstance;
-      spyOn(hostContainer, 'configure').and.callFake((...args) => {
-        return args;
-      });
+      ctrl = toppy.create();
     });
-    it('should return same instance', () => {
-      const instance = toppy.host(null);
-      expect(instance instanceof Toppy).toBeTruthy();
-      expect((instance as any)._overlayID).toBeDefined();
+    afterEach(() => {
+      toppy.destroy();
     });
-    it('should call `HostContainer.configure` method once', () => {
-      toppy.host(null);
-      expect(hostContainer.configure).toHaveBeenCalledTimes(1);
+    it('should return "ToppyControl"', () => {
+      expect(ctrl instanceof ToppyControl).toBeTruthy();
     });
-    it('should set string as input content', () => {
-      const content = 'Hello';
-      toppy.host(content);
-      expect(hostContainer.configure).toHaveBeenCalledWith({ content });
+    it('should have default "GlobalPosition"', () => {
+      expect(ctrl.position instanceof GlobalPosition).toBeTruthy();
     });
-    it('should set HTML string as input content', () => {
-      const content = '<b>Hello</b>';
-      toppy.host(content, { hasHTML: true });
-      expect(hostContainer.configure).toHaveBeenCalledWith({
-        content,
-        contentType: 'STRING',
-        props: { hasHTML: true }
-      });
+    it('should have default config', () => {
+      expect(ctrl.config).toEqual(DefaultConfig);
     });
-    it('should set TemplateRef as input content', fakeAsync(() => {
-      const content = templateRefComp.tpl;
-      templateRefCompFixture.detectChanges();
-      toppy.host(content);
-      expect(hostContainer.configure).toHaveBeenCalledWith({
-        content,
-        contentType: 'TEMPLATEREF'
-      });
-    }));
-    it('should set component as input content', fakeAsync(() => {
-      const content = TestComponent;
-      const id = ((toppy as any)._overlayID = 'abc123');
-      toppy.host(content);
-      expect(hostContainer.configure).toHaveBeenCalledWith({
-        content,
-        props: { id },
-        contentType: 'COMPONENT'
-      });
-    }));
-    it('should set component as input content with given props', fakeAsync(() => {
-      const content = TestComponent;
-      const id = ((toppy as any)._overlayID = 'abc123');
-      toppy.host(content, { label: 'test-props' });
-      expect(hostContainer.configure).toHaveBeenCalledWith({
-        content,
-        props: { id, label: 'test-props' },
-        contentType: 'COMPONENT'
-      });
-    }));
+    it('should have default text content', () => {
+      expect(ctrl.content).toEqual({ data: 'hello', type: ContentType.STRING, props: {} });
+    });
+    it('should add control to toppy', () => {
+      expect(Object.keys(Toppy.controls).length).toEqual(1);
+    });
   });
-  describe('on calling "create" method', () => {
-    it('should return `ToppyRef` instance', () => {
-      const instance = toppy.create();
-      expect(instance instanceof ToppyRef).toBeTruthy();
+  describe('#config|#position|#content', () => {
+    let ctrl: ToppyControl;
+    let tid: string;
+    beforeEach(() => {
+      ctrl = toppy
+        .position(new RelativePosition({ src: templateRefComp.el.nativeElement }))
+        .config({ backdropClass: 't-custom-backdrop' })
+        .content('random text')
+        .create();
+      tid = toppy['tid'];
     });
-    it('should add `ToppyRef` instance to _toppyRef array', () => {
-      (toppy as any)._overlayID = 'abc123';
-      const instance = toppy.create();
-      expect(Object.keys(Toppy.toppyRefs).length).toEqual(1);
-      expect(toppy.getToppyRef('abc123').constructor.name).toEqual('ToppyRef');
-      expect(instance instanceof ToppyRef).toBeTruthy();
+    afterEach(() => {
+      toppy.destroy();
     });
-    it('should call `ToppyRef.close` method if it already exists', () => {
-      (toppy as any)._overlayID = 'mmm';
-      const foo = (Toppy.toppyRefs['mmm'] = new ToppyRef(overlayMock, componentHostMock, eventBus, config, 'mmm'));
-      spyOn(foo, 'close');
-      const instance = toppy.create();
-      expect(foo.close).toHaveBeenCalled();
-      expect(foo.close).toHaveBeenCalledTimes(1);
+    it('should set custom config in "Toppy"', () => {
+      expect((toppy as any).inputs.config).toEqual({ ...DefaultConfig, backdropClass: 't-custom-backdrop' });
+    });
+    it('should set custom config in "ToppyControl"', () => {
+      expect(toppy.getCtrl(tid).config).toEqual({ ...DefaultConfig, backdropClass: 't-custom-backdrop' });
+    });
+    it('should set custom position in "Toppy"', () => {
+      expect((toppy as any).inputs.position instanceof RelativePosition).toBeTruthy();
+    });
+    it('should set custom position in "ToppyControl"', () => {
+      expect(toppy.getCtrl(tid).position instanceof RelativePosition).toBeTruthy();
+    });
+    it('should set custom content in "Toppy"', () => {
+      expect((toppy as any).inputs.content).toEqual({
+        type: ContentType.STRING,
+        data: 'random text',
+        props: {}
+      });
+    });
+    it('should set custom content in "ToppyControl"', () => {
+      expect(toppy.getCtrl(tid).content).toEqual({ type: ContentType.STRING, data: 'random text', props: {} });
+    });
+  });
+  describe('#content', () => {
+    let t: Toppy;
+    let tid: string;
+    beforeEach(() => {
+      t = toppy
+        .position(new RelativePosition({ src: templateRefComp.el.nativeElement }))
+        .config({ backdropClass: 't-custom-backdrop' });
+    });
+    afterEach(() => {
+      toppy.destroy();
+    });
+    describe('should return content type as STRING', () => {
+      it('when without props', () => {
+        t.content('hello').create();
+        tid = toppy['tid'];
+        expect(toppy.getCtrl(tid).content).toEqual({ type: ContentType.STRING, data: 'hello', props: {} });
+      });
+      it('when with props', () => {
+        t.content('hello', { class: 'abc' }).create();
+        tid = toppy['tid'];
+        expect(toppy.getCtrl(tid).content).toEqual({
+          type: ContentType.STRING,
+          data: 'hello',
+          props: { class: 'abc' }
+        });
+      });
+    });
+    describe('should return content type as HTML', () => {
+      it('when without props', () => {
+        t.content('<span>hello</span>').create();
+        tid = toppy['tid'];
+        expect(toppy.getCtrl(tid).content).toEqual({
+          type: ContentType.STRING,
+          data: '<span>hello</span>',
+          props: {}
+        });
+      });
+      it('when with props', () => {
+        t.content('<span>hello</span>', { hasHTML: true }).create();
+        tid = toppy['tid'];
+        expect(toppy.getCtrl(tid).content).toEqual({
+          type: ContentType.HTML,
+          data: '<span>hello</span>',
+          props: { hasHTML: true }
+        });
+      });
+    });
+    describe('should return content type as TEMPLATE', () => {
+      it('when without props', () => {
+        t.content(templateRefComp.tpl).create();
+        tid = toppy['tid'];
+        expect(toppy.getCtrl(tid).content).toEqual({
+          type: ContentType.TEMPLATE,
+          data: templateRefComp.tpl,
+          props: {}
+        });
+      });
+      it('when with props', () => {
+        t.content(templateRefComp.tpl, { name: 'Johny' }).create();
+        tid = toppy['tid'];
+        expect(toppy.getCtrl(tid).content).toEqual({
+          type: ContentType.TEMPLATE,
+          data: templateRefComp.tpl,
+          props: { name: 'Johny' }
+        });
+      });
+    });
+    describe('should return content type as COMPONENT', () => {
+      it('when without props', () => {
+        t.content(TestComponent).create();
+        tid = toppy['tid'];
+        expect(toppy.getCtrl(tid).content).toEqual({
+          type: ContentType.COMPONENT,
+          data: TestComponent,
+          props: {}
+        });
+      });
+      it('when with props', () => {
+        t.content(TestComponent, { name: 'Johny' }).create();
+        tid = toppy['tid'];
+        expect(toppy.getCtrl(tid).content).toEqual({
+          type: ContentType.COMPONENT,
+          data: TestComponent,
+          props: { name: 'Johny' }
+        });
+      });
+    });
+  });
+  describe('#create', () => {
+    let ctrl1: ToppyControl;
+    let t: Toppy;
+    let firstTid, secondTid;
+    beforeEach(() => {
+      ctrl1 = toppy.create();
+      firstTid = toppy['tid'];
+
+      t = toppy.content('abc');
+      (t as any).tid = firstTid;
+      t.create();
+      secondTid = toppy['tid'];
+    });
+    afterEach(() => {
+      toppy.destroy();
+    });
+    it('should create new instance if the tid already exists', () => {
+      expect(Object.keys(Toppy.controls)).toEqual([firstTid, secondTid]);
+    });
+    it('should add multiple new instances', () => {
+      toppy.create();
+      toppy.create();
+      toppy.create();
+      expect(Object.keys(Toppy.controls).length).toEqual(5);
+    });
+  });
+  describe('#destroy', () => {
+    it('should remove all controls', () => {
+      toppy.create();
+      toppy.create();
+      toppy.create();
+      toppy.create();
+
+      toppy.destroy();
+      expect(Object.keys(Toppy.controls).length).toEqual(0);
     });
   });
 });

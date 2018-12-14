@@ -1,11 +1,10 @@
 .comp.target-element-container {
-  background: #fff;
   padding: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
   .target-element {
-    background: #3d3844;
+    background: clr('primary');
     padding: 1rem;
     border-radius: 2px;
     color: #fff;

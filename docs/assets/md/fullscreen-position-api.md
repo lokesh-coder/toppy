@@ -1,3 +1,0 @@
-```typescript
-new FullscreenPosition();
-```

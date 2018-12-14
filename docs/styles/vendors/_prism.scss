@@ -1,20 +1,26 @@
-markdown pre[class*='language-'] {
-  background: #f9f9f9;
+app-content pre[class*='language-'] {
+  background: #fff;
+  border: 1px solid clr('border');
+  border-radius: $toppy--border-rad;
   code {
-    font-size: 13px;
+    font-size: 12px;
     font-family: $toppy--font-family-monospace;
   }
 }
-markdown .inline-code pre[class*='language-'] code {
-  font-size: 13px !important;
-}
-markdown code[class*='language-'],
-markdown pre[class*='language-'] {
-  color: #51585d;
+app-content .inline-code {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  pre[class*='language-'] {
+    font-size: 13px !important;
+    background-color: #f0f0f3;
+    border: 0;
+    margin: 6px;
+    padding: 2px 8px;
+  }
 }
 
-.token.constant {
-  color: #e91e63 !important;
-  font-size: 11px;
-  font-weight: 500;
+app-content code[class*='language-'],
+app-content pre[class*='language-'] {
+  color: #51585d;
 }

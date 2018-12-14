@@ -1,4 +1,5 @@
 import { TemplateRef } from '@angular/core';
+import { Position } from './position/position';
 
 export interface PositionCoOrds {
   top?: number;
@@ -57,12 +58,10 @@ export interface ToppyConfig {
   containerClass: string;
   wrapperClass: string;
   backdropClass: string;
-  watchWindowResize: boolean;
-  watchDocClick: boolean;
-  dismissOnDocumentClick: boolean;
-  bodyClassNameOnOpen: string;
+  listenWindowEvents: boolean;
+  closeOnDocClick: boolean;
+  bodyClass: string;
   closeOnEsc: boolean;
-  parentElement: HTMLElement | null;
   windowResizeCallback: () => void;
   docClickCallback: () => void;
 }
@@ -72,15 +71,29 @@ export interface ComponentType<T> {
 }
 
 export interface ToppyEvent {
+  from: string;
   name: string;
-  data: any;
+  data?: any;
 }
 
-export type HostContentValue = TemplateRef<any> | string | ComponentType<any>;
+export const enum ContentType {
+  STRING = 's',
+  HTML = 'h',
+  TEMPLATE = 't',
+  COMPONENT = 'c'
+}
+export type ContentData = string | TemplateRef<any> | ComponentType<any>;
+export type ContentProps = { [x: string]: any } | any;
 
-export type HostContentType = 'STRING' | 'HTMLSTRING' | 'TEMPLATEREF' | 'COMPONENT';
-export interface HostArgs {
-  contentType?: HostContentType;
-  content: HostContentValue;
-  props?: { [key: string]: any };
+export interface Content {
+  type?: ContentType;
+  data: ContentData;
+  props?: ContentProps;
+}
+
+export interface Inputs {
+  position: Position | null;
+  config: ToppyConfig;
+  content: Content;
+  tid: string;
 }

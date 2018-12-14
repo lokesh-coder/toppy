@@ -1,4 +1,3 @@
-@function clr($key: 'primary', $set: 'basic') {
-	$map: map-get($toppy--colors, $set);
-	@return map-get($map, $key);
+@function clr($key: 'primary') {
+  @return map-get($toppy--colors, $key);
 }

@@ -1,10 +1,11 @@
 /// <reference types="karma-viewport" />
 
-import { EventBus } from '../../lib/helper/event-bus';
+import { take } from 'rxjs/operators';
+import { Bus } from 'toppy/lib/utils';
 import { OutsidePlacement } from '../../lib/models';
 import { RelativePosition } from '../../lib/position';
 
-describe('== Relative position ==', () => {
+describe('@ RelativePosition', () => {
   let targetElement: HTMLElement;
   let hostElement: HTMLElement;
   beforeEach(() => {
@@ -33,38 +34,25 @@ describe('== Relative position ==', () => {
   it('should get updated config', () => {
     const relPos = new RelativePosition({});
     relPos.updateConfig({ autoUpdate: true });
-    expect((relPos as any)._config).toEqual({
+    expect(relPos['config']).toEqual({
       src: null,
       placement: OutsidePlacement.TOP,
       autoUpdate: true,
-      hostWidth: '100%',
-      hostHeight: '100%'
+      width: '100%',
+      height: '100%'
     });
   });
   it('should return correct class name', () => {
     const relPos = new RelativePosition({});
     expect(relPos.getClassName()).toBe('relative-position');
   });
-  it('should return offset size of element', () => {
-    const relPos = new RelativePosition({});
-    expect((relPos as any).getSize(targetElement)).toEqual({
-      x: targetElement.offsetWidth,
-      y: targetElement.offsetHeight
-    });
-  });
-  it('should reset position props of element', () => {
-    const relPos = new RelativePosition({});
-    targetElement.style.top = '10px';
-    expect(targetElement.style.top).toBe('10px');
-    (relPos as any).resetCoOrds(targetElement);
-    expect(targetElement.style.top).toBe('');
-  });
-  describe('should update position based on "autoUpdate"', () => {
-    it('when autoUpdate is true', () => {
+
+  describe('#autoUpdate', () => {
+    it('should switch if it is true', () => {
       const relPos = new RelativePosition({
         src: targetElement,
         placement: OutsidePlacement.TOP,
-        hostHeight: 500,
+        height: 500,
         autoUpdate: true
       });
       const srcCoords = targetElement.getBoundingClientRect();
@@ -77,11 +65,11 @@ describe('== Relative position ==', () => {
         top: srcCoords.top + srcCoords.height
       });
     });
-    it('when autoUpdate is false', () => {
+    it('should not switch if it is false', () => {
       const relPos = new RelativePosition({
         src: targetElement,
         placement: OutsidePlacement.TOP,
-        hostHeight: 500,
+        height: 500,
         autoUpdate: false
       });
       const srcCoords = targetElement.getBoundingClientRect();
@@ -95,15 +83,15 @@ describe('== Relative position ==', () => {
       });
     });
   });
-  describe('should return correct position coords of host element', () => {
+  describe('#getPositions', () => {
     let srcCoords;
     beforeEach(() => {
       srcCoords = targetElement.getBoundingClientRect();
     });
     it('when exact width and height is provided', () => {
       const relPos = new RelativePosition({
-        hostWidth: 4,
-        hostHeight: 10,
+        width: 4,
+        height: 10,
         src: targetElement,
         placement: OutsidePlacement.TOP
       });
@@ -124,27 +112,24 @@ describe('== Relative position ==', () => {
       });
     });
   });
-  describe('on element position change', () => {
+  describe('#listenDrag', () => {
     let relPos;
-    let eventBus;
     beforeEach(() => {
       relPos = new RelativePosition({ src: targetElement, autoUpdate: true });
-      eventBus = new EventBus();
-      relPos.setEventBus(eventBus);
+      relPos.init('abc');
     });
 
-    it('should have eventBus', () => {
-      expect(relPos.eventBus).toBeTruthy();
-    });
-    it('should emit proper event', done => {
-      eventBus.watch().subscribe(res => {
-        expect(res).toEqual({ name: 'NEW_DYN_POS', data: null });
-        done();
-      });
+    it('should emit proper event when drag', done => {
+      Bus.listen('abc', 't_dynpos')
+        .pipe(take(1))
+        .subscribe(res => {
+          expect(res).toEqual(null);
+          done();
+        });
       targetElement.style.left = '0px';
     });
   });
-  describe('should get correction position for', () => {
+  describe('#calc', () => {
     const targetElCoords = {
       bottom: 76,
       height: 18,
@@ -162,8 +147,8 @@ describe('== Relative position ==', () => {
       it(data.name, () => {
         const relPos = new RelativePosition({
           src: targetElement,
-          hostWidth: hostElCoords.width,
-          hostHeight: hostElCoords.height,
+          width: hostElCoords.width,
+          height: hostElCoords.height,
           placement: data.placement
         });
         const pos = (relPos as any).calc(data.placement, targetElCoords, hostElCoords);
