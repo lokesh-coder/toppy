@@ -4,7 +4,10 @@
 <div class="mt-3">
   <ul class="list-inline comp controls">
     <li *ngFor="let placement of placements">
-      <div class="pretty p-default p-round p-smooth p-thick">
+      <div
+        class="pretty p-default p-round p-smooth p-plain"
+        [ngClass]="{ 'p-thick': selectedPlacement != placement.value }"
+      >
         <input
           type="radio"
           name="slidePlacement"
@@ -13,7 +16,7 @@
           (ngModelChange)="onOptionChange()"
         />
         <div class="state p-success-o">
-          <label>{{ placement.name }}</label>
+          <label [ngClass]="{ selectedLabel: selectedPlacement == placement.value }">{{ placement.name }}</label>
         </div>
       </div>
     </li>

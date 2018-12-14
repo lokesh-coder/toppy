@@ -36,7 +36,7 @@ export class DynamicTextExampleComponent implements OnInit {
     this._toppyControl = this.toppy
       .position(
         new RelativePosition({
-          placement: OutsidePlacement.RIGHT_TOP,
+          placement: OutsidePlacement.RIGHT,
           src: this.el.nativeElement,
           width: 'auto',
           autoUpdate: true

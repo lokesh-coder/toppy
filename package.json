@@ -62,6 +62,8 @@
     "npm-registry-client": "^8.6.0",
     "pretty-checkbox": "^3.0.3",
     "prismjs": "^1.15.0",
+    "remark-bracketed-spans": "^3.0.0",
+    "remark-custom-blocks": "^2.3.1",
     "rxjs": "~6.3.3",
     "zone.js": "~0.8.26"
   },

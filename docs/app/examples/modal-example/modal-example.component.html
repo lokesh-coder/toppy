@@ -1,7 +1,9 @@
-<div class="drag-element-holder"><img src="./assets/svg/bottle.svg" style="width: 100px;" #el (click)="open()" /></div>
+<div class="drag-element-holder">
+  <img src="./assets/svg/bottle.svg" class="pointer" style="width: 100px;" #el (click)="open()" />
+</div>
 
 <div class="drag-element-holder">
-  <img src="./assets/svg/giraffe.svg" style="width: 100px;" #el2 (click)="openImage()" />
+  <img src="./assets/svg/giraffe.svg" class="pointer" style="width: 100px;" #el2 (click)="openImage()" />
 </div>
 
 <ng-template #modalTpl let-foo>

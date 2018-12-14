@@ -1,5 +1,5 @@
 
-<h3>Introduction</h3>
+<h3><span class="toppy-icon icon-terminal"></span> Installation</h3>
 <p><strong><code>Step 1:</code></strong> You can install through <a href="https://www.npmjs.com/package/toppy">npm</a> or <a href="https://yarnpkg.com/en/package/toppy">yarn</a> package managers</p>
 <pre><code class="hljs language-sh">npm install toppy --save
 </code></pre>
@@ -37,15 +37,17 @@
       .content(<span class="hljs-string">'hello'</span>) <span class="hljs-comment">// content</span>
       .create();
   &#125;
+
   open() &#123;
     <span class="hljs-keyword">this</span>.overlay.open();
   &#125;
+
   close() &#123;
     <span class="hljs-keyword">this</span>.overlay.close();
   &#125;
 &#125;
 </code></pre>
-<h3>Content types</h3>
+<h3><span class="toppy-icon icon-tag"></span> Content types</h3>
 <p><strong>Plain text</strong></p>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">this</span>.overlay = <span class="hljs-keyword">this</span>._toppy
   .position(position)
@@ -79,7 +81,7 @@
   .content(<span class="hljs-keyword">this</span>.tpl) <span class="hljs-comment">// template ref</span>
   .create();
 </code></pre>
-<h3>Positions</h3>
+<h3><span class="toppy-icon icon-navigation"></span> Positions</h3>
 <h5>Realtive position</h5>
 <p>
   <app-relative-position-example></app-relative-position-example>
@@ -118,7 +120,8 @@
 </p>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">new</span> FullscreenPosition();
 </code></pre>
-<h3>Communication</h3>
+<h3><span class="toppy-icon icon-rss"></span> Communication</h3>
+<h4>Component Data</h4>
 <p>When you host a component, you can control the overlay through <code>CurrentOverlay</code> service. As of now, this service has only one method <code>close</code> to close the overlay from the host component. But, soon more API will be added to this service.</p>
 <pre><code class="hljs language-typescript"><span class="hljs-comment">// host component</span>
 <span class="hljs-meta">@Component</span>(&#123;
@@ -150,19 +153,40 @@
   &#125;
 &#125;
 </code></pre>
-<h3>Examples</h3>
+<h4>Template Data</h4>
+<p>This is very similar to above one. When you use template as a content, you can pass additional data to it.</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">this</span>.overlay = <span class="hljs-keyword">this</span>._toppy
+  .position(position)
+  .content(template, &#123; name: <span class="hljs-string">'Johny'</span> &#125;)
+  .create();
+</code></pre>
+<p>Then in your template you can refer the data like this,</p>
+<pre><code class="hljs language-html" id="tpl"><span class="hljs-tag">&#x3C;<span class="hljs-name">ng-template</span> #<span class="hljs-attr">tpl</span> <span class="hljs-attr">let-toppy</span>></span>
+  <span class="hljs-tag">&#x3C;<span class="hljs-name">div</span>></span>Hello <span class="hljs-tag">&#x3C;<span class="hljs-name">span</span> [<span class="hljs-attr">innerText</span>]=<span class="hljs-string">"toppy.name"</span>></span><span class="hljs-tag">&#x3C;/<span class="hljs-name">span</span>></span> !<span class="hljs-tag">&#x3C;/<span class="hljs-name">div</span>></span>
+  <span class="hljs-tag">&#x3C;<span class="hljs-name">button</span> (<span class="hljs-attr">click</span>)=<span class="hljs-string">"toppy.close()"</span>></span>Close<span class="hljs-tag">&#x3C;/<span class="hljs-name">button</span>></span>
+<span class="hljs-tag">&#x3C;/<span class="hljs-name">ng-template</span>></span>
+</code></pre>
+<p>Method <code>close</code> is automatically binded.</p>
+<h4>Plain text</h4>
+<p>When you use Plain text as a content, optionally you can able to set a class name to that <code>div</code> block.</p>
+<pre><code class="hljs language-typescript"><span class="hljs-keyword">this</span>.overlay = <span class="hljs-keyword">this</span>._toppy
+  .position(position)
+  .content(<span class="hljs-string">'some content'</span>, &#123; <span class="hljs-keyword">class</span>: <span class="hljs-string">'tooltip'</span> &#125;)
+  .create();
+</code></pre>
+<h3><span class="toppy-icon icon-zap"></span> Examples</h3>
 <h5>1. Stick content on dragging</h5>
 <p>In below example you can see that the tooltip content is sticked with the <code>src</code> element in <code>RelativePosition</code></p>
 <p>
   <app-drag-example></app-drag-example>
 </p>
 <h5>2. Dynamic text content</h5>
-<p>When the provided content is just a string, you might sometimes need to update that dynamically.</p>
+<p>When the provided content is just a string, you can update that content dynamically while the overlay is open.</p>
 <p>
   <app-dynamic-text-example></app-dynamic-text-example>
 </p>
 <h5>3. Modal content</h5>
-<p>Simple modal example shows center aligned templateRef content.</p>
+<p>Simple modal example shows center aligned templateRef content. Click Escape to close.</p>
 <p>
   <app-modal-example></app-modal-example>
 </p>
@@ -181,7 +205,7 @@
 <p>
   <app-control-example></app-control-example>
 </p>
-<h3>Configuration</h3>
+<h3><span class="toppy-icon icon-settings"></span> Configuration</h3>
 <pre><code class="hljs language-typescript"><span class="hljs-comment">// config</span>
 <span class="hljs-keyword">this</span>.toppy
   .position(position:Position)
@@ -199,35 +223,35 @@
   <tbody>
     <tr>
       <td><strong>backdrop</strong></td>
-      <td><code>boolean</code> · whether to show backdrop layer · <sub>default</sub>: <em>false</em></td>
+      <td><code>boolean</code> · whether to show backdrop layer · <code>default</code>: <em>false</em></td>
     </tr>
     <tr>
       <td><strong>closeOnEsc</strong></td>
-      <td><code>boolean</code> · clicking Escape button will close overlay · <sub>default</sub>: <em>false</em></td>
+      <td><code>boolean</code> · clicking Escape button will close overlay · <code>default</code>: <em>false</em></td>
     </tr>
     <tr>
       <td><strong>closeOnDocClick</strong></td>
-      <td><code>boolean</code> · dismiss on clicking outside of content · <sub>default</sub>: <em>false</em></td>
+      <td><code>boolean</code> · dismiss on clicking outside of content · <code>default</code>: <em>false</em></td>
     </tr>
     <tr>
       <td><strong>listenWindowEvents</strong></td>
-      <td><code>boolean</code> · auto adjust the position on scroll · <sub>default</sub>: <em>true</em></td>
+      <td><code>boolean</code> · auto adjust the position on scroll/resize · <code>default</code>: <em>true</em></td>
     </tr>
     <tr>
       <td><strong>containerClass</strong></td>
-      <td><code>string</code> · overlay container class name · <sub>default</sub>: <em>t-overlay</em></td>
+      <td><code>string</code> · overlay container class name · <code>default</code>: <em>t-overlay</em></td>
     </tr>
     <tr>
       <td><strong>wrapperClass</strong></td>
-      <td><code>string</code> · overlay wrapper class name · <sub>default</sub>: <em>''</em></td>
+      <td><code>string</code> · overlay wrapper class name · <code>default</code>: <em>''</em></td>
     </tr>
     <tr>
       <td><strong>backdropClass</strong></td>
-      <td><code>string</code> · overlay backdrop class name · <sub>default</sub>: <em>''</em></td>
+      <td><code>string</code> · overlay backdrop class name · <code>default</code>: <em>''</em></td>
     </tr>
     <tr>
       <td><strong>bodyClass</strong></td>
-      <td><code>string</code> · body class when overlay is open · <sub>default</sub>: <em>t-open</em></td>
+      <td><code>string</code> · body class when overlay is open · <code>default</code>: <em>t-open</em></td>
     </tr>
     <tr>
       <td><strong>windowResizeCallback</strong></td>
@@ -239,37 +263,45 @@
     </tr>
   </tbody>
 </table>
-<h3>API</h3>
-<pre><code class="hljs language-typescript">Toppy.position(position:Position):Toppy
-</code></pre>
-<pre><code class="hljs language-typescript">Toppy.config(config:ToppyConfig):Toppy
-</code></pre>
-<pre><code class="hljs language-typescript">Toppy.content(data: ContentData, props: ContentProps = &#123;&#125;):Toppy
-</code></pre>
-<pre><code class="hljs language-typescript">Toppy.create(position:Position,config:ToppyConfig):ToppyControl
-</code></pre>
-<pre><code class="hljs language-typescript">Toppy.getCtrl(id:<span class="hljs-built_in">string</span>):ToppyControl
-</code></pre>
-<pre><code class="hljs language-typescript">Toppy.destroy():<span class="hljs-built_in">void</span>
+<h3><span class="toppy-icon icon-file"></span> API</h3>
+<pre><code class="hljs language-typescript"><span class="hljs-comment">/* Toppy */</span>
+
+Toppy.position(position:Position):Toppy
+
+Toppy.config(config:ToppyConfig):Toppy
+
+Toppy.content(data: ContentData, props: ContentProps = &#123;&#125;):Toppy
+
+Toppy.create(position:Position,config:ToppyConfig):ToppyControl
+
+Toppy.getCtrl(id:<span class="hljs-built_in">string</span>):ToppyControl
+
+Toppy.destroy():<span class="hljs-built_in">void</span>
 </code></pre>
 <hr>
-<pre><code class="hljs language-typescript">ToppyControl.open():<span class="hljs-built_in">void</span>
+<pre><code class="hljs language-typescript"><span class="hljs-comment">/* ToppyControl */</span>
+
+ToppyControl.open():<span class="hljs-built_in">void</span>
+
+ToppyControl.close():<span class="hljs-built_in">void</span>
+
+ToppyControl.toggle():<span class="hljs-built_in">void</span>
+
+ToppyControl.onDocumentClick():Observable&#x3C;<span class="hljs-built_in">any</span>>
+
+ToppyControl.onWindowResize():Observable&#x3C;<span class="hljs-built_in">any</span>>
+
+ToppyControl.changePosition(newPosition: Position): <span class="hljs-built_in">void</span>
+
+ToppyControl.updateContent(content: ContentData, props: ContentProps = &#123;&#125;):<span class="hljs-built_in">void</span>
+
+ToppyControl.updatePosition(config:object):ToppyControl
+
+ToppyControl.listen(eventName:<span class="hljs-built_in">string</span>):Observable&#x3C;<span class="hljs-built_in">any</span>>
 </code></pre>
-<pre><code class="hljs language-typescript">ToppyControl.close():<span class="hljs-built_in">void</span>
-</code></pre>
-<pre><code class="hljs language-typescript">ToppyControl.toggle():<span class="hljs-built_in">void</span>
-</code></pre>
-<pre><code class="hljs language-typescript">ToppyControl.onDocumentClick():Observable
-</code></pre>
-<pre><code class="hljs language-typescript">ToppyControl.onWindowResize():Observable
-</code></pre>
-<pre><code class="hljs language-typescript">ToppyControl.changePosition(newPosition: Position): <span class="hljs-built_in">void</span>
-</code></pre>
-<pre><code class="hljs language-typescript">ToppyControl.updateContent(content: ContentData, props: ContentProps = &#123;&#125;):<span class="hljs-built_in">void</span>
-</code></pre>
-<pre><code class="hljs language-typescript">ToppyControl.updatePosition(config:object):ToppyControl
-</code></pre>
-<pre><code class="hljs language-typescript">ToppyControl.listen(eventName:<span class="hljs-built_in">string</span>):Observable&#x3C;<span class="hljs-built_in">any</span>>
+<pre><code class="hljs language-typescript"><span class="hljs-comment">/* events */</span>
+
+<span class="hljs-string">`t_open`</span>, <span class="hljs-string">`t_close`</span>, <span class="hljs-string">`t_dynpos`</span>, <span class="hljs-string">`t_detach`</span>, <span class="hljs-string">`t_posupdate`</span>;
 </code></pre>
 <hr>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">enum</span> OutsidePlacement &#123;&#125;
@@ -277,23 +309,23 @@
 <div class="inline-code">
   <pre><code class="hljs language-typescript">OutsidePlacement.BOTTOM;
 </code></pre>
+  <pre><code class="hljs language-typescript">OutsidePlacement.LEFT;
+</code></pre>
+  <pre><code class="hljs language-typescript">OutsidePlacement.TOP;
+</code></pre>
+  <pre><code class="hljs language-typescript">OutsidePlacement.RIGHT;
+</code></pre>
   <pre><code class="hljs language-typescript">OutsidePlacement.BOTTOM_LEFT;
 </code></pre>
   <pre><code class="hljs language-typescript">OutsidePlacement.BOTTOM_RIGHT;
-</code></pre>
-  <pre><code class="hljs language-typescript">OutsidePlacement.LEFT;
 </code></pre>
   <pre><code class="hljs language-typescript">OutsidePlacement.LEFT_BOTTOM;
 </code></pre>
   <pre><code class="hljs language-typescript">OutsidePlacement.LEFT_TOP;
 </code></pre>
-  <pre><code class="hljs language-typescript">OutsidePlacement.RIGHT;
-</code></pre>
   <pre><code class="hljs language-typescript">OutsidePlacement.RIGHT_BOTTOM;
 </code></pre>
   <pre><code class="hljs language-typescript">OutsidePlacement.RIGHT_TOP;
-</code></pre>
-  <pre><code class="hljs language-typescript">OutsidePlacement.TOP;
 </code></pre>
   <pre><code class="hljs language-typescript">OutsidePlacement.TOP_LEFT;
 </code></pre>
@@ -303,9 +335,11 @@
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">enum</span> InsidePlacement &#123;&#125;
 </code></pre>
 <div class="inline-code">
-  <pre><code class="hljs language-typescript">InsidePlacement;
+  <pre><code class="hljs language-typescript">InsidePlacement.TOP;
 </code></pre>
   <pre><code class="hljs language-typescript">InsidePlacement.BOTTOM;
+</code></pre>
+  <pre><code class="hljs language-typescript">InsidePlacement.TOP_RIGHT;
 </code></pre>
   <pre><code class="hljs language-typescript">InsidePlacement.BOTTOM_LEFT;
 </code></pre>
@@ -315,11 +349,7 @@
 </code></pre>
   <pre><code class="hljs language-typescript">InsidePlacement.RIGHT;
 </code></pre>
-  <pre><code class="hljs language-typescript">InsidePlacement.TOP;
-</code></pre>
   <pre><code class="hljs language-typescript">InsidePlacement.TOP_LEFT;
-</code></pre>
-  <pre><code class="hljs language-typescript">InsidePlacement.TOP_RIGHT;
 </code></pre>
   <pre><code class="hljs language-typescript">InsidePlacement.CENTER;
 </code></pre>
@@ -332,11 +362,11 @@
   <pre><code class="hljs language-typescript">SlidePlacement.RIGHT;
 </code></pre>
 </div>
-<h3>Contibution</h3>
+<h3><span class="toppy-icon icon-users"></span> Contibution</h3>
 <p>Any kind of contributions ( Typo fix, documentation, code quality, performance, refactor, pipeline, etc., ) are welcome. :)</p>
-<h3>Credits</h3>
+<h3><span class="toppy-icon icon-hash"></span> Credits</h3>
 <ul>
   <li>Icons from <a href="http://openmoji.org">openmoji</a></li>
 </ul>
-<h3>Issues</h3>
+<h3><span class="toppy-icon icon-help"></span> Issues</h3>
 <p>Found a bug? Have some idea? Or do you have questions? File it <a href="https://github.com/lokesh-coder/toppy/issues">github issues</a></p>

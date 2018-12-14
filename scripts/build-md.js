@@ -5,6 +5,7 @@ const sane = require('sane');
 var unified = require('unified');
 var markdown = require('remark-parse');
 var html = require('remark-html');
+var bracketedSpans = require('remark-bracketed-spans');
 const replace = require('replace-in-file');
 const stringify = require('rehype-stringify');
 var highlight = require('rehype-highlight');
@@ -27,6 +28,7 @@ const tasks = new Listr([
       return unified()
         .use(markdown)
         .use(remarkAttr)
+        .use(bracketedSpans)
         .use(remark2rehype, { allowDangerousHTML: true })
         .use(raw)
         .use(format)

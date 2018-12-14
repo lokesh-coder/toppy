@@ -3,7 +3,9 @@ $toppy--base-font-size-xl: 16px;
 $toppy--app-name: 'TOPPY';
 $toppy--debug: false;
 $toppy--font-family: 'Rubik', acumin-pro, 'Inconsolata', 'Inter UI', 'Nunito Sans';
-$toppy--font-family-monospace: 'calling-code', 'Courier New', 'Lucida Console', Monaco, Courier, monospace;
+$toppy--font-family-headings: 'acumin-pro';
+$toppy--font-family-monospace: 'Roboto mono', 'calling-code', 'Courier New', 'Lucida Console', Monaco, Courier,
+  monospace;
 
 $toppy--colors: (
   'bg': #fafafa,
@@ -12,7 +14,7 @@ $toppy--colors: (
   'border': #e9edff,
   'dark': #585c6d,
   'shadow': #dddde9,
-  'primary': #9590d4,
+  'primary': #7d61af,
   'secondary': #ef8fb7,
   'success': #3fc782,
   'warning': #f78f1e,

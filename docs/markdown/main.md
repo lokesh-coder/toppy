@@ -1,4 +1,4 @@
-### Introduction
+### [ ]{.toppy-icon .icon-terminal} Installation
 
 **`Step 1:`** You can install through [npm](https://www.npmjs.com/package/toppy) or [yarn](https://yarnpkg.com/en/package/toppy) package managers
 
@@ -47,16 +47,18 @@ export class AppComponent {
       .content('hello') // content
       .create();
   }
+
   open() {
     this.overlay.open();
   }
+
   close() {
     this.overlay.close();
   }
 }
 ```
 
-### Content types
+### [ ]{.toppy-icon .icon-tag} Content types
 
 **Plain text**
 
@@ -107,7 +109,7 @@ this.overlay = this._toppy
   .create();
 ```
 
-### Positions
+### [ ]{.toppy-icon .icon-navigation} Positions
 
 ##### Realtive position
 
@@ -155,7 +157,9 @@ new SlidePosition({
 new FullscreenPosition();
 ```
 
-### Communication
+### [ ]{.toppy-icon .icon-rss} Communication
+
+#### Component Data
 
 When you host a component, you can control the overlay through `CurrentOverlay` service. As of now, this service has only one method `close` to close the overlay from the host component. But, soon more API will be added to this service.
 
@@ -197,7 +201,40 @@ export class HostComponent {
 }
 ```
 
-### Examples
+#### Template Data
+
+This is very similar to above one. When you use template as a content, you can pass additional data to it.
+
+```typescript
+this.overlay = this._toppy
+  .position(position)
+  .content(template, { name: 'Johny' })
+  .create();
+```
+
+Then in your template you can refer the data like this,
+
+```html
+<ng-template #tpl let-toppy>
+  <div>Hello <span [innerText]="toppy.name"></span> !</div>
+  <button (click)="toppy.close()">Close</button>
+</ng-template>
+```
+
+Method `close` is automatically binded.
+
+#### Plain text
+
+When you use Plain text as a content, optionally you can able to set a class name to that `div` block.
+
+```typescript
+this.overlay = this._toppy
+  .position(position)
+  .content('some content', { class: 'tooltip' })
+  .create();
+```
+
+### [ ]{.toppy-icon .icon-zap} Examples
 
 ##### 1. Stick content on dragging
 
@@ -207,13 +244,13 @@ In below example you can see that the tooltip content is sticked with the `src` 
 
 ##### 2. Dynamic text content
 
-When the provided content is just a string, you might sometimes need to update that dynamically.
+When the provided content is just a string, you can update that content dynamically while the overlay is open.
 
 <app-dynamic-text-example></app-dynamic-text-example>
 
 ##### 3. Modal content
 
-Simple modal example shows center aligned templateRef content.
+Simple modal example shows center aligned templateRef content. Click Escape to close.
 
 <app-modal-example></app-modal-example>
 
@@ -235,7 +272,7 @@ You can actually control any toppy overlays from anywhere in the application. Cl
 
 <app-control-example></app-control-example>
 
-### Configuration
+### [ ]{.toppy-icon .icon-settings} Configuration
 
 ```typescript
 // config
@@ -246,81 +283,67 @@ this.toppy
   .create();
 ```
 
-| `property`               | `for`                                                                                             |
-| ------------------------ | ------------------------------------------------------------------------------------------------- |
-| **backdrop**             | `boolean` &middot; whether to show backdrop layer &middot; <sub>default</sub>: _false_            |
-| **closeOnEsc**           | `boolean` &middot; clicking Escape button will close overlay &middot; <sub>default</sub>: _false_ |
-| **closeOnDocClick**      | `boolean` &middot; dismiss on clicking outside of content &middot; <sub>default</sub>: _false_    |
-| **listenWindowEvents**   | `boolean` &middot; auto adjust the position on scroll &middot; <sub>default</sub>: _true_         |
-| **containerClass**       | `string` &middot; overlay container class name &middot; <sub>default</sub>: _t-overlay_           |
-| **wrapperClass**         | `string` &middot; overlay wrapper class name &middot; <sub>default</sub>: _''_                    |
-| **backdropClass**        | `string` &middot; overlay backdrop class name &middot; <sub>default</sub>: _''_                   |
-| **bodyClass**            | `string` &middot; body class when overlay is open &middot; <sub>default</sub>: _t-open_           |
-| **windowResizeCallback** | `function` &middot; triggered on window scroll                                                    |
-| **docClickCallback**     | `function` &middot; triggered on document click                                                   |
+| `property`               | `for`                                                                                    |
+| ------------------------ | ---------------------------------------------------------------------------------------- |
+| **backdrop**             | `boolean` &middot; whether to show backdrop layer &middot; `default`: _false_            |
+| **closeOnEsc**           | `boolean` &middot; clicking Escape button will close overlay &middot; `default`: _false_ |
+| **closeOnDocClick**      | `boolean` &middot; dismiss on clicking outside of content &middot; `default`: _false_    |
+| **listenWindowEvents**   | `boolean` &middot; auto adjust the position on scroll/resize &middot; `default`: _true_  |
+| **containerClass**       | `string` &middot; overlay container class name &middot; `default`: _t-overlay_           |
+| **wrapperClass**         | `string` &middot; overlay wrapper class name &middot; `default`: _''_                    |
+| **backdropClass**        | `string` &middot; overlay backdrop class name &middot; `default`: _''_                   |
+| **bodyClass**            | `string` &middot; body class when overlay is open &middot; `default`: _t-open_           |
+| **windowResizeCallback** | `function` &middot; triggered on window scroll                                           |
+| **docClickCallback**     | `function` &middot; triggered on document click                                          |
 
-### API
+### [ ]{.toppy-icon .icon-file} API
 
 ```typescript
+
+/* Toppy */
+
 Toppy.position(position:Position):Toppy
-```
 
-```typescript
 Toppy.config(config:ToppyConfig):Toppy
-```
 
-```typescript
 Toppy.content(data: ContentData, props: ContentProps = {}):Toppy
-```
 
-```typescript
 Toppy.create(position:Position,config:ToppyConfig):ToppyControl
-```
 
-```typescript
 Toppy.getCtrl(id:string):ToppyControl
-```
 
-```typescript
 Toppy.destroy():void
 ```
 
 ---
 
 ```typescript
+
+/* ToppyControl */
+
 ToppyControl.open():void
-```
 
-```typescript
 ToppyControl.close():void
-```
 
-```typescript
 ToppyControl.toggle():void
-```
 
-```typescript
-ToppyControl.onDocumentClick():Observable
-```
+ToppyControl.onDocumentClick():Observable<any>
 
-```typescript
-ToppyControl.onWindowResize():Observable
-```
+ToppyControl.onWindowResize():Observable<any>
 
-```typescript
 ToppyControl.changePosition(newPosition: Position): void
-```
 
-```typescript
 ToppyControl.updateContent(content: ContentData, props: ContentProps = {}):void
-```
 
-```typescript
 ToppyControl.updatePosition(config:object):ToppyControl
+
+ToppyControl.listen(eventName:string):Observable<any>
 ```
 
 ```typescript
-ToppyControl.listen(eventName:string):Observable<any>
+/* events */
+
+`t_open`, `t_close`, `t_dynpos`, `t_detach`, `t_posupdate`;
 ```
 
 ---
@@ -336,15 +359,23 @@ OutsidePlacement.BOTTOM;
 ```
 
 ```typescript
+OutsidePlacement.LEFT;
+```
+
+```typescript
+OutsidePlacement.TOP;
+```
+
+```typescript
+OutsidePlacement.RIGHT;
+```
+
+```typescript
 OutsidePlacement.BOTTOM_LEFT;
 ```
 
 ```typescript
 OutsidePlacement.BOTTOM_RIGHT;
-```
-
-```typescript
-OutsidePlacement.LEFT;
 ```
 
 ```typescript
@@ -356,19 +387,11 @@ OutsidePlacement.LEFT_TOP;
 ```
 
 ```typescript
-OutsidePlacement.RIGHT;
-```
-
-```typescript
 OutsidePlacement.RIGHT_BOTTOM;
 ```
 
 ```typescript
 OutsidePlacement.RIGHT_TOP;
-```
-
-```typescript
-OutsidePlacement.TOP;
 ```
 
 ```typescript
@@ -388,11 +411,15 @@ enum InsidePlacement {}
 <div class="inline-code">
 
 ```typescript
-InsidePlacement;
+InsidePlacement.TOP;
 ```
 
 ```typescript
 InsidePlacement.BOTTOM;
+```
+
+```typescript
+InsidePlacement.TOP_RIGHT;
 ```
 
 ```typescript
@@ -412,15 +439,7 @@ InsidePlacement.RIGHT;
 ```
 
 ```typescript
-InsidePlacement.TOP;
-```
-
-```typescript
 InsidePlacement.TOP_LEFT;
-```
-
-```typescript
-InsidePlacement.TOP_RIGHT;
 ```
 
 ```typescript
@@ -445,14 +464,14 @@ SlidePlacement.RIGHT;
 
 </div>
 
-### Contibution
+### [ ]{.toppy-icon .icon-users} Contibution
 
 Any kind of contributions ( Typo fix, documentation, code quality, performance, refactor, pipeline, etc., ) are welcome. :)
 
-### Credits
+### [ ]{.toppy-icon .icon-hash} Credits
 
 - Icons from [openmoji](http://openmoji.org)
 
-### Issues
+### [ ]{.toppy-icon .icon-help} Issues
 
 Found a bug? Have some idea? Or do you have questions? File it [github issues](https://github.com/lokesh-coder/toppy/issues)

@@ -27,7 +27,7 @@
 
 ### Installation
 
-**step 1:** Install from NPM or YARN
+**step 1:** Install from [npm](https://www.npmjs.com/package/toppy) or [yarn](https://yarnpkg.com/en/package/toppy)
 
 ```sh
 npm install toppy // or
@@ -68,18 +68,18 @@ export class AppComponent {
       src: this.el.nativeElement
     });
 
-    this.overlayIns = this._toppy
-      .overlay(position)
-      .host('hello') // content
+    this.overlay = this._toppy
+      .position(position)
+      .content('hello') // content
       .create();
   }
 
   open() {
-    this.overlayIns.open();
+    this.overlay.open();
   }
 
   close() {
-    this.overlayIns.close();
+    this.overlay.close();
   }
 }
 ```
@@ -91,18 +91,18 @@ Toppy allows to use `string`, `html`, `TemplateRef`, `Component` as overlay cont
 **Plain text**
 
 ```typescript
-this.overlayIns = this._toppy
-  .overlay(position)
-  .host(`some plain text content`) // simple text
+this.overlay = this._toppy
+  .position(position)
+  .content(`some plain text content`) // simple text
   .create();
 ```
 
 **HTML content**
 
 ```typescript
-this.overlayIns = this._toppy
-  .overlay(position)
-  .host(`<div>any HTML content</div>`, { hasHTML: true }) // html
+this.overlay = this._toppy
+  .position(position)
+  .content(`<div>any HTML content</div>`, { hasHTML: true }) // html
   .create();
 ```
 
@@ -115,9 +115,9 @@ this.overlayIns = this._toppy
 ```typescript
 @ViewChild('tpl') tpl:TemplateRef<any>;
 
-this.overlayIns = this._toppy
-  .overlay(position)
-  .host(this.tpl) // template ref
+this.overlay = this._toppy
+  .position(position)
+  .content(this.tpl) // template ref
   .create();
 ```
 
@@ -132,9 +132,9 @@ export class HelloComponent {}
 ```
 
 ```typescript
-this.overlayIns = this._toppy
-  .overlay(position)
-  .host(HelloComponent) // <==
+this.overlay = this._toppy
+  .position(position)
+  .content(HelloComponent) // <==
   .create();
 ```
 
@@ -152,8 +152,8 @@ Overlay position that is relative to specific element. These are used in `toolti
 new RelativePosition({
   src: HTMLElement, // target element
   placement: OutsidePlacement, // location of the content
-  hostWidth: string | number, // content width eg, `auto`, 150, `30%`
-  hostHeight: string | number, // content height eg, `auto`, 150, `30%`
+  width: string | number, // content width eg, `auto`, 150, `30%`
+  height: string | number, // content height eg, `auto`, 150, `30%`
   autoUpdate: boolean // update position when window scroll/resize/drag
 });
 ```
@@ -182,8 +182,8 @@ Overlay position that is relative to window viewport. These are used in `modals`
 ```typescript
 new GlobalPosition({
   placement: InsidePlacement, // location of the content.
-  hostWidth: string | number, // content width eg, `auto`, `150`, `30%`
-  hostHeight: string | number, //content height eg, `auto`, 150, `30%`
+  width: string | number, // content width eg, `auto`, `150`, `30%`
+  height: string | number, //content height eg, `auto`, 150, `30%`
   offset: number // oustide space of the content, in px
 });
 ```
@@ -232,27 +232,28 @@ new FullScreenPosition();
 
 ```typescript
 this.toppy
-  .overlay(position, configuration)
-  .host('hello')
+  .position(position:Position)
+  .config(configuration:ToppyConfig = {})
+  .content('hello')
   .create();
 ```
 
-| `property`                 | `default`           | `supported values` |
-| -------------------------- | ------------------- | ------------------ |
-| **backdrop**               | _false_             | boolean            |
-| **containerClass**         | _'toppy-container'_ | string             |
-| **wrapperClass**           | _'toppy-wrapper'_   | string             |
-| **backdropClass**          | _'toppy-backdrop'_  | string             |
-| **bodyClassNameOnOpen**    | _''_                | string             |
-| **dismissOnDocumentClick** | _true_              | boolean            |
-| **closeOnEsc**             | _false_             | boolean            |
-| **parentElement**          | _null_              | HTMLElement        |
-| **watchDocClick**          | _true_              | boolean            |
-| **watchWindowResize**      | _true_              | boolean            |
-| **windowResizeCallback**   | _null_              | function           |
-| **docClickCallback**       | _null_              | function           |
+| `property`               | `for`                                                                                  |
+| ------------------------ | -------------------------------------------------------------------------------------- |
+| **backdrop**             | `boolean` &middot; whether to show backdrop layer &middot; default: `false`            |
+| **closeOnEsc**           | `boolean` &middot; clicking Escape button will close overlay &middot; default: `false` |
+| **closeOnDocClick**      | `boolean` &middot; dismiss on clicking outside of content &middot; default: `false`    |
+| **listenWindowEvents**   | `boolean` &middot; auto adjust the position on scroll/resize &middot; default: `true`  |
+| **containerClass**       | `string` &middot; overlay container class name &middot; default: `t-overlay`           |
+| **wrapperClass**         | `string` &middot; overlay wrapper class name &middot; default: `''`                    |
+| **backdropClass**        | `string` &middot; overlay backdrop class name &middot; default: `''`                   |
+| **bodyClass**            | `string` &middot; body class when overlay is open &middot; default: `t-open`           |
+| **windowResizeCallback** | `function` &middot; triggered on window scroll                                         |
+| **docClickCallback**     | `function` &middot; triggered on document click                                        |
 
 ### Component communication
+
+#### Component Data
 
 When you host a component, you can control the overlay through `CurrentOverlay` service. As of now, this service has only one method called `close` to close the overlay from the host component. But, soon more API will be added to this service.
 
@@ -273,9 +274,9 @@ export class HostComponent {
 You can also set properties to component when creating the overlay.
 
 ```typescript
-this.overlayIns = this._toppy
-  .overlay(position)
-  .host(HelloComponent, { propName: 'toppy-test-prop' })
+this.overlay = this._toppy
+  .position(position)
+  .content(HelloComponent, { propName: 'toppy-test-prop' })
   .create();
 ```
 
@@ -294,63 +295,94 @@ export class HostComponent {
 }
 ```
 
+#### Template Data
+
+This is very similar to above one. When you use template as a content, you can pass additional data to it.
+
+```typescript
+this.overlay = this._toppy
+  .position(position)
+  .content(template, { name: 'Johny' })
+  .create();
+```
+
+Then in your template you can refer the data like this,
+
+```html
+<ng-template #tpl let-toppy>
+  <div>Hello <span [innerText]="toppy.name"></span> !</div>
+  <button (click)="toppy.close()">Close</button>
+</ng-template>
+```
+
+Method `close` is automatically binded.
+
+#### Plain text
+
+When you use Plain text as a content, optionally you can able to set a class name to that `div` block.
+
+```typescript
+this.overlay = this._toppy
+  .position(position)
+  .content('some content', { class: 'tooltip' })
+  .create();
+```
+
 ### API
 
-> ```typescript
-> Toppy.overlay(position:Position, config:ToppyConfig):Toppy
-> ```
+```typescript
 
-> ```typescript
-> Toppy.host(
->   content: string | TemplateRef<any> | ComponentType<any>,
->   props: { [x: string]: any } = {}
-> ):Toppy
-> ```
+/* Toppy */
 
-> ```typescript
-> Toppy.create(position:Position, config:ToppyConfig):ToppyRef
-> ```
+Toppy.position(position:Position):Toppy
 
----
+Toppy.config(config:ToppyConfig):Toppy
 
-> ```typescript
-> ToppyRef.open():void
-> ```
+Toppy.content(data: ContentData, props: ContentProps = {}):Toppy
 
-> ```typescript
-> ToppyRef.close():void
-> ```
+Toppy.create(position:Position,config:ToppyConfig):ToppyControl
 
-> ```typescript
-> ToppyRef.toggle():void
-> ```
+Toppy.getCtrl(id:string):ToppyControl
 
-> ```typescript
-> ToppyRef.onDocumentClick():Observable
-> ```
+Toppy.destroy():void
+```
 
-> ```typescript
-> ToppyRef.onWindowResize():Observable
-> ```
+```typescript
 
-> ```typescript
-> ToppyRef.getConfig():ToppyConfig
-> ```
+/* ToppyControl */
 
-> ```typescript
-> ToppyRef.updateHost(
->   content: string | TemplateRef<any> | ComponentType<any>,
->   props: { [x: string]: any } = {}
-> ):ToppyRef
-> ```
+ToppyControl.open():void
 
-> ```typescript
-> ToppyRef.updatePosition(config:object):ToppyRef
-> ```
+ToppyControl.close():void
+
+ToppyControl.toggle():void
+
+ToppyControl.onDocumentClick():Observable<any>
+
+ToppyControl.onWindowResize():Observable<any>
+
+ToppyControl.changePosition(newPosition: Position): void
+
+ToppyControl.updateContent(content: ContentData, props: ContentProps = {}):void
+
+ToppyControl.updatePosition(config:object):ToppyControl
+
+ToppyControl.listen(eventName:string):Observable<any>
+```
+
+```typescript
+/* events */
+
+`t_open`, `t_close`, `t_dynpos`, `t_detach`, `t_posupdate`;
+```
 
 ### Contribution
 
 Any kind of contributions ( Typo fix, documentation, code quality, performance, refactor, pipeline, etc., ) are welcome. :)
+
+### Credits
+
+- Icons from [openmoji](http://openmoji.org)
 
 ### Issues
 

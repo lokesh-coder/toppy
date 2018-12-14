@@ -27,12 +27,22 @@ app-sub-section {
   margin-bottom: 4rem;
 }
 
+p {
+  margin-top: 1rem;
+}
+
 h3 {
   margin: 2rem 0;
   font-weight: 300;
 }
+h4 {
+  margin: 1rem 0 !important;
+}
 h5 {
   margin-top: 3rem;
+  color: #383c56;
+  font-family: 'Rubik';
+  font-size: 1.2rem;
 }
 
 strong {
@@ -40,9 +50,39 @@ strong {
   color: clr('dark');
 }
 
+.pointer {
+  cursor: pointer;
+}
+
+td code:nth-child(2) {
+  color: rgba(0, 0, 0, 0.49);
+}
+
+td em {
+  color: clr('dark');
+  font-style: normal;
+}
+
+.brand p span {
+  color: clr('dark');
+  position: relative;
+  text-transform: uppercase;
+  font-size: 10px;
+  font-weight: 500;
+}
+
+.hero {
+  border-bottom: 2px solid #d1d0e0;
+}
+
+.selectedLabel {
+  color: #3fc782;
+  font-weight: 500 !important;
+}
+
 .drag-element-holder {
   width: calc(102px);
-  border: 1px dashed #aaa;
+  border: 1px dashed transparent;
   display: inline-block;
   position: relative;
   height: 100px;

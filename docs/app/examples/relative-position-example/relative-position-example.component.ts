@@ -1,4 +1,4 @@
-import { Component, ElementRef, OnInit, TemplateRef, ViewChild } from '@angular/core';
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core';
 import { Subject } from 'rxjs';
 import { OutsidePlacement, RelativePosition, Toppy } from 'toppy';
 import { ToppyControl } from '../../../../projects/toppy/src/lib/toppy-control';
@@ -12,8 +12,7 @@ import { ToppyControl } from '../../../../projects/toppy/src/lib/toppy-control';
 export class RelativePositionExampleComponent implements OnInit {
   @ViewChild('targetEl', { read: ElementRef })
   targetEl: ElementRef;
-  @ViewChild('content', { read: TemplateRef })
-  content: TemplateRef<any>;
+
   placements: { name: string; value: OutsidePlacement }[] = [
     { name: 'Bottom', value: OutsidePlacement.BOTTOM },
     { name: 'Bottom left', value: OutsidePlacement.BOTTOM_LEFT },
@@ -43,36 +42,21 @@ export class RelativePositionExampleComponent implements OnInit {
           autoUpdate: true
         })
       )
-      // .config({
-      //   backdrop: false,
-      //   dismissOnDocumentClick: false,
-      //   isHover: true
-      // })
-      .content(this.content)
+      .content('hello')
       .create();
   }
 
-  ngAfterViewInit() {}
-
   onOptionChange() {
-    // this.destroy$.next('');
     this._toppyControl.updatePosition({
       placement: this.selectedPlacement
     });
   }
   onMouseOver() {
-    // console.log('aaaa');
-    // console.log('relative config', this._toppyControl.getConfig());
+    const content = this.placements.find(a => a.value === this.selectedPlacement).name;
+    this._toppyControl.updateContent(content, { class: 'tooltip' });
     this._toppyControl.open();
-    setTimeout(() => {
-      // this._toppyControl.updateTextContent.next('yoyoybaby');
-    }, 100);
   }
   onMouseLeave() {
-    // console.log('leave');
-    // this.destroy$.next('');
-    // if (this._toppyControl) {
     this._toppyControl.close();
-    // }
   }
 }

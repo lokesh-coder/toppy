@@ -39,7 +39,8 @@ export class ModalExampleComponent implements OnInit {
         })
       )
       .config({
-        closeOnEsc: true
+        closeOnEsc: true,
+        closeOnDocClick: true
       })
       .content('<img src="./assets/svg/giraffe.svg"/>', { hasHTML: true })
       .create();
