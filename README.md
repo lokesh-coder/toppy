@@ -340,7 +340,7 @@ Toppy.config(config:ToppyConfig):Toppy
 
 Toppy.content(data: ContentData, props: ContentProps = {}):Toppy
 
-Toppy.create(position:Position,config:ToppyConfig):ToppyControl
+Toppy.create(key: string = ''):ToppyControl
 
 Toppy.getCtrl(id:string):ToppyControl
 
