@@ -1,7 +1,7 @@
 import { PositionCoOrds, SlidePlacement } from '../models';
-import { Position } from './position';
+import { ToppyPosition } from './position';
 
-export class SlidePosition extends Position {
+export class SlidePosition extends ToppyPosition {
   protected config: { placement: SlidePlacement; width: string } = { placement: SlidePlacement.LEFT, width: '30%' };
   constructor(config) {
     super();

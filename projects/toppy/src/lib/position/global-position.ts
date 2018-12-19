@@ -1,5 +1,5 @@
 import { InsidePlacement } from '../models';
-import { Position } from './position';
+import { ToppyPosition } from './position';
 
 export interface Config {
   placement?: InsidePlacement;
@@ -7,7 +7,7 @@ export interface Config {
   width?: string | number;
   height?: string | number;
 }
-export class GlobalPosition extends Position {
+export class GlobalPosition extends ToppyPosition {
   protected config: Config = { placement: InsidePlacement.CENTER, width: 100, height: 100, offset: 0 };
   constructor(config: Config) {
     super();
