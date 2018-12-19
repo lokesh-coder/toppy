@@ -1,5 +1,5 @@
 import { TemplateRef } from '@angular/core';
-import { Position } from './position/position';
+import { ToppyPosition } from './position/position';
 
 export interface PositionCoOrds {
   top?: number;
@@ -70,9 +70,13 @@ export interface ComponentType<T> {
   new (...args: any[]): T;
 }
 
+export type TID = string;
+
+export type ToppyEventName = 't_open' | 't_close' | 't_dynpos' | 't_detach' | 't_posupdate';
+
 export interface ToppyEvent {
-  from: string;
-  name: string;
+  from: TID;
+  name: ToppyEventName;
   data?: any;
 }
 
@@ -92,8 +96,8 @@ export interface Content {
 }
 
 export interface Inputs {
-  position: Position | null;
+  position: ToppyPosition | null;
   config: ToppyConfig;
   content: Content;
-  tid: string;
+  tid: TID;
 }

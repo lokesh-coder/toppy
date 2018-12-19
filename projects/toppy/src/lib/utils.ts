@@ -1,7 +1,7 @@
 import { Injector, StaticProvider, TemplateRef } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
-import { Content, ContentData, ContentProps, ContentType, ToppyEvent } from './models';
+import { Content, ContentData, ContentProps, ContentType, ToppyEvent, ToppyEventName } from './models';
 
 export function getContent(data: ContentData, props: ContentProps = {}): Content {
   let type: ContentType = ContentType.COMPONENT;
@@ -39,10 +39,10 @@ export function toCss(styleObj) {
 
 class BusClass {
   private _e: Subject<ToppyEvent> = new Subject();
-  send(from: string, name: string, data: any = null): void {
+  send(from: string, name: ToppyEventName, data: any = null): void {
     this._e.next({ from, name, data });
   }
-  listen(from: string, name: string): Observable<any> {
+  listen(from: string, name: ToppyEventName): Observable<any> {
     return this._e.asObservable().pipe(
       filter(e => e.from === from && e.name === name),
       map(e => e.data)
