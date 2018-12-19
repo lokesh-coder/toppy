@@ -14,17 +14,13 @@ export class DropdownExampleComponent implements OnInit {
   private _toppyControl2: ToppyControl;
   @ViewChild('tpl', { read: TemplateRef }) tpl: TemplateRef<any>;
   @ViewChild('tpl2', { read: TemplateRef }) tpl2: TemplateRef<any>;
-  items = [
-    { name: 'giraffe', icon: 'giraffe' },
-    { name: 'elephant', icon: 'elephant' },
-    { name: 'bottle', icon: 'bottle' }
-  ];
+  items = [{ name: 'Cow', icon: 'cow' }, { name: 'Goat', icon: 'goat' }, { name: 'Snake', icon: 'snake' }];
   eatables = [
-    { name: 'Beer', icon: 'beer' },
-    { name: 'Lollipop', icon: 'lollipop' },
-    { name: 'Sandwich', icon: 'sandwich' },
-    { name: 'Pizza', icon: 'pizza' },
-    { name: 'Candy', icon: 'candy' }
+    { name: 'Nah!', icon: 'one' },
+    { name: 'Not so much', icon: 'two' },
+    { name: 'Okay', icon: 'three' },
+    { name: 'looks good!', icon: 'four' },
+    { name: 'Yes, it is cool!!', icon: 'five' }
   ];
   selectedData;
   selectedEatable;

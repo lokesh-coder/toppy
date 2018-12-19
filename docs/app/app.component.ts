@@ -32,10 +32,9 @@ export class AppComponent {
     this.currentSection = sectionId;
   }
 
-  scrollTo(section, e) {
+  scrollTo(section) {
     this.currentSection = section;
     document.querySelector('#' + section).scrollIntoView();
-    e.preventDefault();
   }
 
   ngOnInit() {
