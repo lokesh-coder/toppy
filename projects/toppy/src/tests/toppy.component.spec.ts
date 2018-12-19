@@ -1,20 +1,27 @@
-import { Component, DebugElement } from '@angular/core';
+import { Component, DebugElement, NgModule } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
 import { skip, take } from 'rxjs/operators';
 import { DefaultConfig } from '../lib/config';
-import { CurrentOverlay } from '../lib/current-overlay';
 import { ContentType } from '../lib/models';
+import { ToppyOverlay } from '../lib/toppy-overlay';
 import { ToppyComponent } from '../lib/toppy.component';
 import { Bus } from '../lib/utils';
 
 @Component({
   selector: 'test-comp',
-  template: 'hello'
+  template: 'Hello {{o.props.name||"John"}}'
 })
 export class TestComponent {
-  constructor(private co: CurrentOverlay) {}
+  constructor(public o: ToppyOverlay) {}
 }
+
+@NgModule({
+  declarations: [TestComponent],
+  entryComponents: [TestComponent],
+  exports: [TestComponent]
+})
+export class TestModule {}
 
 describe('@ ToppyComponent', () => {
   let fixture: ComponentFixture<ToppyComponent>;
@@ -23,7 +30,8 @@ describe('@ ToppyComponent', () => {
   let el: HTMLElement;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
-      declarations: [ToppyComponent, TestComponent]
+      imports: [TestModule],
+      declarations: [ToppyComponent]
     }).compileComponents();
     fixture = TestBed.createComponent(ToppyComponent);
     debugEl = fixture.debugElement;
@@ -79,7 +87,6 @@ describe('@ ToppyComponent', () => {
     });
     it('should subscribe to listenPos', () => {
       fixture.detectChanges();
-      toppyComp.triggerPosChange.complete();
       spyOn(toppyComp as any, 'setPos');
       Bus.send('abc', 't_dynpos', null);
       toppyComp.ngAfterViewInit();
@@ -87,7 +94,6 @@ describe('@ ToppyComponent', () => {
     });
     it('should subscribe to listenPos when custom data is arraived', () => {
       fixture.detectChanges();
-      toppyComp.triggerPosChange.complete();
       toppyComp.ngAfterViewInit();
       Bus.send('abc', 't_dynpos', { x: 10, y: 12 });
       expect(el.querySelector('.t-wrapper').getAttribute('style')).toEqual('left: 10px; top: 12px;');
@@ -99,13 +105,24 @@ describe('@ ToppyComponent', () => {
       expect(toppyComp.createInj().constructor.name).toEqual('StaticInjector');
     });
     it('should have CurrentOverlay', () => {
-      expect(toppyComp.createInj().get(CurrentOverlay)).toBeTruthy();
-      expect(toppyComp.createInj().get(CurrentOverlay).close).toBeTruthy();
+      expect(toppyComp.createInj().get(ToppyOverlay)).toBeTruthy();
+      expect(toppyComp.createInj().get(ToppyOverlay).close).toBeTruthy();
     });
     it('should return close function on calling `close` method', () => {
       toppyComp.content.props.close = () => '123';
-      const co = toppyComp.createInj().get(CurrentOverlay);
+      const co = toppyComp.createInj().get(ToppyOverlay);
       expect(co.close()).toBe('123');
+    });
+    it('should return all props', () => {
+      toppyComp.content.data = TestComponent;
+      toppyComp.content.type = ContentType.COMPONENT;
+      toppyComp.content.props = {
+        name: 'Peter',
+        id: 22
+      };
+      toppyComp.createInj();
+      fixture.detectChanges();
+      expect(fixture.debugElement.query(By.css('test-comp')).nativeElement.textContent).toBe('Hello Peter');
     });
   });
   describe('#updateTextContent', () => {
@@ -139,13 +156,11 @@ describe('@ ToppyComponent', () => {
     it('should unsubscribe all events', () => {
       spyOn(toppyComp as any, 'setPos');
       toppyComp.ngAfterViewInit();
-      toppyComp.triggerPosChange.next(1);
       Bus.send('abc', 't_dynpos');
-      expect(toppyComp['setPos']).toHaveBeenCalledTimes(3);
+      expect(toppyComp['setPos']).toHaveBeenCalledTimes(2);
       fixture.destroy();
-      toppyComp.triggerPosChange.next(1);
       Bus.send('abc', 't_dynpos');
-      expect(toppyComp['setPos']).toHaveBeenCalledTimes(3);
+      expect(toppyComp['setPos']).toHaveBeenCalledTimes(2);
     });
     it('should fire t_detach event', () => {
       const spy = jasmine.createSpy().and.callThrough();
