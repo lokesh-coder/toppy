@@ -1,8 +1,8 @@
 import { ApplicationRef, ComponentFactoryResolver, Injectable, Injector } from '@angular/core';
 import { DefaultConfig } from './config';
-import { ContentData, ContentProps, ContentType, Inputs, InsidePlacement, ToppyConfig } from './models';
+import { ContentData, ContentProps, ContentType, Inputs, InsidePlacement, TID, ToppyConfig } from './models';
 import { GlobalPosition } from './position';
-import { Position } from './position/position';
+import { ToppyPosition } from './position/position';
 import { ToppyControl } from './toppy-control';
 import { Bus, createId, getContent, newInjector } from './utils';
 
@@ -11,7 +11,7 @@ import { Bus, createId, getContent, newInjector } from './utils';
 })
 export class Toppy {
   static controls: { [key: string]: ToppyControl } = {};
-  private tid: string;
+  private tid: TID;
   private inputs: Inputs = {
     position: null,
     config: DefaultConfig,
@@ -23,7 +23,7 @@ export class Toppy {
     this.inputs.position = new GlobalPosition({ placement: InsidePlacement.TOP });
   }
 
-  position(position: Position): Toppy {
+  position(position: ToppyPosition): Toppy {
     this.inputs.position = position;
     return this;
   }
@@ -57,7 +57,7 @@ export class Toppy {
     return tc;
   }
 
-  getCtrl(tid): ToppyControl {
+  getCtrl(tid: TID): ToppyControl {
     return Toppy.controls[tid];
   }
 
