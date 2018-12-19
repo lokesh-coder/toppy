@@ -1,5 +1,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, ViewChild } from '@angular/core';
+import { fromEvent } from 'rxjs';
 // import { Toppy } from 'toppy';
 import { code } from './codes';
 
@@ -25,6 +26,21 @@ export class AppComponent {
       this.getCurrentVerison();
     });
   }
+  currentSection = '';
+
+  onSectionChange(sectionId: string) {
+    this.currentSection = sectionId;
+  }
+
+  scrollTo(section, e) {
+    this.currentSection = section;
+    document.querySelector('#' + section).scrollIntoView();
+    e.preventDefault();
+  }
+
+  ngOnInit() {
+    this.onScroll();
+  }
 
   ngafterViewInit() {
     this.getCurrentVerison();
@@ -41,5 +57,19 @@ export class AppComponent {
 
   onVersionChange(version) {
     (window as any).location = `https://lokesh-coder.github.io/toppy/${version}`;
+  }
+
+  onScroll() {
+    fromEvent(window, 'scroll')
+      .pipe()
+      .subscribe(res => {
+        const heroHeight = document.querySelector('.hero').getBoundingClientRect().height;
+        const scrolledTo = document.documentElement.scrollTop;
+        if (scrolledTo >= heroHeight) {
+          document.querySelector('body').classList.add('sidebar-fixed');
+        } else {
+          document.querySelector('body').classList.remove('sidebar-fixed');
+        }
+      });
   }
 }
