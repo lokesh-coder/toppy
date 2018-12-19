@@ -8,7 +8,7 @@ import {
   OnDestroy,
   OnInit
 } from '@angular/core';
-import { merge, Observable, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { startWith, takeUntil, tap } from 'rxjs/operators';
 import { Content, ContentType, TID, ToppyConfig } from './models';
 import { ToppyPosition } from './position/position';
@@ -79,7 +79,8 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private listenPos(): Observable<any> {
-    return merge(Bus.listen(this.tid, 't_dynpos').pipe(startWith(1))).pipe(
+    return Bus.listen(this.tid, 't_dynpos').pipe(
+      startWith(1),
       takeUntil(this.die),
       tap(e => {
         if (!e || !e.x) return this.setPos();
