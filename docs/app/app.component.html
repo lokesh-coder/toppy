@@ -6,7 +6,7 @@
           <img src="./assets/toppy-logo.png" alt="Toppy" width="100" />
           <p class="text-center mt-3">
             Toppy is a tiny library to create overlays for Angular applications. Overlays are used in
-            <span>tooltip</span>, <span>modal</span>, <span>sidemenu</span>, <span>dropdowns</span>,<span>popup</span>,
+            <span>tooltip</span>, <span>modal</span>, <span>sidemenu</span>, <span>dropdowns</span>, <span>popup</span>,
             <span>context menu</span>, <span>toaster</span>, <span>alerts</span>, <span>datepicker</span>,
             <span>popovers</span> etc
           </p>
@@ -54,6 +54,66 @@
 </div>
 <div class="container">
   <div class="row">
-    <div class="col-md-8 mx-auto"><app-content class="table"></app-content></div>
+    <div class="col-md-4">
+      <div class="sidemenu d-none d-md-block">
+        <ul snScrollSpy id="sb">
+          <li>
+            <a (click)="scrollTo('installation')" [ngClass]="{ active: currentSection === 'installation' }"
+              ><span class="toppy-icon icon-terminal"></span> Installation</a
+            >
+          </li>
+          <li>
+            <a (click)="scrollTo('content-types')" [ngClass]="{ active: currentSection === 'content-types' }"
+              ><span class="toppy-icon icon-tag"></span> Content types</a
+            >
+          </li>
+          <li>
+            <a (click)="scrollTo('positions')" [ngClass]="{ active: currentSection === 'positions' }"
+              ><span class="toppy-icon icon-navigation"></span> Positions</a
+            >
+          </li>
+          <li>
+            <a (click)="scrollTo('communication')" [ngClass]="{ active: currentSection === 'communication' }"
+              ><span class="toppy-icon icon-rss"></span> Communication</a
+            >
+          </li>
+          <li>
+            <a (click)="scrollTo('examples')" [ngClass]="{ active: currentSection === 'examples' }"
+              ><span class="toppy-icon icon-zap"></span> Examples</a
+            >
+          </li>
+          <li>
+            <a (click)="scrollTo('configuration')" [ngClass]="{ active: currentSection === 'configuration' }"
+              ><span class="toppy-icon icon-settings"></span> Configuration</a
+            >
+          </li>
+          <li>
+            <a (click)="scrollTo('api')" [ngClass]="{ active: currentSection === 'api' }"
+              ><span class="toppy-icon icon-file"></span> API</a
+            >
+          </li>
+          <li>
+            <a (click)="scrollTo('contribution')" [ngClass]="{ active: currentSection === 'contribution' }"
+              ><span class="toppy-icon icon-users"></span> Contribution</a
+            >
+          </li>
+          <li>
+            <a (click)="scrollTo('credits')" [ngClass]="{ active: currentSection === 'credits' }"
+              ><span class="toppy-icon icon-hash"></span> Credits</a
+            >
+          </li>
+          <li>
+            <a (click)="scrollTo('issues')" [ngClass]="{ active: currentSection === 'issues' }"
+              ><span class="toppy-icon icon-help"></span> Issues</a
+            >
+          </li>
+        </ul>
+      </div>
+    </div>
+    <div class="col-md-8">
+      <div id="parentDiv" scrollSpy [spiedTags]="['H3']" (sectionChange)="onSectionChange($event)">
+        <app-content class="table"></app-content>
+      </div>
+    </div>
   </div>
 </div>

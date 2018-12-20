@@ -232,8 +232,8 @@ new FullScreenPosition();
 
 ```typescript
 this.toppy
-  .position(position:Position)
-  .config(configuration:ToppyConfig = {})
+  .position(position: ToppyPosition)
+  .config(configuration: ToppyConfig = {})
   .content('hello')
   .create();
 ```
@@ -255,23 +255,7 @@ this.toppy
 
 #### Component Data
 
-When you host a component, you can control the overlay through `CurrentOverlay` service. As of now, this service has only one method called `close` to close the overlay from the host component. But, soon more API will be added to this service.
-
-```typescript
-// host component
-@Component({
-  template: '<div>Some text</div>'
-})
-export class HostComponent {
-  constructor(private _overlay: CurrentOverlay) {}
-
-  close() {
-    this._overlay.close();
-  }
-}
-```
-
-You can also set properties to component when creating the overlay.
+When you host a component, you can control the overlay through `ToppyOverlay` service. Using this service you can access all properties that is provided in content. Also the properties comes with `close`.
 
 ```typescript
 this.overlay = this._toppy
@@ -280,17 +264,18 @@ this.overlay = this._toppy
   .create();
 ```
 
-Now automatically all props are attached to host component and you can access it like,
-
 ```typescript
 // host component
 @Component({
   template: '<div>Some text</div>'
 })
-export class HostComponent {
-  propName; // else tslint will throw error
-  constructor() {
-    console.log(this.propName); // will return 'toppy-test-prop'
+export class HelloComponent {
+  constructor(public overlay: ToppyOverlay) {
+    console.log(this.overlay.props.propName); // will return 'toppy-test-prop'
+  }
+
+  close() {
+    this.overlay.close();
   }
 }
 ```
@@ -334,15 +319,15 @@ this.overlay = this._toppy
 
 /* Toppy */
 
-Toppy.position(position:Position):Toppy
+Toppy.position(position: ToppyPosition):Toppy
 
-Toppy.config(config:ToppyConfig):Toppy
+Toppy.config(config: ToppyConfig):Toppy
 
 Toppy.content(data: ContentData, props: ContentProps = {}):Toppy
 
 Toppy.create(key: string = ''):ToppyControl
 
-Toppy.getCtrl(id:string):ToppyControl
+Toppy.getCtrl(id: string):ToppyControl
 
 Toppy.destroy():void
 ```
@@ -361,7 +346,7 @@ ToppyControl.onDocumentClick():Observable<any>
 
 ToppyControl.onWindowResize():Observable<any>
 
-ToppyControl.changePosition(newPosition: Position): void
+ToppyControl.changePosition(newPosition: ToppyPosition): void
 
 ToppyControl.updateContent(content: ContentData, props: ContentProps = {}):void
 

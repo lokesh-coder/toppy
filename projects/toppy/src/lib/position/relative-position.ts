@@ -1,6 +1,6 @@
 import { OutsidePlacement, PositionCoOrds } from '../models';
 import { Bus } from '../utils';
-import { Position } from './position';
+import { ToppyPosition } from './position';
 
 export interface Config {
   src?: HTMLElement;
@@ -10,7 +10,7 @@ export interface Config {
   height?: string | number;
 }
 
-export class RelativePosition extends Position {
+export class RelativePosition extends ToppyPosition {
   protected config: Config = {
     src: null,
     placement: OutsidePlacement.TOP,

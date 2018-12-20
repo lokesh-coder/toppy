@@ -1,10 +1,6 @@
-<div class="drag-element-holder">
-  <img src="./assets/svg/bottle.svg" class="pointer" style="width: 100px;" #el (click)="open()" />
-</div>
+<div class="drag-element-holder"><img src="./assets/img/mail.png" class="pointer" #el (click)="open()" /></div>
 
-<div class="drag-element-holder">
-  <img src="./assets/svg/giraffe.svg" class="pointer" style="width: 100px;" #el2 (click)="openImage()" />
-</div>
+<div class="drag-element-holder"><img src="./assets/img/bomb.png" class="pointer" #el2 (click)="openImage()" /></div>
 
 <ng-template #modalTpl let-foo>
   <div class="modal-container">
@@ -19,3 +15,4 @@
     <div class="modal-footer"><button class="dismiss btn btn-danger" (click)="foo.close()">Close</button></div>
   </div>
 </ng-template>
+<img src="./assets/img/blast.png" style="display:none;" />

@@ -1,8 +1,7 @@
-import { HttpClient, HttpClientModule } from '@angular/common/http';
+import { HttpClientModule } from '@angular/common/http';
 import { NgModule } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
-import { MarkdownModule } from 'ngx-markdown';
 import { ToppyModule } from 'toppy';
 import { AppComponent } from './app.component';
 import { ControlExampleComponent } from './examples/control-example/control-example.component';
@@ -21,7 +20,7 @@ import { SimpleModalComponent } from './host-components/simple-modal/simple-moda
 import { TooltipComponent } from './host-components/tooltip/tooltip.component';
 import { TestComponent } from './test/test.component';
 import { ContentComponent } from './utils/content/content.component';
-import { ScollSpyDirective } from './utils/scollspy.directive';
+import { ScrollSpyDirective } from './utils/scollspy.directive';
 import { SectionComponent } from './utils/section/section.component';
 import { SubSectionComponent } from './utils/sub-section/sub-section.component';
 
@@ -40,15 +39,15 @@ import { SubSectionComponent } from './utils/sub-section/sub-section.component';
     FullscreenPositionExampleComponent,
     DragExampleComponent,
     HeroScreenComponent,
-    ScollSpyDirective,
     ModalExampleComponent,
     ContentComponent,
     DynamicTextExampleComponent,
     DropdownExampleComponent,
     RibbonExampleComponent,
-    ControlExampleComponent
+    ControlExampleComponent,
+    ScrollSpyDirective
   ],
-  imports: [BrowserModule, FormsModule, HttpClientModule, MarkdownModule.forRoot({ loader: HttpClient }), ToppyModule],
+  imports: [BrowserModule, FormsModule, HttpClientModule, ToppyModule],
   providers: [],
   entryComponents: [TestComponent, TooltipComponent, SimpleModalComponent, SimpleListComponent, HeroScreenComponent],
   bootstrap: [AppComponent],

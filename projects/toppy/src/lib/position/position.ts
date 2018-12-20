@@ -1,4 +1,4 @@
-export abstract class Position {
+export abstract class ToppyPosition {
   protected config = {};
   abstract getPositions(host: HTMLElement): any;
   getClassName(): string {

@@ -1,5 +1,5 @@
 import { Component } from '@angular/core';
-import { CurrentOverlay } from 'toppy';
+import { ToppyOverlay } from 'toppy';
 
 @Component({
   selector: 'app-hero-screen',
@@ -7,8 +7,8 @@ import { CurrentOverlay } from 'toppy';
   styles: []
 })
 export class HeroScreenComponent {
-  constructor(private overlay: CurrentOverlay) {}
-  close() {
+  constructor(public overlay: ToppyOverlay) {}
+  dispose() {
     this.overlay.close();
   }
 }

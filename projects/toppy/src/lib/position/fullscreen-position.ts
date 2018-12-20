@@ -1,7 +1,7 @@
 import { PositionCoOrds } from '../models';
-import { Position } from './position';
+import { ToppyPosition } from './position';
 
-export class FullscreenPosition extends Position {
+export class FullscreenPosition extends ToppyPosition {
   constructor() {
     super();
   }

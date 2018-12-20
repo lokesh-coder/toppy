@@ -11,6 +11,8 @@ const stringify = require('rehype-stringify');
 var highlight = require('rehype-highlight');
 const remarkAttr = require('remark-attr');
 const remark2rehype = require('remark-rehype');
+const slug = require('remark-slug');
+const headings = require('remark-autolink-headings');
 var raw = require('rehype-raw');
 var format = require('rehype-format');
 var watcher = sane('./docs/markdown', { glob: ['**/*.md'] });
@@ -29,6 +31,8 @@ const tasks = new Listr([
         .use(markdown)
         .use(remarkAttr)
         .use(bracketedSpans)
+        .use(slug)
+        .use(headings, { behaviour: 'wrap' })
         .use(remark2rehype, { allowDangerousHTML: true })
         .use(raw)
         .use(format)
@@ -52,6 +56,16 @@ const tasks = new Listr([
         files: './docs/app/utils/content/content.component.html',
         from: [/\{/g, /\}/g],
         to: ['&#123;', '&#125;']
+      }).then(c => (ctx.contents = c));
+    }
+  },
+  {
+    title: 'replace links',
+    task: ctx => {
+      return replace({
+        files: './docs/app/utils/content/content.component.html',
+        from: [/(span-classtoppy-icon-icon-)(.+?)--span-/g],
+        to: ['']
       }).then(c => (ctx.contents = c));
     }
   }

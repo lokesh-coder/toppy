@@ -8,11 +8,11 @@ import {
   OnDestroy,
   OnInit
 } from '@angular/core';
-import { merge, Observable, Subject } from 'rxjs';
+import { Observable, Subject } from 'rxjs';
 import { startWith, takeUntil, tap } from 'rxjs/operators';
-import { CurrentOverlay } from './current-overlay';
-import { Content, ContentType, ToppyConfig } from './models';
-import { Position } from './position/position';
+import { Content, ContentType, TID, ToppyConfig } from './models';
+import { ToppyPosition } from './position/position';
+import { ToppyOverlay } from './toppy-overlay';
 import { Bus, cssClass, newInjector, toCss } from './utils';
 
 @Component({
@@ -29,13 +29,10 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
     props: {}
   };
   config: ToppyConfig;
-  position: Position;
-  toppyRef;
-  close;
-  tid;
+  position: ToppyPosition;
+  tid: TID;
   el: HTMLElement | any;
   wrapperEl: HTMLElement | any;
-  triggerPosChange: Subject<1> = new Subject();
 
   private die: Subject<1> = new Subject();
 
@@ -60,8 +57,8 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
   createInj(): Injector {
     return newInjector(
       {
-        provide: CurrentOverlay,
-        useFactory: () => new CurrentOverlay(this.content.props.close),
+        provide: ToppyOverlay,
+        useFactory: () => new ToppyOverlay(this.content.props),
         deps: []
       },
       this.inj
@@ -82,7 +79,8 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private listenPos(): Observable<any> {
-    return merge(this.triggerPosChange.pipe(startWith(1)), Bus.listen(this.tid, 't_dynpos')).pipe(
+    return Bus.listen(this.tid, 't_dynpos').pipe(
+      startWith(1),
       takeUntil(this.die),
       tap(e => {
         if (!e || !e.x) return this.setPos();

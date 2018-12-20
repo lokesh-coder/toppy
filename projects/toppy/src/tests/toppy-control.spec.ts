@@ -6,7 +6,7 @@ import { take, takeUntil } from 'rxjs/operators';
 import { DefaultConfig } from 'toppy/lib/config';
 import { ContentType, InsidePlacement } from 'toppy/lib/models';
 import { Bus } from 'toppy/lib/utils';
-import { DefaultPosition, GlobalPosition } from '../lib/position';
+import { FullscreenPosition, GlobalPosition } from '../lib/position';
 import { ToppyControl } from '../lib/toppy-control';
 import { ToppyComponent } from '../lib/toppy.component';
 
@@ -203,8 +203,8 @@ describe('@ ToppyControl', () => {
       toppyControl.close();
     });
     it('should change the position', () => {
-      toppyControl.changePosition(new DefaultPosition());
-      expect(toppyControl.position.getClassName()).toEqual('default-position');
+      toppyControl.changePosition(new FullscreenPosition());
+      expect(toppyControl.position.getClassName()).toEqual('fullscreen-position');
     });
   });
   describe('#updatePosition', () => {

@@ -8,13 +8,13 @@ import {
 } from '@angular/core';
 import { animationFrameScheduler, fromEvent, merge as mergeObs, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, observeOn, skipWhile, takeUntil, tap } from 'rxjs/operators';
-import { Content, ContentData, ContentProps, ToppyConfig } from './models';
-import { Position } from './position/position';
+import { Content, ContentData, ContentProps, ToppyConfig, ToppyEventName } from './models';
+import { ToppyPosition } from './position/position';
 import { ToppyComponent } from './toppy.component';
 import { Bus, getContent } from './utils';
 
 export class ToppyControl {
-  position: Position;
+  position: ToppyPosition;
   config: ToppyConfig;
   content: Content;
   tid: string;
@@ -25,7 +25,6 @@ export class ToppyControl {
 
   private viewEl: HTMLElement;
   private isOpen = false;
-  private listenBrowserEvents = true;
   private compFac: ComponentFactory<ToppyComponent>;
   private die: Subject<1> = new Subject();
 
@@ -43,9 +42,9 @@ export class ToppyControl {
     if (this.isOpen) return;
 
     this.attach();
-    if (this.viewEl && this.listenBrowserEvents) {
+    if (this.viewEl) {
       mergeObs(this.onDocumentClick(), this.onWindowResize(), this.onEscClick()).subscribe();
-      setTimeout(() => this.comp && this.comp.triggerPosChange.next(1), 1);
+      setTimeout(() => Bus.send(this.tid, 't_dynpos'), 1);
     }
 
     Bus.send(this.tid, 't_open');
@@ -98,13 +97,13 @@ export class ToppyControl {
       distinctUntilChanged(),
       tap(() => {
         // tslint:disable-next-line:no-unused-expression
-        this.comp && this.comp.triggerPosChange.next(1);
+        Bus.send(this.tid, 't_dynpos');
         this.config.windowResizeCallback();
       })
     );
   }
 
-  changePosition(newPosition: Position): void {
+  changePosition(newPosition: ToppyPosition): void {
     this.position = newPosition;
   }
 
@@ -116,7 +115,7 @@ export class ToppyControl {
     this.content = getContent(content, { ...this.content.props, ...props });
   }
 
-  listen(eventName: string) {
+  listen(eventName: ToppyEventName) {
     return Bus.listen(this.tid, eventName);
   }
 
