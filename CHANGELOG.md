@@ -1,3 +1,10 @@
+## [2.0.4](https://github.com/lokesh-coder/toppy/compare/v2.0.3...v2.0.4) (2018-12-20)
+
+
+### Bug Fixes
+
+* allow custom props to be accessed in host component ([9d8e4ba](https://github.com/lokesh-coder/toppy/commit/9d8e4ba))
+
 ## [2.0.3](https://github.com/lokesh-coder/toppy/compare/v2.0.2...v2.0.3) (2018-12-15)
 
 ## [2.0.2](https://github.com/lokesh-coder/toppy/compare/v2.0.1...v2.0.2) (2018-12-15)
