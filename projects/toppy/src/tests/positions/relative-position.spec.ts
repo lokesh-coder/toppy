@@ -61,8 +61,11 @@ describe('@ RelativePosition', () => {
         height: 450
       };
       expect((relPos as any).calculatePos(OutsidePlacement.TOP, srcCoords, hostElCoords, true)).toEqual({
-        left: 8 + (srcCoords.width - 4) / 2,
-        top: srcCoords.top + srcCoords.height
+        props: {
+          left: 8 + (srcCoords.width - 4) / 2,
+          top: srcCoords.top + srcCoords.height
+        },
+        pos: OutsidePlacement.BOTTOM
       });
     });
     it('should not switch if it is false', () => {
@@ -78,8 +81,11 @@ describe('@ RelativePosition', () => {
         height: 150
       };
       expect((relPos as any).calculatePos(OutsidePlacement.TOP, srcCoords, hostElCoords, true)).toEqual({
-        left: 8 + (srcCoords.width - 4) / 2,
-        top: srcCoords.top - 150
+        props: {
+          left: 8 + (srcCoords.width - 4) / 2,
+          top: srcCoords.top - 150
+        },
+        pos: OutsidePlacement.TOP
       });
     });
   });
@@ -99,7 +105,8 @@ describe('@ RelativePosition', () => {
         left: Math.round(8 + (targetElement.offsetWidth - 4) / 2),
         top: Math.round(srcCoords.top - 10),
         width: 4,
-        height: 10
+        height: 10,
+        extra: OutsidePlacement.TOP
       });
     });
     it('when no width and height is provided', () => {
@@ -108,7 +115,8 @@ describe('@ RelativePosition', () => {
         left: Math.round(8 + (967 - 967) / 2),
         top: Math.round(srcCoords.top - 18),
         width: targetElement.offsetWidth,
-        height: 'auto'
+        height: 'auto',
+        extra: OutsidePlacement.TOP
       });
     });
   });

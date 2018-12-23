@@ -1,4 +1,4 @@
-import { PositionCoOrds, SlidePlacement } from '../models';
+import { PositionMeta, SlidePlacement } from '../models';
 import { ToppyPosition } from './position';
 
 export class SlidePosition extends ToppyPosition {
@@ -7,8 +7,15 @@ export class SlidePosition extends ToppyPosition {
     super();
     this.config = { ...this.config, ...config };
   }
-  getPositions(): PositionCoOrds {
+  getPositions(): PositionMeta {
     const props = this.config.placement === SlidePlacement.LEFT ? { left: 0 } : { right: 0 };
-    return { ...props, top: 0, width: this.config.width, height: '100%', position: 'fixed' };
+    return {
+      ...props,
+      top: 0,
+      width: this.config.width,
+      height: '100%',
+      position: 'fixed',
+      extra: this.config.placement
+    };
   }
 }

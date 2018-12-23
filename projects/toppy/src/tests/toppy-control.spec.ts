@@ -306,4 +306,26 @@ describe('@ ToppyControl', () => {
       window.dispatchEvent(new Event('resize'));
     });
   });
+  describe('#listen', () => {
+    beforeEach(() => {
+      toppyControl.tid = 'arui';
+      toppyControl.config = DefaultConfig;
+      toppyControl.content = { data: 'One', props: {}, type: ContentType.STRING };
+    });
+    afterEach(() => {
+      toppyControl.close();
+    });
+
+    it('should emit events', done => {
+      toppyControl
+        .listen('t_open')
+        .pipe(take(1))
+        .subscribe(res => {
+          expect(res).toBeNull();
+          done();
+        });
+
+      toppyControl.open();
+    });
+  });
 });

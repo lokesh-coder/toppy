@@ -42,7 +42,10 @@ describe('@ ToppyComponent', () => {
   beforeEach(() => {
     toppyComp.tid = 'abc';
     toppyComp.config = { ...DefaultConfig, bodyClass: 'zzz' };
-    toppyComp.position = { getClassName: () => 'relative', getPositions: c => ({ left: 45, top: 79 }) } as any;
+    toppyComp.position = {
+      getClassName: () => 'relative',
+      getPositions: c => ({ left: 45, top: 79, extra: 't' })
+    } as any;
   });
 
   afterEach(() => {
@@ -125,6 +128,7 @@ describe('@ ToppyComponent', () => {
       expect(fixture.debugElement.query(By.css('test-comp')).nativeElement.textContent).toBe('Hello Peter');
     });
   });
+
   describe('#updateTextContent', () => {
     it('should not change the text if the content is not string', () => {
       toppyComp.content = {
@@ -174,6 +178,7 @@ describe('@ ToppyComponent', () => {
       expect(spy.calls.count()).toEqual(2);
     });
   });
+
   describe('#listenPos', () => {
     it('should return new position', done => {
       fixture.detectChanges();
@@ -225,6 +230,11 @@ describe('@ ToppyComponent', () => {
         });
       toppyComp['setPos']();
       expect(spy.calls.count()).toEqual(3);
+    });
+    it('should set extra class to wrapper element', () => {
+      fixture.detectChanges();
+      toppyComp['setPos']();
+      expect(el.querySelector('.t-wrapper').classList.value).toEqual('t-wrapper t');
     });
   });
 });

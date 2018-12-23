@@ -35,7 +35,13 @@ export class GlobalPosition extends ToppyPosition {
     }
 
     const props = this.calc(this.config.placement, src, host);
-    return { ...props, width: this.config.width, height: this.config.height, position: 'fixed' };
+    return {
+      ...props,
+      width: this.config.width,
+      height: this.config.height,
+      position: 'fixed',
+      extra: this.config.placement
+    };
   }
   private getPercentageToCssPx(max, percentage: string): string {
     let number = Number(percentage.slice(0, -1));
