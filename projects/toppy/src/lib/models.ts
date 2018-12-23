@@ -1,7 +1,7 @@
 import { TemplateRef } from '@angular/core';
 import { ToppyPosition } from './position/position';
 
-export interface PositionCoOrds {
+export interface PositionMeta {
   top?: number;
   left?: number;
   bottom?: number;
@@ -9,6 +9,7 @@ export interface PositionCoOrds {
   height?: number | string;
   width?: number | string;
   position?: string;
+  extra?: string;
 }
 
 enum p {

@@ -1,5 +1,5 @@
 <div class="t-backdrop" *ngIf="config.backdrop"></div>
-<div class="t-wrapper" [ngClass]="config.wrapperClass" #wrapperEl>
+<div class="t-wrapper" [ngClass]="config.wrapperClass" [class]="extra" #wrapperEl>
   <ng-container [ngSwitch]="content.type">
     <ng-container *ngSwitchCase="'s'">
       <div [class]="content.props.class">{{ content.data }}</div>

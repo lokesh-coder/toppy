@@ -65,7 +65,8 @@ describe('@ GlobalPosition', () => {
         top: 0,
         width: 4,
         height: 10,
-        position: 'fixed'
+        position: 'fixed',
+        extra: InsidePlacement.TOP
       });
     });
     it('when exact width and height is provided in negative px', () => {
@@ -79,7 +80,8 @@ describe('@ GlobalPosition', () => {
         top: 0,
         width: 4,
         height: 10,
-        position: 'fixed'
+        position: 'fixed',
+        extra: InsidePlacement.TOP
       });
     });
     it('when exact width and height is provided in percentage', () => {
@@ -93,7 +95,8 @@ describe('@ GlobalPosition', () => {
         top: 0,
         width: `calc(${ww}px - 50%)`,
         height: `calc(${wh}px - 50%)`,
-        position: 'fixed'
+        position: 'fixed',
+        extra: InsidePlacement.TOP
       });
     });
     it('when exact width and height is provided in higher percentage', () => {
@@ -107,7 +110,8 @@ describe('@ GlobalPosition', () => {
         top: 0,
         width: `calc(${ww}px - 0%)`,
         height: `calc(${wh}px - 0%)`,
-        position: 'fixed'
+        position: 'fixed',
+        extra: InsidePlacement.TOP
       });
     });
     it('when no width and height is provided', () => {
@@ -117,7 +121,8 @@ describe('@ GlobalPosition', () => {
         top: 0,
         width: 100,
         height: 100,
-        position: 'fixed'
+        position: 'fixed',
+        extra: InsidePlacement.TOP_RIGHT
       });
     });
   });

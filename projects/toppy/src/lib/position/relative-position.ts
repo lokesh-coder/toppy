@@ -1,4 +1,4 @@
-import { OutsidePlacement, PositionCoOrds } from '../models';
+import { OutsidePlacement, PositionMeta } from '../models';
 import { Bus } from '../utils';
 import { ToppyPosition } from './position';
 
@@ -28,7 +28,7 @@ export class RelativePosition extends ToppyPosition {
     if (this.config.autoUpdate) this.listenDrag(tid);
   }
 
-  getPositions(hostElement: HTMLElement): PositionCoOrds {
+  getPositions(hostElement: HTMLElement): Pick<PositionMeta, any> {
     const s = this.getCoords(this.config.src);
     const h = this.getCoords(hostElement);
 
@@ -45,11 +45,11 @@ export class RelativePosition extends ToppyPosition {
     if (typeof this.config.width === 'number') {
       h.width = this.config.width;
     }
-    const props = this.calculatePos(this.config.placement, s, h);
-    return { ...this.round(props), width: this.config.width, height: this.config.height };
+    const { pos, props } = this.calculatePos(this.config.placement, s, h);
+    return { ...this.round(props), width: this.config.width, height: this.config.height, extra: pos };
   }
 
-  private getCoords(elem: HTMLElement): PositionCoOrds {
+  private getCoords(elem: HTMLElement): PositionMeta {
     const box: any = elem.getBoundingClientRect();
 
     return {
@@ -104,16 +104,14 @@ export class RelativePosition extends ToppyPosition {
     return this.calc(pos, s, h);
   }
 
-  private calculatePos(pos, s, h, c = true): object {
+  private calculatePos(pos, s, h, c = true): { [x: string]: any } {
     const props = this.getProps(pos, s, h);
-    if (!c) {
-      return props;
-    }
-    if (this.config.autoUpdate && this.isOverflowed({ ...props, width: h.width, height: h.height })) {
+
+    if (c && this.config.autoUpdate && this.isOverflowed({ ...props, width: h.width, height: h.height })) {
       return this.calculatePos(this.nextPosition(pos), s, h, false);
     }
 
-    return props;
+    return { pos, props };
   }
 
   private isOverflowed(props: { [x: string]: any }): boolean {

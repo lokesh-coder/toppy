@@ -33,7 +33,7 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
   tid: TID;
   el: HTMLElement | any;
   wrapperEl: HTMLElement | any;
-
+  extra: string;
   private die: Subject<1> = new Subject();
 
   constructor(private inj: Injector, private cd: ChangeDetectorRef, private elRef: ElementRef) {}
@@ -91,7 +91,11 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
   }
 
   private setPos(): void {
-    const coords = this.position.getPositions(this.wrapperEl);
+    const { extra, ...coords } = this.position.getPositions(this.wrapperEl);
+    if (this.extra !== extra) {
+      this.extra = extra;
+      this.cd.detectChanges();
+    }
     Object.assign(coords, { visibility: 'visible', opacity: '1' });
     this.wrapperEl.style = toCss(coords);
     Bus.send(this.tid, 't_posupdate');

@@ -9,11 +9,13 @@ import {
   ViewChild
 } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
+import { Subject } from 'rxjs';
 import { DefaultConfig } from '../lib/config';
 import { ContentType } from '../lib/models';
 import { GlobalPosition, RelativePosition } from '../lib/position';
 import { Toppy } from '../lib/toppy';
 import { ToppyControl } from '../lib/toppy-control';
+import { Bus } from '../lib/utils';
 
 @Component({
   selector: 'lib-template-ref-test-comp',
@@ -59,18 +61,15 @@ describe('@ Toppy', () => {
     appRef = TestBed.get(ApplicationRef);
     compFact = TestBed.get(ComponentFactoryResolver);
     inj = TestBed.get(Injector);
-    spyOn(toppy, 'destroy').and.callFake(() => {
-      // tslint:disable-next-line:forin
-      for (const key in Toppy.controls) {
-        Toppy.controls[key].close();
-      }
-      Toppy.controls = {};
-    });
+    spyOn(toppy, 'destroy').and.callThrough();
   }));
 
   afterEach(function() {
     templateRefCompFixture.destroy();
     document.querySelector('body').removeChild(templateRefCompFixture.debugElement.nativeElement);
+  });
+  afterAll(() => {
+    Bus['_e'] = new Subject();
   });
 
   it('should be initialized', () => {
@@ -250,6 +249,16 @@ describe('@ Toppy', () => {
       toppy.create();
       toppy.create();
       expect(Object.keys(Toppy.controls).length).toEqual(5);
+    });
+    it('should add new instance with custom key', () => {
+      toppy.create('JKL');
+      expect(Object.keys(Toppy.controls)).toContain('JKL');
+    });
+    it('should create new key if same key already exists', () => {
+      toppy.create('ABCD');
+      toppy.create('ABCD');
+      expect(Object.keys(Toppy.controls).length).toEqual(4);
+      expect(Object.keys(Toppy.controls).filter(x => x === 'ABCD').length).toEqual(1);
     });
   });
   describe('#destroy', () => {
