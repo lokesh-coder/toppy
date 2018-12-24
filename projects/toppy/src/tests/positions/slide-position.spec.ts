@@ -21,13 +21,13 @@ describe('@ SlidePosition', () => {
     });
     it('should return proper position when placement is right', () => {
       const slidePos = new SlidePosition({
-        width: 500,
+        width: '500',
         placement: SlidePlacement.RIGHT
       });
       expect(slidePos.getPositions()).toEqual({
         right: 0,
         top: 0,
-        width: 500,
+        width: '500',
         height: '100%',
         position: 'fixed',
         extra: SlidePlacement.RIGHT
