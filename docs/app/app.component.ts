@@ -71,4 +71,21 @@ export class AppComponent {
         }
       });
   }
+
+  tweet(e) {
+    const getWindowOptions = function() {
+      const width = 500;
+      const height = 350;
+      const left = window.innerWidth / 2 - width / 2;
+      const top = window.innerHeight / 2 - height / 2;
+
+      return ['resizable,scrollbars,status', 'height=' + height, 'width=' + width, 'left=' + left, 'top=' + top].join();
+    };
+    // const text = encodeURIComponent('Hey everyone, come & see how good I look!');
+    const shareUrl = `https://twitter.com/intent/tweet?hashtags=angular&original_referer=http%3A%2F%2Flocalhost%3A4200%2F&ref_src=twsrc%5Etfw&text=Cute%20overlay%20library%20for%20Angular%20-%20tooltips%2C%20modals%2C%20toastr%2C%20menu%2C%20dropdowns%2C%20alerts%2C%20popovers%2C%20sidebar%20and%20more...%20&tw_p=tweetbutton&url=https%3A%2F%2Flokesh-coder.github.io%2Ftoppy%2F&via=lokesh-coder`;
+
+    e.preventDefault();
+    const win = window.open(shareUrl, 'ShareOnTwitter', getWindowOptions());
+    win.opener = null; // 2
+  }
 }
