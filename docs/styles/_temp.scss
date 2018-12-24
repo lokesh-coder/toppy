@@ -98,6 +98,27 @@ td em {
   font-weight: 500;
 }
 
+.version-btn{
+      width: 60px;
+    height: 21px;
+    line-height: 1;
+    background: #e99732;
+    vertical-align: middle;
+    display: flex;
+    align-items: CENTER;
+    justify-content: center;
+    color: #fff;
+    border-radius: 2px;
+    font-weight: 500;
+    cursor: pointer;
+    text-decoration: none;
+    &:hover{
+          text-decoration: none;
+    color: #7b501c;
+    background: #ffb75f;
+    }
+}
+
 .hero {
   border-bottom: 2px solid #d1d0e0;
 }

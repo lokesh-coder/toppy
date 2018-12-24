@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, ElementRef, ViewChild } from '@angular/core';
 import { fromEvent } from 'rxjs';
+import { TOPPY_VERSION } from '../environments/version';
 // import { Toppy } from 'toppy';
 import { code } from './codes';
 
@@ -13,6 +14,7 @@ export class AppComponent {
   versions = [];
   title = 'toppy-app';
   selectedVersion = '';
+  currentVersion = TOPPY_VERSION;
   @ViewChild('el', { read: ElementRef })
   el: ElementRef;
   ins;
