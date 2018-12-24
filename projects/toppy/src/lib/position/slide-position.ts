@@ -1,9 +1,15 @@
 import { PositionMeta, SlidePlacement } from '../models';
 import { ToppyPosition } from './position';
 
+interface SlidePlacementConfig {
+  placement: SlidePlacement;
+  width: string;
+}
+
 export class SlidePosition extends ToppyPosition {
-  protected config: { placement: SlidePlacement; width: string } = { placement: SlidePlacement.LEFT, width: '30%' };
-  constructor(config) {
+  protected config: SlidePlacementConfig = { placement: SlidePlacement.LEFT, width: '30%' };
+
+  constructor(config: SlidePlacementConfig) {
     super();
     this.config = { ...this.config, ...config };
   }
