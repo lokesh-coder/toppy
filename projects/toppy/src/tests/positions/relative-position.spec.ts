@@ -38,8 +38,8 @@ describe('@ RelativePosition', () => {
       src: null,
       placement: OutsidePlacement.TOP,
       autoUpdate: true,
-      width: '100%',
-      height: '100%'
+      width: 'auto',
+      height: 'auto'
     });
   });
   it('should return correct class name', () => {
@@ -114,7 +114,7 @@ describe('@ RelativePosition', () => {
       expect(relPos.getPositions(hostElement)).toEqual({
         left: Math.round(8 + (967 - 967) / 2),
         top: Math.round(srcCoords.top - 18),
-        width: targetElement.offsetWidth,
+        width: 'auto',
         height: 'auto',
         extra: OutsidePlacement.TOP
       });
