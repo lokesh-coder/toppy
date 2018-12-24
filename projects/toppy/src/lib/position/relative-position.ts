@@ -1,8 +1,8 @@
 import { OutsidePlacement, PositionMeta } from '../models';
-import { Bus } from '../utils';
+import { Bus, setWH } from '../utils';
 import { ToppyPosition } from './position';
 
-export interface Config {
+interface RelativePositionConfig {
   src?: HTMLElement;
   placement?: OutsidePlacement;
   autoUpdate?: boolean;
@@ -11,55 +11,36 @@ export interface Config {
 }
 
 export class RelativePosition extends ToppyPosition {
-  protected config: Config = {
+  protected config: RelativePositionConfig = {
     src: null,
     placement: OutsidePlacement.TOP,
     autoUpdate: false,
-    width: '100%',
-    height: '100%'
+    width: 'auto',
+    height: 'auto'
   };
   obs: MutationObserver;
-  constructor(config: Config) {
+  constructor(config: RelativePositionConfig) {
     super();
-    this.config = { ...this.config, ...config };
+    this.updateConfig(config);
   }
-
   init(tid: string): void {
     if (this.config.autoUpdate) this.listenDrag(tid);
   }
 
-  getPositions(hostElement: HTMLElement): Pick<PositionMeta, any> {
+  getPositions(targetEl: HTMLElement): Pick<PositionMeta, any> {
     const s = this.getCoords(this.config.src);
-    const h = this.getCoords(hostElement);
+    const h = this.getCoords(targetEl);
+    let { width: w, height: ht } = this.config;
 
-    if (this.config.width === '100%') {
-      this.config.width = s.width;
-    }
+    w = setWH(s, h, 'width', w);
+    ht = setWH(s, h, 'height', ht);
 
-    if (this.config.height === '100%') {
-      this.config.height = 'auto';
-    }
-    if (typeof this.config.height === 'number') {
-      h.height = this.config.height;
-    }
-    if (typeof this.config.width === 'number') {
-      h.width = this.config.width;
-    }
     const { pos, props } = this.calculatePos(this.config.placement, s, h);
-    return { ...this.round(props), width: this.config.width, height: this.config.height, extra: pos };
+    return { ...this.round(props), width: w, height: ht, extra: pos };
   }
 
   private getCoords(elem: HTMLElement): PositionMeta {
-    const box: any = elem.getBoundingClientRect();
-
-    return {
-      top: Math.round(box.top),
-      left: Math.round(box.left),
-      height: box.height,
-      right: box.right,
-      bottom: box.bottom,
-      width: box.width
-    };
+    return elem.getBoundingClientRect();
   }
 
   private calc(placement: OutsidePlacement, src, host): object {
@@ -100,12 +81,8 @@ export class RelativePosition extends ToppyPosition {
     return p;
   }
 
-  private getProps(pos, s, h): object {
-    return this.calc(pos, s, h);
-  }
-
   private calculatePos(pos, s, h, c = true): { [x: string]: any } {
-    const props = this.getProps(pos, s, h);
+    const props = this.calc(pos, s, h);
 
     if (c && this.config.autoUpdate && this.isOverflowed({ ...props, width: h.width, height: h.height })) {
       return this.calculatePos(this.nextPosition(pos), s, h, false);
@@ -121,21 +98,8 @@ export class RelativePosition extends ToppyPosition {
     return props.bottom > innerHeight || props.top <= 0 || props.left <= 0 || props.right > innerWidth;
   }
 
-  private nextPosition(current): OutsidePlacement {
-    const placements = [
-      OutsidePlacement.TOP,
-      OutsidePlacement.BOTTOM,
-      OutsidePlacement.LEFT,
-      OutsidePlacement.RIGHT,
-      OutsidePlacement.TOP_LEFT,
-      OutsidePlacement.TOP_RIGHT,
-      OutsidePlacement.BOTTOM_LEFT,
-      OutsidePlacement.BOTTOM_RIGHT,
-      OutsidePlacement.LEFT_TOP,
-      OutsidePlacement.LEFT_BOTTOM,
-      OutsidePlacement.RIGHT_TOP,
-      OutsidePlacement.RIGHT_BOTTOM
-    ];
+  private nextPosition(current: OutsidePlacement): string {
+    const placements = ['t', 'b', 'l', 'r', 'tl', 'tr', 'bl', 'br', 'lt', 'lb', 'rt', 'rb'];
 
     const index = placements.indexOf(current);
     const even = index % 2 === 0;
