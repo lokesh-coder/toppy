@@ -7,7 +7,7 @@ describe('@ SlidePosition', () => {
   describe('#getPositions', () => {
     it('should return proper position when placement is left', () => {
       const slidePos = new SlidePosition({
-        width: 200,
+        width: '200px',
         placement: SlidePlacement.LEFT
       });
       expect(slidePos.getPositions()).toEqual({

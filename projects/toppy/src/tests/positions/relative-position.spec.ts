@@ -32,7 +32,7 @@ describe('@ RelativePosition', () => {
     expect(document.querySelector('.foobar').textContent).toBe('Hello');
   });
   it('should get updated config', () => {
-    const relPos = new RelativePosition({});
+    const relPos = new RelativePosition({ src: null });
     relPos.updateConfig({ autoUpdate: true });
     expect(relPos['config']).toEqual({
       src: null,
@@ -43,7 +43,7 @@ describe('@ RelativePosition', () => {
     });
   });
   it('should return correct class name', () => {
-    const relPos = new RelativePosition({});
+    const relPos = new RelativePosition({ src: null });
     expect(relPos.getClassName()).toBe('relative-position');
   });
 

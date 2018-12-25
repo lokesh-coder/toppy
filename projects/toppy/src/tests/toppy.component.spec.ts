@@ -105,15 +105,15 @@ describe('@ ToppyComponent', () => {
 
   describe('#createInj', () => {
     it('should return new StaticInjector ', () => {
-      expect(toppyComp.createInj().constructor.name).toEqual('StaticInjector');
+      expect(toppyComp.createInj.constructor.name).toEqual('StaticInjector');
     });
     it('should have CurrentOverlay', () => {
-      expect(toppyComp.createInj().get(ToppyOverlay)).toBeTruthy();
-      expect(toppyComp.createInj().get(ToppyOverlay).close).toBeTruthy();
+      expect(toppyComp.createInj.get(ToppyOverlay)).toBeTruthy();
+      expect(toppyComp.createInj.get(ToppyOverlay).close).toBeTruthy();
     });
     it('should return close function on calling `close` method', () => {
       toppyComp.content.props.close = () => '123';
-      const co = toppyComp.createInj().get(ToppyOverlay);
+      const co = toppyComp.createInj.get(ToppyOverlay);
       expect(co.close()).toBe('123');
     });
     it('should return all props', () => {
@@ -123,7 +123,8 @@ describe('@ ToppyComponent', () => {
         name: 'Peter',
         id: 22
       };
-      toppyComp.createInj();
+      // tslint:disable-next-line:no-unused-expression
+      const foo = toppyComp.createInj;
       fixture.detectChanges();
       expect(fixture.debugElement.query(By.css('test-comp')).nativeElement.textContent).toBe('Hello Peter');
     });
