@@ -13,7 +13,7 @@ describe('@ SlidePosition', () => {
       expect(slidePos.getPositions()).toEqual({
         left: 0,
         top: 0,
-        width: 200,
+        width: '200px',
         height: '100%',
         position: 'fixed',
         extra: SlidePlacement.LEFT
