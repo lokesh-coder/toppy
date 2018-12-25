@@ -1,3 +1,16 @@
+# [2.1.0](https://github.com/lokesh-coder/toppy/compare/v2.0.5...v2.1.0) (2018-12-25)
+
+
+### Bug Fixes
+
+* re-render when nested dynamic component ([68f5844](https://github.com/lokesh-coder/toppy/commit/68f5844))
+
+
+### Features
+
+* add position classes to warpper element ([79fc1a5](https://github.com/lokesh-coder/toppy/commit/79fc1a5))
+* add position classes to warpper element ([b8ffb44](https://github.com/lokesh-coder/toppy/commit/b8ffb44))
+
 ## [2.0.5](https://github.com/lokesh-coder/toppy/compare/v2.0.4...v2.0.5) (2018-12-24)
 
 ## [2.0.4](https://github.com/lokesh-coder/toppy/compare/v2.0.3...v2.0.4) (2018-12-20)
