@@ -8,16 +8,16 @@ import {
 } from '@angular/core';
 import { animationFrameScheduler, fromEvent, merge as mergeObs, Observable, Subject } from 'rxjs';
 import { debounceTime, distinctUntilChanged, filter, map, observeOn, skipWhile, takeUntil, tap } from 'rxjs/operators';
-import { Content, ContentData, ContentProps, ToppyConfig, ToppyEventName } from './models';
+import { Content, ContentData, ContentProps, TID, ToppyConfig, ToppyEventName } from './models';
 import { ToppyPosition } from './position/position';
 import { ToppyComponent } from './toppy.component';
-import { Bus, getContent } from './utils';
+import { BodyEl, Bus, getContent } from './utils';
 
 export class ToppyControl {
   position: ToppyPosition;
   config: ToppyConfig;
   content: Content;
-  tid: string;
+  tid: TID;
   comp: ToppyComponent;
   updateTextContent: Subject<string> = new Subject();
   hostView: ViewRef;
@@ -52,6 +52,8 @@ export class ToppyControl {
   }
 
   close(): void {
+    if (!this.isOpen) return;
+
     this.dettach();
     this.die.next(1);
     Bus.send(this.tid, 't_close');
@@ -63,12 +65,12 @@ export class ToppyControl {
   }
 
   onEscClick(): Observable<any> {
-    return fromEvent(document.getElementsByTagName('body'), 'keydown').pipe(
+    return fromEvent(BodyEl, 'keydown').pipe(
       takeUntil(this.die),
       skipWhile(() => !this.config.closeOnEsc),
       filter((e: any) => (e.key === 'Escape' || e.key === 'Esc' || e.keyCode === 27) && e.target.nodeName === 'BODY'),
       tap(e => e.preventDefault()),
-      map((e: any) => e.target),
+      map(e => e.target),
       tap(() => this.close())
     );
   }
@@ -96,7 +98,6 @@ export class ToppyControl {
       observeOn(animationFrameScheduler),
       distinctUntilChanged(),
       tap(() => {
-        // tslint:disable-next-line:no-unused-expression
         Bus.send(this.tid, 't_dynpos');
         this.config.windowResizeCallback();
       })
@@ -139,7 +140,7 @@ export class ToppyControl {
     this.hostView = this.compRef.hostView;
     this.appRef.attachView(this.hostView);
     this.viewEl = (this.hostView as any).rootNodes[0];
-    document.querySelector('body').appendChild(this.viewEl);
+    BodyEl.appendChild(this.viewEl);
   }
 
   private dettach(): void {

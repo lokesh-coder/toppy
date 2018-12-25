@@ -1,5 +1,5 @@
 <div class="t-backdrop" *ngIf="config.backdrop"></div>
-<div class="t-wrapper" [ngClass]="config.wrapperClass" #wrapperEl>
+<div class="t-wrapper" [ngClass]="config.wrapperClass" [class]="extra" #wrapperEl>
   <ng-container [ngSwitch]="content.type">
     <ng-container *ngSwitchCase="'s'">
       <div [class]="content.props.class">{{ content.data }}</div>
@@ -9,7 +9,7 @@
       <ng-container *ngTemplateOutlet="content.data; context: { $implicit: content.props }"></ng-container>
     </ng-container>
     <ng-container *ngSwitchCase="'c'">
-      <ng-container *ngComponentOutlet="content.data; injector: createInj()"></ng-container>
+      <ng-container *ngComponentOutlet="content.data; injector: overlayInj || createInj"></ng-container>
     </ng-container>
   </ng-container>
 </div>

@@ -98,6 +98,27 @@ td em {
   font-weight: 500;
 }
 
+.version-btn {
+  width: 60px;
+  height: 21px;
+  line-height: 1;
+  background: #e99732;
+  vertical-align: middle;
+  display: flex;
+  align-items: CENTER;
+  justify-content: center;
+  color: #fff;
+  border-radius: 2px;
+  font-weight: 500;
+  cursor: pointer;
+  text-decoration: none;
+  &:hover {
+    text-decoration: none;
+    color: #7b501c;
+    background: #ffb75f;
+  }
+}
+
 .hero {
   border-bottom: 2px solid #d1d0e0;
 }
@@ -239,7 +260,7 @@ ul.horizontal-list {
 
 p > code {
   font-size: 11px;
-  font-family: Roboto mono;
+  font-family: 'Roboto mono';
   background: #3fc782;
   color: #ffffff;
   display: inline-block;
@@ -283,7 +304,6 @@ p > code {
       bottom: 0;
       /* background: red; */
       border: 0;
-      border-top: 1px dashed #d2d5e6;
     }
     &:hover,
     &.active {
@@ -299,9 +319,22 @@ p > code {
   }
 }
 
+ul li:not(:last-child) a:after {
+  border-top: 1px dashed #d2d5e6;
+}
+
 .sidebar-fixed .sidemenu {
   position: fixed;
   top: 0rem;
   width: 100%;
   max-width: 290px;
+}
+
+.footer {
+  padding: 4rem 0;
+  opacity: 0.4;
+  color: rgba(0, 0, 0, 0.5);
+  span {
+    color: #f44336;
+  }
 }

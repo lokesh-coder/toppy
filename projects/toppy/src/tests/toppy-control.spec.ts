@@ -144,12 +144,18 @@ describe('@ ToppyControl', () => {
       sub.next(1);
       expect(spy.calls.count()).toEqual(1);
     });
+    it('should return null if isOpen is false', () => {
+      spyOn(toppyControl as any, 'dettach');
+      toppyControl.close();
+      expect(toppyControl['dettach']).toHaveBeenCalledTimes(0);
+    });
     it('should emit close event', done => {
       const spy = jasmine.createSpy('spy').and.callThrough();
       Bus.listen('abc', 't_close').subscribe(_ => {
         spy();
         done();
       });
+      toppyControl.open();
       toppyControl.close();
       expect(spy.calls.count()).toEqual(1);
     });
@@ -304,6 +310,28 @@ describe('@ ToppyControl', () => {
         done();
       });
       window.dispatchEvent(new Event('resize'));
+    });
+  });
+  describe('#listen', () => {
+    beforeEach(() => {
+      toppyControl.tid = 'arui';
+      toppyControl.config = DefaultConfig;
+      toppyControl.content = { data: 'One', props: {}, type: ContentType.STRING };
+    });
+    afterEach(() => {
+      toppyControl.close();
+    });
+
+    it('should emit events', done => {
+      toppyControl
+        .listen('t_open')
+        .pipe(take(1))
+        .subscribe(res => {
+          expect(res).toBeNull();
+          done();
+        });
+
+      toppyControl.open();
     });
   });
 });

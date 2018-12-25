@@ -159,7 +159,7 @@ new FullscreenPosition();
 
 ### [ ]{.toppy-icon .icon-rss} Communication
 
-#### Component Data
+##### Component Data
 
 When you host a component, you can control the overlay through `ToppyOverlay` service. Using this service you can access all properties that is provided in content. Also the properties comes with `close`.
 
@@ -186,7 +186,7 @@ export class HelloComponent {
 }
 ```
 
-#### Template Data
+##### Template Data
 
 This is very similar to above one. When you use template as a content, you can pass additional data to it.
 
@@ -208,7 +208,7 @@ Then in your template you can refer the data like this,
 
 Method `close` is automatically binded.
 
-#### Plain text
+##### Plain text
 
 When you use Plain text as a content, optionally you can able to set a class name to that `div` block.
 
@@ -473,14 +473,22 @@ SlidePlacement.RIGHT;
 
 </div>
 
-### [ ]{.toppy-icon .icon-users} Contribution
+### [ ]{.toppy-icon .icon-hash} More
 
-Any kind of contributions ( Typo fix, documentation, code quality, performance, refactor, pipeline, etc., ) are welcome. :)
+##### Contribution
 
-### [ ]{.toppy-icon .icon-hash} Credits
+Any kind of contributions ( Typo fix, documentation, code quality, performance, refactor, pipeline, etc., ) are welcome. 😊
 
-- Icons from [openmoji](http://openmoji.org)
+##### Credits
 
-### [ ]{.toppy-icon .icon-help} Issues
+Icon imagess are from [openmoji](http://openmoji.org)
 
-Found a bug? Have some idea? Or do you have questions? File it [github issues](https://github.com/lokesh-coder/toppy/issues)
+##### Issues
+
+Found a bug? Have some idea? Or do you have questions? File it in [github issues](https://github.com/lokesh-coder/toppy/issues)
+
+##### License
+
+MIT
+
+<br/>

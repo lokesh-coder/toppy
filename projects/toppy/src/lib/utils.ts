@@ -35,6 +35,28 @@ export function toCss(styleObj) {
     .join(';');
 }
 
+export function percentToCss(max, percentage: string): string {
+  let number = Number(percentage.slice(0, -1));
+  if (number > 100) {
+    number = 100;
+  }
+  return `calc(${max}px - ${100 - number}%)`;
+}
+
+export function setWH(src, host, key, value) {
+  if (typeof value === 'number') {
+    host[key] = value = Math.abs(value);
+  }
+
+  if (typeof value === 'string' && value.endsWith('%')) {
+    value = percentToCss(src[key], value);
+  }
+
+  return value;
+}
+
+export const BodyEl = document.querySelector('body');
+
 /* events */
 
 class BusClass {
