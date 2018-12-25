@@ -3,7 +3,7 @@ import { Bus, setWH } from '../utils';
 import { ToppyPosition } from './position';
 
 interface RelativePositionConfig {
-  src?: HTMLElement;
+  src: HTMLElement;
   placement?: OutsidePlacement;
   autoUpdate?: boolean;
   width?: string | number;

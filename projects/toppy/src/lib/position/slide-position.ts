@@ -2,8 +2,8 @@ import { PositionMeta, SlidePlacement } from '../models';
 import { ToppyPosition } from './position';
 
 interface SlidePlacementConfig {
-  placement: SlidePlacement;
-  width: string;
+  placement?: SlidePlacement;
+  width?: string;
 }
 
 export class SlidePosition extends ToppyPosition {
