@@ -9,7 +9,7 @@
       <ng-container *ngTemplateOutlet="content.data; context: { $implicit: content.props }"></ng-container>
     </ng-container>
     <ng-container *ngSwitchCase="'c'">
-      <ng-container *ngComponentOutlet="content.data; injector: createInj()"></ng-container>
+      <ng-container *ngComponentOutlet="content.data; injector: overlayInj || createInj"></ng-container>
     </ng-container>
   </ng-container>
 </div>

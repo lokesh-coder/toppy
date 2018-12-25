@@ -34,6 +34,7 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
   el: HTMLElement | any;
   wrapperEl: HTMLElement | any;
   extra: string;
+  overlayInj: Injector = null;
   private die: Subject<1> = new Subject();
 
   constructor(private inj: Injector, private cd: ChangeDetectorRef, private elRef: ElementRef) {}
@@ -54,8 +55,8 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
     this.listenPos().subscribe();
   }
 
-  createInj(): Injector {
-    return newInjector(
+  get createInj(): Injector {
+    this.overlayInj = newInjector(
       {
         provide: ToppyOverlay,
         useFactory: () => new ToppyOverlay(this.content.props),
@@ -63,6 +64,7 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
       },
       this.inj
     );
+    return this.overlayInj;
   }
 
   updateTextContent(data: string): void {
