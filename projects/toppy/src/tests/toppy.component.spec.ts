@@ -4,16 +4,15 @@ import { By } from '@angular/platform-browser';
 import { skip, take } from 'rxjs/operators';
 import { DefaultConfig } from '../lib/config';
 import { ContentType } from '../lib/models';
-import { ToppyOverlay } from '../lib/toppy-overlay';
 import { ToppyComponent } from '../lib/toppy.component';
 import { Bus } from '../lib/utils';
 
 @Component({
   selector: 'test-comp',
-  template: 'Hello {{o.props.name||"John"}}'
+  template: 'Hello {{name||"John"}}'
 })
 export class TestComponent {
-  constructor(public o: ToppyOverlay) {}
+  name;
 }
 
 @NgModule({
@@ -101,30 +100,13 @@ describe('@ ToppyComponent', () => {
       Bus.send('abc', 't_dynpos', { x: 10, y: 12 });
       expect(el.querySelector('.t-wrapper').getAttribute('style')).toEqual('left: 10px; top: 12px;');
     });
-  });
-
-  describe('#createInj', () => {
-    it('should return new StaticInjector ', () => {
-      expect(toppyComp.createInj.constructor.name).toEqual('StaticInjector');
-    });
-    it('should have CurrentOverlay', () => {
-      expect(toppyComp.createInj.get(ToppyOverlay)).toBeTruthy();
-      expect(toppyComp.createInj.get(ToppyOverlay).close).toBeTruthy();
-    });
-    it('should return close function on calling `close` method', () => {
-      toppyComp.content.props.close = () => '123';
-      const co = toppyComp.createInj.get(ToppyOverlay);
-      expect(co.close()).toBe('123');
-    });
-    it('should return all props', () => {
+    it('should render custom props in the template', () => {
       toppyComp.content.data = TestComponent;
       toppyComp.content.type = ContentType.COMPONENT;
       toppyComp.content.props = {
         name: 'Peter',
         id: 22
       };
-      // tslint:disable-next-line:no-unused-expression
-      const foo = toppyComp.createInj;
       fixture.detectChanges();
       expect(fixture.debugElement.query(By.css('test-comp')).nativeElement.textContent).toBe('Hello Peter');
     });

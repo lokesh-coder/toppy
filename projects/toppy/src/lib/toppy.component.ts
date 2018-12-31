@@ -12,8 +12,7 @@ import { Observable, Subject } from 'rxjs';
 import { startWith, takeUntil, tap } from 'rxjs/operators';
 import { Content, ContentType, TID, ToppyConfig } from './models';
 import { ToppyPosition } from './position/position';
-import { ToppyOverlay } from './toppy-overlay';
-import { Bus, cssClass, newInjector, toCss } from './utils';
+import { Bus, cssClass, toCss } from './utils';
 
 @Component({
   // tslint:disable-next-line:component-selector
@@ -34,7 +33,6 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
   el: HTMLElement | any;
   wrapperEl: HTMLElement | any;
   extra: string;
-  overlayInj: Injector = null;
   private die: Subject<1> = new Subject();
 
   constructor(private inj: Injector, private cd: ChangeDetectorRef, private elRef: ElementRef) {}
@@ -49,22 +47,13 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
     this.el.setAttribute('data-tid', this.tid);
     cssClass('add', cls, `[data-tid='${[this.tid]}']`);
     cssClass('add', [this.config.bodyClass]);
+    if (this.content.type === ContentType.COMPONENT) {
+      Object.assign(this.content.data['prototype'], this.content.props);
+    }
   }
 
   ngAfterViewInit() {
     this.listenPos().subscribe();
-  }
-
-  get createInj(): Injector {
-    this.overlayInj = newInjector(
-      {
-        provide: ToppyOverlay,
-        useFactory: () => new ToppyOverlay(this.content.props),
-        deps: []
-      },
-      this.inj
-    );
-    return this.overlayInj;
   }
 
   updateTextContent(data: string): void {

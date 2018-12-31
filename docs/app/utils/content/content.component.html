@@ -120,9 +120,9 @@
 </p>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">new</span> FullscreenPosition();
 </code></pre>
-<h3 id="communication"><a href="#communication"><span class="toppy-icon icon-rss"></span> Communication</a></h3>
-<h5 id="component-data"><a href="#component-data">Component Data</a></h5>
-<p>When you host a component, you can control the overlay through <code>ToppyOverlay</code> service. Using this service you can access all properties that is provided in content. Also the properties comes with <code>close</code>.</p>
+<h3 id="content-properties"><a href="#content-properties"><span class="toppy-icon icon-rss"></span> Content Properties</a></h3>
+<p>When you are adding content, optionally you can add additional custom data to them. Which can be accessed later inside the content. This applies only if the content type is <strong>Component</strong> or <strong>TemplateRef</strong>. The data will be auto attached with the content and comes with <code>close</code> property, to dismiss the overlay programatically.</p>
+<h5 id="component-props"><a href="#component-props">Component Props</a></h5>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">this</span>.overlay = <span class="hljs-keyword">this</span>._toppy
   .position(position)
   .content(HelloComponent, &#123; propName: <span class="hljs-string">'toppy-test-prop'</span> &#125;)
@@ -133,30 +133,29 @@
   template: <span class="hljs-string">'&#x3C;div>Some text&#x3C;/div>'</span>
 &#125;)
 <span class="hljs-keyword">export</span> <span class="hljs-keyword">class</span> HelloComponent &#123;
-  <span class="hljs-keyword">constructor</span>(<span class="hljs-params"><span class="hljs-keyword">public</span> overlay: ToppyOverlay</span>) &#123;
-    <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>.overlay.props.propName); <span class="hljs-comment">// will return 'toppy-test-prop'</span>
+  propName; <span class="hljs-comment">// declare. Else TSlint throws error</span>
+  close; <span class="hljs-comment">// just declare</span>
+  <span class="hljs-keyword">constructor</span>(<span class="hljs-params"></span>) &#123;
+    <span class="hljs-built_in">console</span>.log(<span class="hljs-keyword">this</span>.propName); <span class="hljs-comment">// will return 'toppy-test-prop'</span>
   &#125;
 
-  close() &#123;
-    <span class="hljs-keyword">this</span>.overlay.close();
+  dismiss() &#123;
+    <span class="hljs-keyword">this</span>.close(); <span class="hljs-comment">// auto binded</span>
   &#125;
 &#125;
 </code></pre>
-<h5 id="template-data"><a href="#template-data">Template Data</a></h5>
-<p>This is very similar to above one. When you use template as a content, you can pass additional data to it.</p>
+<h5 id="template-props"><a href="#template-props">Template props</a></h5>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">this</span>.overlay = <span class="hljs-keyword">this</span>._toppy
   .position(position)
   .content(template, &#123; name: <span class="hljs-string">'Johny'</span> &#125;)
   .create();
 </code></pre>
-<p>Then in your template you can refer the data like this,</p>
 <pre><code class="hljs language-html" id="tpl"><span class="hljs-tag">&#x3C;<span class="hljs-name">ng-template</span> #<span class="hljs-attr">tpl</span> <span class="hljs-attr">let-toppy</span>></span>
   <span class="hljs-tag">&#x3C;<span class="hljs-name">div</span>></span>Hello <span class="hljs-tag">&#x3C;<span class="hljs-name">span</span> [<span class="hljs-attr">innerText</span>]=<span class="hljs-string">"toppy.name"</span>></span><span class="hljs-tag">&#x3C;/<span class="hljs-name">span</span>></span> !<span class="hljs-tag">&#x3C;/<span class="hljs-name">div</span>></span>
   <span class="hljs-tag">&#x3C;<span class="hljs-name">button</span> (<span class="hljs-attr">click</span>)=<span class="hljs-string">"toppy.close()"</span>></span>Close<span class="hljs-tag">&#x3C;/<span class="hljs-name">button</span>></span>
 <span class="hljs-tag">&#x3C;/<span class="hljs-name">ng-template</span>></span>
 </code></pre>
-<p>Method <code>close</code> is automatically binded.</p>
-<h5 id="plain-text"><a href="#plain-text">Plain text</a></h5>
+<h5 id="plain-text-props"><a href="#plain-text-props">Plain text props</a></h5>
 <p>When you use Plain text as a content, optionally you can able to set a class name to that <code>div</code> block.</p>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">this</span>.overlay = <span class="hljs-keyword">this</span>._toppy
   .position(position)

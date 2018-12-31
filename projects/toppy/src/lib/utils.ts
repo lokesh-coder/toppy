@@ -1,4 +1,4 @@
-import { Injector, StaticProvider, TemplateRef } from '@angular/core';
+import { TemplateRef } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { filter, map } from 'rxjs/operators';
 import { Content, ContentData, ContentProps, ContentType, ToppyEvent, ToppyEventName } from './models';
@@ -17,10 +17,6 @@ export function createId() {
   return Math.random()
     .toString(36)
     .substr(2, 5);
-}
-
-export function newInjector(provider: StaticProvider, parent: Injector) {
-  return Injector.create({ providers: [provider], parent });
 }
 
 /* html dom utils */
