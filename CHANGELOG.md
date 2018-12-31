@@ -1,3 +1,10 @@
+# [2.2.0](https://github.com/lokesh-coder/toppy/compare/v2.1.0...v2.2.0) (2018-12-31)
+
+
+### Features
+
+* attach component custom props on initialize without ToppyOverlay ([e96a5f4](https://github.com/lokesh-coder/toppy/commit/e96a5f4))
+
 # [2.1.0](https://github.com/lokesh-coder/toppy/compare/v2.0.5...v2.1.0) (2018-12-25)
 
 
