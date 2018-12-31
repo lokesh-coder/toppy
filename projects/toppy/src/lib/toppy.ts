@@ -4,7 +4,7 @@ import { ContentData, ContentProps, ContentType, Inputs, InsidePlacement, TID, T
 import { GlobalPosition } from './position';
 import { ToppyPosition } from './position/position';
 import { ToppyControl } from './toppy-control';
-import { Bus, createId, getContent, newInjector } from './utils';
+import { Bus, createId, getContent } from './utils';
 
 @Injectable({
   providedIn: 'root'
@@ -41,13 +41,16 @@ export class Toppy {
   create(key: string = null): ToppyControl {
     this.tid = this.inputs.tid = key || createId();
 
-    const injector = newInjector(
-      {
-        provide: ToppyControl,
-        deps: [ApplicationRef, ComponentFactoryResolver, Injector]
-      },
+    const injector = Injector.create(
+      [
+        {
+          provide: ToppyControl,
+          deps: [ApplicationRef, ComponentFactoryResolver, Injector]
+        }
+      ],
       this.injector
     );
+
     const tc = injector.get(ToppyControl);
     if (Toppy.controls[this.tid]) {
       this.tid = createId();

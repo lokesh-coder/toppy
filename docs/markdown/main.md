@@ -157,11 +157,11 @@ new SlidePosition({
 new FullscreenPosition();
 ```
 
-### [ ]{.toppy-icon .icon-rss} Communication
+### [ ]{.toppy-icon .icon-rss} Content Properties
 
-##### Component Data
+When you are adding content, optionally you can add additional custom data to them. Which can be accessed later inside the content. This applies only if the content type is **Component** or **TemplateRef**. The data will be auto attached with the content and comes with `close` property, to dismiss the overlay programatically.
 
-When you host a component, you can control the overlay through `ToppyOverlay` service. Using this service you can access all properties that is provided in content. Also the properties comes with `close`.
+##### Component Props
 
 ```typescript
 this.overlay = this._toppy
@@ -176,19 +176,19 @@ this.overlay = this._toppy
   template: '<div>Some text</div>'
 })
 export class HelloComponent {
-  constructor(public overlay: ToppyOverlay) {
-    console.log(this.overlay.props.propName); // will return 'toppy-test-prop'
+  propName; // declare. Else TSlint throws error
+  close; // just declare
+  constructor() {
+    console.log(this.propName); // will return 'toppy-test-prop'
   }
 
-  close() {
-    this.overlay.close();
+  dismiss() {
+    this.close(); // auto binded
   }
 }
 ```
 
-##### Template Data
-
-This is very similar to above one. When you use template as a content, you can pass additional data to it.
+##### Template props
 
 ```typescript
 this.overlay = this._toppy
@@ -197,8 +197,6 @@ this.overlay = this._toppy
   .create();
 ```
 
-Then in your template you can refer the data like this,
-
 ```html
 <ng-template #tpl let-toppy>
   <div>Hello <span [innerText]="toppy.name"></span> !</div>
@@ -206,9 +204,7 @@ Then in your template you can refer the data like this,
 </ng-template>
 ```
 
-Method `close` is automatically binded.
-
-##### Plain text
+##### Plain text props
 
 When you use Plain text as a content, optionally you can able to set a class name to that `div` block.
 
