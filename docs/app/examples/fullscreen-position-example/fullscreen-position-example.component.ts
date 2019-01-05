@@ -4,11 +4,9 @@ import { HeroScreenComponent } from '../../host-components/hero-screen/hero-scre
 
 @Component({
   selector: 'app-fullscreen-position-example',
-  templateUrl: './fullscreen-position-example.component.html',
-  styles: []
+  templateUrl: './fullscreen-position-example.component.html'
 })
 export class FullscreenPositionExampleComponent implements OnInit {
-  selectedPlacement = null;
   private _toppyControl: ToppyControl;
   constructor(private toppy: Toppy) {}
 
@@ -20,13 +18,12 @@ export class FullscreenPositionExampleComponent implements OnInit {
       })
       .content(HeroScreenComponent)
       .create();
+    this._toppyControl.listen('t_compins').subscribe(d => {
+      console.log('HeroScreenComponent initiated', d);
+    });
   }
 
   open() {
     this._toppyControl.open();
-  }
-
-  onOptionChange() {
-    console.log('option changed');
   }
 }

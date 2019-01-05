@@ -9,13 +9,12 @@ import { SimpleModalComponent } from '../../host-components/simple-modal/simple-
   styles: [
     `
       .global-content-wrapper {
-        background: #ff5722;
+        background: #e91e63;
         padding: 1rem 2rem;
-        border: 2px solid #c4532f;
+        border: 2px solid #cc1a57;
         border-radius: 3px;
         color: #fff;
-        text-transform: uppercase;
-        font-weight: 700;
+        font-weight: 500;
       }
     `
   ]
