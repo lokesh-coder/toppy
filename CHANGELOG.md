@@ -1,3 +1,10 @@
+# [2.3.0](https://github.com/lokesh-coder/toppy/compare/v2.2.0...v2.3.0) (2019-01-05)
+
+
+### Features
+
+* add support to access host component instance ([6cf180a](https://github.com/lokesh-coder/toppy/commit/6cf180a))
+
 # [2.2.0](https://github.com/lokesh-coder/toppy/compare/v2.1.0...v2.2.0) (2018-12-31)
 
 
