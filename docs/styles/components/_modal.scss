@@ -1,15 +1,23 @@
 .modal-container {
   background: #fff;
+  border-radius: 4px;
+  box-shadow: 4px 5px 19px #62616b;
+  overflow: hidden;
+  color: clr('dark');
 }
 
 .modal-header {
   padding: 20px;
-  font-weight: 700;
-  border-bottom: 1px solid #ececec;
-  background: #fafafb;
+  font-weight: 400;
+  background: #f0f0ff;
+  text-align: center;
+  font-size: 1.4rem;
 }
 .modal-body {
   padding: 20px;
+  .illus {
+    min-height: 192px;
+  }
 }
 .modal-footer {
   text-align: right;

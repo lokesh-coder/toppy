@@ -18,4 +18,10 @@
     border: 1px dashed #d8d8e3;
     cursor: pointer;
   }
+
+  .target-element-basic:hover {
+    border-color: #cfd2de;
+    color: clr('dark');
+    background-color: #fff;
+  }
 }
