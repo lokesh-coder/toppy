@@ -127,6 +127,10 @@
   .position(position)
   .content(HelloComponent, &#123; propName: <span class="hljs-string">'toppy-test-prop'</span> &#125;)
   .create();
+
+<span class="hljs-keyword">this</span>.overlay.listen(<span class="hljs-string">'t_compins'</span>).subscribe(<span class="hljs-function"><span class="hljs-params">comp</span> =></span> &#123;
+  <span class="hljs-built_in">console</span>.log(<span class="hljs-string">'component is ready!'</span>, comp); <span class="hljs-comment">// returns HelloComponent</span>
+&#125;);
 </code></pre>
 <pre><code class="hljs language-typescript"><span class="hljs-comment">// host component</span>
 <span class="hljs-meta">@Component</span>(&#123;
@@ -301,6 +305,8 @@ ToppyControl.listen(eventName: ToppyEventName):Observable&#x3C;<span class="hljs
 </code></pre>
   <pre><code class="hljs language-typescript"><span class="hljs-string">'t_posupdate'</span>;
 </code></pre>
+  <pre><code class="hljs language-typescript"><span class="hljs-string">'t_compins'</span>;
+</code></pre>
 </div>
 <hr>
 <pre><code class="hljs language-typescript"><span class="hljs-keyword">enum</span> OutsidePlacement &#123;&#125;
@@ -365,7 +371,9 @@ ToppyControl.listen(eventName: ToppyEventName):Observable&#x3C;<span class="hljs
 <h5 id="contribution"><a href="#contribution">Contribution</a></h5>
 <p>Any kind of contributions ( Typo fix, documentation, code quality, performance, refactor, pipeline, etc., ) are welcome. 😊</p>
 <h5 id="credits"><a href="#credits">Credits</a></h5>
-<p>Icon imagess are from <a href="http://openmoji.org">openmoji</a></p>
+<p>▶ Icons ━ <a href="https://icons8.com/icons/cotton">icons8</a></p>
+<p>▶ Illustrations ━ <a href="https://undraw.co/illustrations">undraw</a></p>
+<p>▶ Font icons ━ <a href="https://feathericons.com">feathers</a></p>
 <h5 id="issues"><a href="#issues">Issues</a></h5>
 <p>Found a bug? Have some idea? Or do you have questions? File it in <a href="https://github.com/lokesh-coder/toppy/issues">github issues</a></p>
 <h5 id="license"><a href="#license">License</a></h5>
