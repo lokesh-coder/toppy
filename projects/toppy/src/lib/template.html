@@ -8,6 +8,6 @@
     <ng-container *ngSwitchCase="'t'">
       <ng-container *ngTemplateOutlet="content.data; context: { $implicit: content.props }"></ng-container>
     </ng-container>
-    <ng-container *ngSwitchCase="'c'"> <ng-container *ngComponentOutlet="content.data"></ng-container> </ng-container>
+    <ng-container *ngSwitchCase="'c'"> <ng-template #compOutlet></ng-template> </ng-container>
   </ng-container>
 </div>
