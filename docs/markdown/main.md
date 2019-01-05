@@ -168,6 +168,10 @@ this.overlay = this._toppy
   .position(position)
   .content(HelloComponent, { propName: 'toppy-test-prop' })
   .create();
+
+this.overlay.listen('t_compins').subscribe(comp => {
+  console.log('component is ready!', comp); // returns HelloComponent
+});
 ```
 
 ```typescript
@@ -349,6 +353,10 @@ type ToppyEventName
 't_posupdate';
 ```
 
+```typescript
+'t_compins';
+```
+
 </div>
 
 ---
@@ -477,7 +485,11 @@ Any kind of contributions ( Typo fix, documentation, code quality, performance, 
 
 ##### Credits
 
-Icon imagess are from [openmoji](http://openmoji.org)
+▶ Icons ━ [icons8](https://icons8.com/icons/cotton)
+
+▶ Illustrations ━ [undraw](https://undraw.co/illustrations)
+
+▶ Font icons ━ [feathers](https://feathericons.com)
 
 ##### Issues
 

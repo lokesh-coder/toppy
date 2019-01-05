@@ -7,7 +7,6 @@ import { Component } from '@angular/core';
 })
 export class HeroScreenComponent {
   close;
-  constructor() {}
   dispose() {
     this.close();
   }

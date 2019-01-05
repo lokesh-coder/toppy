@@ -73,7 +73,7 @@ export interface ComponentType<T> {
 
 export type TID = string;
 
-export type ToppyEventName = 't_open' | 't_close' | 't_dynpos' | 't_detach' | 't_posupdate';
+export type ToppyEventName = 't_open' | 't_close' | 't_dynpos' | 't_detach' | 't_posupdate' | 't_compins';
 
 export interface ToppyEvent {
   from: TID;

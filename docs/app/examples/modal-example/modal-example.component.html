@@ -1,18 +1,21 @@
-<div class="drag-element-holder"><img src="./assets/img/mail.png" class="pointer" #el (click)="open()" /></div>
+<div class="drag-element-holder">
+  <img src="./assets/icons/icons8-comments-50.png" class="pointer" #el (click)="open()" />
+</div>
 
-<div class="drag-element-holder"><img src="./assets/img/bomb.png" class="pointer" #el2 (click)="openImage()" /></div>
+<div class="drag-element-holder">
+  <img src="./assets/icons/icons8-dynamite-50.png" class="pointer" #el2 (click)="openImage()" />
+</div>
 
 <ng-template #modalTpl let-foo>
   <div class="modal-container">
-    <div class="modal-header"><h3 class="m-0">Modal example</h3></div>
-    <div class="modal-body">
-      <p>
-        Lorem ipsum dolor, sit amet consectetur adipisicing elit. Consequuntur assumenda aspernatur, eligendi
-        dignissimos itaque provident accusantium dolor repellendus maiores quia veniam blanditiis ipsum, perspiciatis
-        perferendis a ex, quibusdam voluptatibus? Vel.
-      </p>
+    <div class="modal-header">Congratulations!</div>
+    <div class="modal-body text-center">
+      <div class="illus"><img src="./assets/illus/congrats.svg" alt="" width="90%" /></div>
+      <div class="mt-4 desc">Wow, You made it!</div>
     </div>
-    <div class="modal-footer"><button class="dismiss btn btn-danger" (click)="foo.close()">Close</button></div>
+    <div class="modal-footer text-center pt-0">
+      <button class="dismiss btn btn-dark btn-lg" (click)="foo.close()">Okay</button>
+    </div>
   </div>
 </ng-template>
-<img src="./assets/img/blast.png" style="display:none;" />
+<img src="./assets/icons/icons8-firework-explosion-100.png" style="display:none;" />

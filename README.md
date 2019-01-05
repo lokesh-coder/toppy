@@ -262,6 +262,10 @@ this.overlay = this._toppy
   .position(position)
   .content(HelloComponent, { propName: 'toppy-test-prop' })
   .create();
+
+this.overlay.listen('t_compins').subscribe(comp => {
+  console.log('component is ready!', comp); // returns HelloComponent
+});
 ```
 
 ```typescript
@@ -358,7 +362,7 @@ ToppyControl.listen(eventName:string):Observable<any>
 ```typescript
 /* events */
 
-`t_open`, `t_close`, `t_dynpos`, `t_detach`, `t_posupdate`;
+`t_open`, `t_close`, `t_dynpos`, `t_detach`, `t_posupdate`, `t_compins`;
 ```
 
 ### Contribution
@@ -367,7 +371,11 @@ Any kind of contributions ( Typo fix, documentation, code quality, performance, 
 
 ### Credits
 
-- Icons from [openmoji](http://openmoji.org)
+▶ Icons ━ [icons8](https://icons8.com/icons/cotton)
+
+▶ Illustrations ━ [undraw](https://undraw.co/illustrations)
+
+▶ Font icons ━ [feathers](https://feathericons.com)
 
 ### Issues
 

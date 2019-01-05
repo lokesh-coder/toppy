@@ -1,15 +1,15 @@
 <div class="dropdown-field" #el (click)="open()" [ngClass]="{ open: isOpen }">
-  <img src="./assets/img/{{ selectedData.icon }}.png" alt="" /> {{ selectedData.name }}
+  <img src="./assets/icons/{{ selectedData.icon }}.png" alt="" /> {{ selectedData.name }}
 </div>
 
 <div class="text-selection" #el2 (click)="open2()">
-  Do you like it? <span>{{ selectedEatable.name }}</span>
+  I like <span>{{ selectedEatable.name }}</span>
 </div>
 
 <ng-template #tpl let-toppy>
   <ul class="dropdown-ist">
     <li (click)="select(item)" *ngFor="let item of items" [ngClass]="{ selected: item.name == selectedData.name }">
-      <img src="./assets/img/{{ item.icon }}.png" alt="" /> {{ item.name }}
+      <img src="./assets/icons/{{ item.icon }}.png" alt="" /> {{ item.name }}
     </li>
   </ul>
 </ng-template>
@@ -21,7 +21,7 @@
       *ngFor="let item of eatables"
       [ngClass]="{ selected: item.name == selectedEatable.name }"
     >
-      <img src="./assets/img/{{ item.icon }}.png" alt="" />
+      <img src="./assets/icons/{{ item.icon }}.png" alt="" />
     </li>
   </ul>
 </ng-template>

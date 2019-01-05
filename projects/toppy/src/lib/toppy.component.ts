@@ -3,10 +3,13 @@ import {
   ChangeDetectionStrategy,
   ChangeDetectorRef,
   Component,
+  ComponentFactoryResolver,
   ElementRef,
   Injector,
   OnDestroy,
-  OnInit
+  OnInit,
+  ViewChild,
+  ViewContainerRef
 } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { startWith, takeUntil, tap } from 'rxjs/operators';
@@ -22,6 +25,7 @@ import { Bus, cssClass, toCss } from './utils';
   changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
+  @ViewChild('compOutlet', { read: ViewContainerRef }) compOutlet: ViewContainerRef;
   content: Content = {
     type: ContentType.STRING,
     data: '',
@@ -33,9 +37,18 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
   el: HTMLElement | any;
   wrapperEl: HTMLElement | any;
   extra: string;
+  pinj: any;
+  compInstance;
   private die: Subject<1> = new Subject();
 
-  constructor(private inj: Injector, private cd: ChangeDetectorRef, private elRef: ElementRef) {}
+  constructor(
+    public inj: Injector,
+    private cd: ChangeDetectorRef,
+    private compResolver: ComponentFactoryResolver,
+    private elRef: ElementRef
+  ) {
+    this.pinj = Injector;
+  }
 
   ngOnInit() {
     this.el = this.elRef.nativeElement;
@@ -47,13 +60,23 @@ export class ToppyComponent implements OnInit, AfterViewInit, OnDestroy {
     this.el.setAttribute('data-tid', this.tid);
     cssClass('add', cls, `[data-tid='${[this.tid]}']`);
     cssClass('add', [this.config.bodyClass]);
-    if (this.content.type === ContentType.COMPONENT) {
-      Object.assign(this.content.data['prototype'], this.content.props);
-    }
   }
 
   ngAfterViewInit() {
     this.listenPos().subscribe();
+    if (this.content.type === ContentType.COMPONENT) {
+      this.compInstance = this.setComponent(this.content.props);
+      Bus.send(this.tid, 't_compins', this.compInstance);
+    }
+  }
+
+  setComponent(props) {
+    const compRef = this.compOutlet.createComponent(
+      this.compResolver.resolveComponentFactory(this.content.data as any)
+    );
+    Object.assign(compRef.instance, props);
+    compRef.changeDetectorRef.detectChanges();
+    return compRef.instance;
   }
 
   updateTextContent(data: string): void {

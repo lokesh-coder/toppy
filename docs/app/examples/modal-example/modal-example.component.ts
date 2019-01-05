@@ -18,7 +18,7 @@ export class ModalExampleComponent implements OnInit {
       .position(
         new GlobalPosition({
           placement: InsidePlacement.CENTER,
-          width: '40%',
+          width: 300,
           height: 'auto'
         })
       )
@@ -34,7 +34,7 @@ export class ModalExampleComponent implements OnInit {
       .position(
         new GlobalPosition({
           placement: InsidePlacement.CENTER,
-          width: '25%',
+          width: 'auto',
           height: 'auto'
         })
       )
@@ -42,7 +42,7 @@ export class ModalExampleComponent implements OnInit {
         closeOnEsc: true,
         closeOnDocClick: true
       })
-      .content('<img src="./assets/img/blast.png" width="100%"/>', { hasHTML: true })
+      .content('<img src="./assets/icons/icons8-firework-explosion-100.png" width="100%"/>', { hasHTML: true })
       .create();
   }
   open() {
