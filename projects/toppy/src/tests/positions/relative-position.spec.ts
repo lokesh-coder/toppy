@@ -1,5 +1,6 @@
 /// <reference types="karma-viewport" />
 
+import { Subject } from 'rxjs';
 import { take } from 'rxjs/operators';
 import { Bus } from 'toppy/lib/utils';
 import { OutsidePlacement } from '../../lib/models';
@@ -8,6 +9,7 @@ import { RelativePosition } from '../../lib/position';
 describe('@ RelativePosition', () => {
   let targetElement: HTMLElement;
   let hostElement: HTMLElement;
+  let die: Subject<boolean>;
   beforeEach(() => {
     targetElement = document.createElement('div');
     targetElement.setAttribute('class', 'foobar');
@@ -26,6 +28,17 @@ describe('@ RelativePosition', () => {
     document.getElementsByTagName('body')[0].removeChild(targetElement);
     document.getElementsByTagName('body')[0].removeChild(hostElement);
     viewport.set(1000, 480);
+  });
+
+  beforeEach(() => {
+    die = new Subject();
+    Bus['_e'] = new Subject();
+  });
+
+  afterEach(function() {
+    die.next(true);
+    die.complete();
+    Bus.stop();
   });
 
   it('should have target element in document', () => {

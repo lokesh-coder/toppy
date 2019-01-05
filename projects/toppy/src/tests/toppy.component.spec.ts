@@ -1,7 +1,8 @@
-import { Component, DebugElement, NgModule } from '@angular/core';
+import { Component, DebugElement, EventEmitter, Input, NgModule, Output } from '@angular/core';
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { By } from '@angular/platform-browser';
-import { skip, take } from 'rxjs/operators';
+import { Subject } from 'rxjs';
+import { skip, switchMap, take } from 'rxjs/operators';
 import { DefaultConfig } from '../lib/config';
 import { ContentType } from '../lib/models';
 import { ToppyComponent } from '../lib/toppy.component';
@@ -12,6 +13,8 @@ import { Bus } from '../lib/utils';
   template: 'Hello {{name||"John"}}'
 })
 export class TestComponent {
+  @Input() data = null;
+  @Output() fire: EventEmitter<any> = new EventEmitter();
   name;
 }
 
@@ -27,6 +30,7 @@ describe('@ ToppyComponent', () => {
   let debugEl: DebugElement;
   let toppyComp: ToppyComponent;
   let el: HTMLElement;
+  let die: Subject<boolean>;
   beforeEach(async(() => {
     TestBed.configureTestingModule({
       imports: [TestModule],
@@ -45,10 +49,15 @@ describe('@ ToppyComponent', () => {
       getClassName: () => 'relative',
       getPositions: c => ({ left: 45, top: 79, extra: 't' })
     } as any;
+    die = new Subject();
+    Bus['_e'] = new Subject();
   });
 
   afterEach(() => {
     fixture.destroy();
+    die.next(true);
+    die.complete();
+    Bus.stop();
   });
 
   it('should be initialized', () => {
@@ -109,6 +118,33 @@ describe('@ ToppyComponent', () => {
       };
       fixture.detectChanges();
       expect(fixture.debugElement.query(By.css('test-comp')).nativeElement.textContent).toBe('Hello Peter');
+    });
+    it('should emit host component instance', done => {
+      toppyComp.content.data = TestComponent;
+      toppyComp.content.type = ContentType.COMPONENT;
+      toppyComp.content.props = {
+        name: 'Loky'
+      };
+      fixture.detectChanges();
+      Bus.listen('abc', 't_compins').subscribe(data => {
+        expect(data.name).toEqual('Loky');
+        done();
+      });
+      toppyComp.ngAfterViewInit();
+    });
+    it('should able to access "@Output()"', done => {
+      toppyComp.content.data = TestComponent;
+      toppyComp.content.type = ContentType.COMPONENT;
+      toppyComp.content.props = { name: 'SSSS' };
+      fixture.detectChanges();
+      Bus.listen('abc', 't_compins')
+        .pipe(switchMap(a => a['fire']))
+        .subscribe(data => {
+          expect(data).toEqual('ABCXYZ');
+          done();
+        });
+      toppyComp.ngAfterViewInit();
+      toppyComp.compInstance.fire.emit('ABCXYZ');
     });
   });
 

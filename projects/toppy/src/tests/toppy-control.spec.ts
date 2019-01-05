@@ -30,6 +30,7 @@ describe('@ ToppyControl', () => {
   let toppyControl: ToppyControl = null;
   let debugEl: DebugElement = null;
   let fixture: ComponentFixture<TestComponent> = null;
+  let die: Subject<boolean>;
 
   beforeEach(async(() => {
     TestBed.configureTestingModule({
@@ -44,9 +45,17 @@ describe('@ ToppyControl', () => {
     debugEl = fixture.debugElement;
   }));
 
+  beforeEach(() => {
+    die = new Subject();
+    Bus['_e'] = new Subject();
+  });
+
   afterEach(function() {
     fixture.destroy();
     document.body.removeChild(fixture.debugElement.nativeElement);
+    die.next(true);
+    die.complete();
+    Bus.stop();
   });
 
   it('should initialize', () => {
