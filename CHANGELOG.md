@@ -1,3 +1,10 @@
+## [2.3.3](https://github.com/lokesh-coder/toppy/compare/v2.3.2...v2.3.3) (2019-03-13)
+
+
+### Bug Fixes
+
+* relative positon incorrect placement on `autoUpdate` ([f3c0106](https://github.com/lokesh-coder/toppy/commit/f3c0106))
+
 ## [2.3.2](https://github.com/lokesh-coder/toppy/compare/v2.3.1...v2.3.2) (2019-02-12)
 
 ## [2.3.1](https://github.com/lokesh-coder/toppy/compare/v2.3.0...v2.3.1) (2019-02-10)
