@@ -61,7 +61,7 @@ describe('@ RelativePosition', () => {
   });
 
   describe('#autoUpdate', () => {
-    it('should switch if it is true', () => {
+    it('should switch if it is true - case 1', () => {
       const relPos = new RelativePosition({
         src: targetElement,
         placement: OutsidePlacement.TOP,
@@ -79,6 +79,26 @@ describe('@ RelativePosition', () => {
           top: srcCoords.top + srcCoords.height
         },
         pos: OutsidePlacement.BOTTOM
+      });
+    });
+    it('should switch if it is true - case 2', () => {
+      const relPos = new RelativePosition({
+        src: targetElement,
+        placement: OutsidePlacement.TOP_LEFT,
+        height: 500,
+        autoUpdate: true
+      });
+      const srcCoords = targetElement.getBoundingClientRect();
+      const hostElCoords = {
+        width: 4, // actual 967
+        height: 450
+      };
+      expect((relPos as any).calculatePos(OutsidePlacement.TOP_LEFT, srcCoords, hostElCoords, true)).toEqual({
+        props: {
+          left: 8,
+          top: srcCoords.top + srcCoords.height
+        },
+        pos: OutsidePlacement.BOTTOM_LEFT
       });
     });
     it('should not switch if it is false', () => {

@@ -99,7 +99,7 @@ export class RelativePosition extends ToppyPosition {
   }
 
   private nextPosition(current: OutsidePlacement): string {
-    const placements = ['t', 'b', 'l', 'r', 'tl', 'tr', 'bl', 'br', 'lt', 'lb', 'rt', 'rb'];
+    const placements = ['t', 'b', 'l', 'r', 'tl', 'bl', 'tr', 'br', 'lt', 'rt', 'lb', 'rb'];
 
     const index = placements.indexOf(current);
     const even = index % 2 === 0;
