@@ -256,4 +256,15 @@ describe('@ ToppyComponent', () => {
       expect(el.querySelector('.t-wrapper').classList.value).toEqual('t-wrapper t');
     });
   });
+
+  describe('#config', () => {
+    it('should set custom class names', () => {
+      toppyComp.config.backdrop = true;
+      toppyComp.config.wrapperClass = 'custom-wrapper-class';
+      toppyComp.config.backdropClass = 'custom-backdrop-class';
+      fixture.detectChanges();
+      expect(el.querySelector('.t-wrapper').classList.value).toEqual('t-wrapper custom-wrapper-class t');
+      expect(el.querySelector('.t-backdrop').classList.value).toEqual('t-backdrop custom-backdrop-class');
+    });
+  });
 });
