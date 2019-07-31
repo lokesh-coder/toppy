@@ -1,4 +1,4 @@
-<div class="t-backdrop" *ngIf="config.backdrop"></div>
+<div class="t-backdrop" *ngIf="config.backdrop" [ngClass]="config.backdropClass"></div>
 <div class="t-wrapper" [ngClass]="config.wrapperClass" [class]="extra" #wrapperEl>
   <ng-container [ngSwitch]="content.type">
     <ng-container *ngSwitchCase="'s'">
