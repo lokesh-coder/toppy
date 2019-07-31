@@ -1,3 +1,10 @@
+## [2.3.4](https://github.com/lokesh-coder/toppy/compare/v2.3.3...v2.3.4) (2019-07-31)
+
+
+### Bug Fixes
+
+* backdrop custom class not added ([#35](https://github.com/lokesh-coder/toppy/issues/35)) ([23752b9](https://github.com/lokesh-coder/toppy/commit/23752b9))
+
 ## [2.3.3](https://github.com/lokesh-coder/toppy/compare/v2.3.2...v2.3.3) (2019-03-13)
 
 
