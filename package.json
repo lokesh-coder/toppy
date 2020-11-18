@@ -115,7 +115,7 @@
     "remark-slug": "^5.1.1",
     "replace-in-file": "^3.4.2",
     "sane": "^4.0.2",
-    "semantic-release": "^15.12.2",
+    "semantic-release": "^17.2.3",
     "stylelint": "^9.9.0",
     "stylelint-config-recommended-scss": "^3.2.0",
     "stylelint-scss": "^3.4.0",
